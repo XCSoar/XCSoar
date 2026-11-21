@@ -85,7 +85,13 @@ configured when flying at a new site.
   SD card, or the PDA's static memory.
 \item[Map Database]  The name of the map file (XCM) containing digital elevation
   terrain data, topography, and optionally waypoints, airspace etc. A good
-  prepared database file covers all the needs for this page.
+  prepared database file covers all the needs for this page. Roads and
+  other vector data always come from this file. Elevation is a GeoTIFF
+  inside the zip (\texttt{terrain.tif}) if present; otherwise XCSoar
+  converts the JPEG2000 terrain to a GeoTIFF cache on first load.
+\item[Terrain]  Optional GeoTIFF (\texttt{.tif}) elevation file. If set, it
+  replaces only the height data; topography stays in the map database.
+  Leave empty to use the map database.
 \item[Waypoints] List of waypoint files. If left blank, waypoints are loaded
   from the map file (if available).
 

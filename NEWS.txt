@@ -140,7 +140,12 @@ Version 7.47 - not yet released
     data directory, as in waypoints/details/ETSI_1.png #3453
   - describe which airspace the list of map elements selects
   - describe the Imhof Atlas lite terrain colour ramp
+  - describe GeoTIFF elevation from the XCM or a one-time JPEG2000
+    convert, with topography still in the map file
 * data
+  - load elevation as Cloud-Optimized GeoTIFF: a .tif in Site
+    files, terrain.tif inside the XCM, or JPEG2000 from the XCM
+    converted once into the cache. Topography stays in the XCM.
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar
     shows the download, and a message reports when files were
