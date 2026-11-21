@@ -119,6 +119,11 @@ Version 7.47 - not yet released
 * dialogs
   - enter password punctuation with the on-screen #+= key or HighScore
     controls, and type directly in HighScore with an attached keyboard
+  - mark the on-screen space key with the space symbol
+  - blink the text cursor while entering text; it stays steady on
+    e-paper
+  - follow the dialog theme and frame in the text-entry field,
+    including dark mode
   - remember checklist checkbox ticks when an unfinished flight is
     restored; choosing a different checklist file, or editing a page's
     text, clears the ticks for that file or page #2536

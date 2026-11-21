@@ -3,9 +3,45 @@
 
 #pragma once
 
+#include "ui/window/PaintWindow.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 #include "util/StringBuffer.hxx"
 
 #include <functional>
+#include <cstddef>
+
+class Canvas;
+struct PixelRect;
+
+/**
+ * The text-entry field used by both the on-screen keyboard and
+ * HighScore entry. The blinking mark is one underscore of the text font.
+ */
+class TextEntryField : public PaintWindow {
+  const char *value = "";
+  std::size_t cursor = 0;
+  bool cursor_on = true;
+  UI::PeriodicTimer cursor_timer{[this]{ OnCursorTimer(); }};
+
+  void OnCursorTimer() noexcept;
+
+public:
+  /**
+   * @p text must outlive the next paint. @p offset is a UTF-8 boundary.
+   * Shows the mark and restarts the blink.
+   */
+  void SetValue(const char *text, std::size_t offset) noexcept;
+
+protected:
+  void OnCreate() override;
+  void OnDestroy() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
+};
+
+void
+DrawTextEntryField(Canvas &canvas, const PixelRect &rc,
+                   const char *value, std::size_t cursor,
+                   bool cursor_on) noexcept;
 typedef std::function<const char *(const char *)> AllowedCharacters;
 
 bool

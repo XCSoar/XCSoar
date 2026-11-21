@@ -53,7 +53,7 @@ FindEntryLetter(char ch)
   return 0;
 }
 
-class KnobTextEntryWindow final : public PaintWindow {
+class KnobTextEntryWindow final : public TextEntryField {
   TextEntryBuffer buffer;
   AllowedCharacters allowed_characters;
   int lettercursor = 0;
@@ -79,13 +79,19 @@ private:
     return allowed_characters(prefix);
   }
 
+  void RefreshField() noexcept {
+    const bool delete_selected = lettercursor == DELETE_SELECTION;
+    const auto target = delete_selected && buffer.GetSequenceLength() == 0
+      ? buffer.GetPreviousCursor() : buffer.GetCursor();
+    SetValue(buffer.GetValue(), target);
+  }
+
   void MoveCursor() {
     continue_after_cycle = false;
     lettercursor = buffer.GetSequenceLength() == 1
       ? FindEntryLetter(buffer.GetValue()[buffer.GetCursor()])
       : 0;
-    if (IsDefined())
-      Invalidate();
+    RefreshField();
   }
 
   void CycleLetter(int direction) {
@@ -95,7 +101,7 @@ private:
         (MAXENTRYLETTERS + 1);
       if (lettercursor == DELETE_SELECTION) {
         continue_after_cycle = false;
-        Invalidate();
+        RefreshField();
         return;
       }
       const char ch = EntryLetters[lettercursor];
@@ -145,7 +151,7 @@ public:
         return false;
       if (!buffer.Delete())
         buffer.Backspace();
-      Invalidate();
+      RefreshField();
       return true;
     case KEY_BACK:
     case KEY_F1:
@@ -176,53 +182,11 @@ protected:
 void
 KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
 {
-  const PixelRect rc = GetClientRect();
-  const char *value = buffer.GetValue();
-  const std::string_view text{value};
-  const auto cursor = buffer.GetCursor();
-  const bool delete_selected = lettercursor == DELETE_SELECTION;
-  const auto sequence_length = buffer.GetSequenceLength();
-  const auto target = delete_selected && sequence_length == 0
-    ? buffer.GetPreviousCursor() : cursor;
-  const auto target_end = cursor + sequence_length;
-
-  canvas.Clear(COLOR_BLACK);
-
-  // Do the actual painting of the text
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  canvas.Select(look.text_font);
-
-  PixelSize tsize = canvas.CalcTextSize(text);
-  PixelSize tsizec = canvas.CalcTextSize({value, target});
-  PixelSize tsizea = canvas.CalcTextSize({value, target_end});
-
-  BulkPixelPoint p[5];
-  const int padding = Layout::Scale(10);
-  const int cursor_right = tsizea.width + padding;
-  p[0].x = padding - std::max(0, cursor_right - int(rc.GetWidth()) + padding);
-  p[0].y = (rc.GetHeight() - tsize.height - 5) / 2;
-
-  p[2].x = p[0].x + tsizec.width;
-  p[2].y = p[0].y + tsize.height + 5;
-
-  p[3].x = p[0].x + (target_end > target
-    ? tsizea.width : tsizec.width + Layout::Scale(10));
-  p[3].y = p[0].y + tsize.height + 5;
-
-  p[1].x = p[2].x;
-  p[1].y = p[2].y - 2;
-
-  p[4].x = p[3].x;
-  p[4].y = p[3].y - 2;
-
-  canvas.SelectWhitePen();
-  canvas.DrawPolyline(p + 1, 4);
-
-  canvas.SetBackgroundTransparent();
-  canvas.SetTextColor(COLOR_WHITE);
-  canvas.DrawText(p[0], text);
-  if (delete_selected)
-    canvas.DrawText({padding, padding}, _("[DEL]"));
+  TextEntryField::OnPaint(canvas);
+  if (lettercursor == DELETE_SELECTION) {
+    const int pad = (int)Layout::GetTextPadding() * 2;
+    canvas.DrawText({pad, pad}, _("[DEL]"));
+  }
 }
 
 class KnobTextEntryWidget final : public WindowWidget {
