@@ -178,9 +178,8 @@ PopupMessage::Message::IsVisible(std::chrono::steady_clock::time_point now) cons
 
 PopupMessage::PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
                            const MapLook &_map_look,
-                           const UISettings &_settings) noexcept
-  :parent(_parent), look(_look), map_look(_map_look),
-   settings(_settings)
+                           [[maybe_unused]] const UISettings &_settings) noexcept
+  :parent(_parent), look(_look), map_look(_map_look)
 {
 }
 
