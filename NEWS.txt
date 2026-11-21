@@ -19,6 +19,11 @@ Version 7.47 - not yet released
   - deactivate the current plane from the Planes dialog, which
     clears its polar #3270
 * ui
+  - show status messages and file-load progress as rounded labels
+    at the top of the map, the same look as Simulator on the
+    lower left. Long text wraps. Touch a message to dismiss it;
+    progress fills while the load runs and stays a moment after
+    it finishes
   - add a ground-side shadow to the artificial horizon line so it
     stays visible on both sky and ground
   - draw the artificial-horizon aircraft reference as a yellow bar
@@ -155,6 +160,8 @@ Version 7.47 - not yet released
   - describe the Imhof Atlas lite terrain colour ramp
   - describe GeoTIFF elevation from the XCM or a one-time JPEG2000
     convert, with topography still in the map file
+  - describe status messages and file-load progress as rounded
+    labels at the top of the map
   - note discrete map zoom bands for terrain, topography and
     airspace, and that FIR-class volumes are outlined only at the
     widest overview
@@ -164,7 +171,7 @@ Version 7.47 - not yet released
     converted once into the cache (one JPEG2000 read).
     Topography stays in the XCM.
   - add an option on Site files to download newer copies of files
-    already on the device when XCSoar starts. The progress bar
+    already on the device when XCSoar starts. A progress label
     shows the download, and a message reports when files were
     updated. A download that finishes in flight is loaded at the
     next start #417
