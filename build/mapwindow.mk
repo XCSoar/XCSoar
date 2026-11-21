@@ -62,5 +62,6 @@ $(MAP_OVERLAYS_FLAGS_STAMP): FORCE | $(ABI_OUTPUT_DIR)/dirstamp
 
 MAP_OVERLAYS_FLAGS_SOURCES = \
 	$(SRC)/MapWindow/GlueMapWindowEvents.cpp \
-	$(SRC)/MapWindow/GlueMapWindowOverlays.cpp
+	$(SRC)/MapWindow/GlueMapWindowOverlays.cpp \
+	$(SRC)/PopupMessage.cpp
 $(call SRC_TO_OBJ,$(MAP_OVERLAYS_FLAGS_SOURCES)): $(MAP_OVERLAYS_FLAGS_STAMP)
