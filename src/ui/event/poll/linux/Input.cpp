@@ -90,8 +90,10 @@ LinuxInputDevice::Open(const char *path) noexcept
   min_x = max_x = min_y = max_y = 0;
 
   is_pointer = IsPointerDevice(_fd.Get());
-  if (!is_pointer || HasKeyboardKeys(_fd.Get()))
+  if (!is_pointer || HasKeyboardKeys(_fd.Get())) {
     keyboard.Initialise();
+    keyboard.Resynchronise(_fd.Get());
+  }
   if (is_pointer) {
     merge.AddPointer();
 
