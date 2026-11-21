@@ -222,7 +222,7 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
   canvas.SetTextColor(COLOR_WHITE);
   canvas.DrawText(p[0], text);
   if (delete_selected)
-    canvas.DrawText({padding, padding}, "[DEL]");
+    canvas.DrawText({padding, padding}, _("[DEL]"));
 }
 
 class KnobTextEntryWidget final : public WindowWidget {

@@ -13026,3 +13026,6 @@ msgstr "Spazio"
 
 msgid "Enter three to five ASCII letters or digits. Leave the code empty to clear it."
 msgstr ""
+
+msgid "[DEL]"
+msgstr "[CANC]"
