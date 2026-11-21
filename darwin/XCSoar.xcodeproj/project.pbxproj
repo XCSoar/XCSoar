@@ -6410,8 +6410,6 @@
 		5CBFECF72D742FA600F05795 /* PanelWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PanelWidget.hpp; sourceTree = "<group>"; };
 		5CBFECF82D742FA600F05795 /* PanelWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PanelWidget.cpp; sourceTree = "<group>"; };
 		5CBFECF92D742FA600F05795 /* ProfileRowFormWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProfileRowFormWidget.cpp; sourceTree = "<group>"; };
-		5CBFECFA2D742FA600F05795 /* ProgressWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProgressWidget.hpp; sourceTree = "<group>"; };
-		5CBFECFB2D742FA600F05795 /* ProgressWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressWidget.cpp; sourceTree = "<group>"; };
 		5CBFECFC2D742FA600F05795 /* QuestionWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = QuestionWidget.hpp; sourceTree = "<group>"; };
 		5CBFECFD2D742FA600F05795 /* QuestionWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = QuestionWidget.cpp; sourceTree = "<group>"; };
 		5CBFECFE2D742FA600F05795 /* RowFormWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RowFormWidget.hpp; sourceTree = "<group>"; };
@@ -19381,8 +19379,6 @@
 				5CBFECF72D742FA600F05795 /* PanelWidget.hpp */,
 				5CBFECF82D742FA600F05795 /* PanelWidget.cpp */,
 				5CBFECF92D742FA600F05795 /* ProfileRowFormWidget.cpp */,
-				5CBFECFA2D742FA600F05795 /* ProgressWidget.hpp */,
-				5CBFECFB2D742FA600F05795 /* ProgressWidget.cpp */,
 				5CBFECFC2D742FA600F05795 /* QuestionWidget.hpp */,
 				5CBFECFD2D742FA600F05795 /* QuestionWidget.cpp */,
 				5CBFECFE2D742FA600F05795 /* RowFormWidget.hpp */,

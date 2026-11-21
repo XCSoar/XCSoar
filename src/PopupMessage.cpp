@@ -5,13 +5,17 @@
 #include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Look/DialogLook.hpp"
+#include "Renderer/MapScaleRenderer.hpp"
 #include "Audio/Sound.hpp"
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"
-#include "Form/Button.hpp"
 
 #include <algorithm>
+#include <cassert>
+#include <cstring>
+#include <memory>
 
 #ifdef HAVE_VIBRATOR
 /** the minimum time between two haptic feedbacks for new messages */
@@ -19,8 +23,17 @@ static constexpr std::chrono::steady_clock::duration HAPTIC_INTERVAL =
   std::chrono::seconds(2);
 #endif
 
-using std::min;
-using std::max;
+static constexpr auto PROGRESS_HOLD = std::chrono::seconds(1);
+
+static unsigned
+HudPillMaxWidth(const PixelRect &hud) noexcept
+{
+  unsigned max_w = hud.GetWidth();
+  const unsigned pad = Layout::GetTextPadding();
+  if (max_w > 2 * pad)
+    max_w -= 2 * pad;
+  return max_w;
+}
 
 void
 PopupMessage::Message::Set(Type _type,
@@ -60,23 +73,9 @@ PopupMessage::Message::Update(std::chrono::steady_clock::time_point now) noexcep
 }
 
 bool
-PopupMessage::Message::AppendTo(StaticString<2000> &buffer,
-                                std::chrono::steady_clock::time_point now) noexcept
+PopupMessage::Message::IsVisible(std::chrono::steady_clock::time_point now) const noexcept
 {
-  if (IsUnknown())
-    // ignore unknown messages
-    return false;
-
-  if (texpiry < now) {
-    texpiry = tstart - std::chrono::steady_clock::duration(1);
-    // reset expiry so we don't refresh
-    return false;
-  }
-
-  if (!buffer.empty())
-    buffer.append("\r\n");
-  buffer.append(text);
-  return true;
+  return !IsUnknown() && texpiry >= now;
 }
 
 PopupMessage::PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
@@ -84,8 +83,6 @@ PopupMessage::PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
   :parent(_parent), look(_look),
    settings(_settings)
 {
-  renderer.SetCenter();
-  text.clear();
 }
 
 void
@@ -97,65 +94,128 @@ PopupMessage::Create(const PixelRect _rc) noexcept
   style.Hide();
 
   PaintWindow::Create(parent, GetRect(), style);
+  SetTransparent();
 }
 
 bool
-PopupMessage::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
+PopupMessage::OnMouseDown(PixelPoint p) noexcept
 {
-  // acknowledge with click/touch
-  Acknowledge(MSG_UNKNOWN);
+  unsigned progress_h = 0;
+  {
+    const std::lock_guard lock{mutex};
+    if (!progress_slots.empty()) {
+      const Font &font = GetFont();
+      const unsigned max_w = HudPillMaxWidth(rc);
+      const unsigned gap = Layout::GetTextPadding();
+      for (const auto &s : progress_slots) {
+        if (progress_h > 0)
+          progress_h += gap;
+        progress_h += MapLabelSize(font, MapLabel{s.text.c_str()},
+                                   max_w).height;
+      }
+    }
+  }
 
+  if (p.y < int(progress_h))
+    return true;
+
+  Acknowledge(MSG_UNKNOWN);
   return true;
+}
+
+const Font &
+PopupMessage::GetFont() const noexcept
+{
+  return look.bold_font;
 }
 
 void
 PopupMessage::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.Clear(look.dark_mode ? look.background_color : COLOR_WHITE);
+  const Font &font = GetFont();
+  const unsigned gap = Layout::GetTextPadding();
 
-  auto rc = GetClientRect();
-  canvas.DrawOutlineRectangle(rc,
-                              look.dark_mode ? COLOR_GRAY : COLOR_BLACK);
-
-  const int padding = Layout::GetTextPadding();
-  rc.Grow(-padding);
-
-  canvas.SetTextColor(look.text_color);
-  canvas.SetBackgroundTransparent();
-  canvas.Select(look.text_font);
-
-  renderer.Draw(canvas, rc, text);
-}
-
-inline unsigned
-PopupMessage::CalculateWidth() const noexcept
-{
-  if (settings.popup_message_position == UISettings::PopupMessagePosition::TOP_LEFT)
-    return rc.GetWidth();
-  else
-    return unsigned(rc.GetWidth() * 0.9);
-}
-
-PixelRect
-PopupMessage::GetRect(PixelSize size) const noexcept
-{
-  if (settings.popup_message_position == UISettings::PopupMessagePosition::TOP_LEFT) {
-    return PixelRect{rc.left, rc.top,
-                     static_cast<int>(rc.left) + static_cast<int>(size.width),
-                     static_cast<int>(rc.top) + static_cast<int>(size.height)};
-  } else {
-    return PixelRect::Centered(rc.GetCenter(), size);
+  struct ProgressView {
+    StaticString<128> text;
+    unsigned range;
+    unsigned position;
+  };
+  StaticArray<ProgressView, MAX_PILLS> progress;
+  StaticArray<StaticString<256>, MAX_PILLS> pills;
+  {
+    const std::lock_guard lock{mutex};
+    for (const auto &s : progress_slots) {
+      auto &v = progress.append();
+      v.text = s.text;
+      v.range = s.range;
+      v.position = s.position;
+    }
+    pills = status_pills;
   }
+
+  const unsigned max_w = HudPillMaxWidth(rc);
+  const int win_w = int(canvas.GetWidth());
+  int bottom = 0;
+
+  auto draw = [&](const MapLabel &label) noexcept {
+    const PixelSize size = MapLabelSize(font, label, max_w);
+    bottom += int(size.height);
+    int left = (win_w - int(size.width)) / 2;
+    if (left < 0)
+      left = 0;
+    DrawMapLabel(canvas, font, left, bottom, label, max_w);
+    bottom += int(gap);
+  };
+
+  for (const auto &p : progress) {
+    const MapLabel progress_label{
+      p.text.c_str(), nullptr, COLOR_WHITE, nullptr,
+      p.position, p.range,
+    };
+    draw(progress_label);
+  }
+
+  for (const auto &s : pills)
+    draw(MapLabel{s.c_str()});
 }
 
 PixelRect
 PopupMessage::GetRect() const noexcept
 {
-  const unsigned width = CalculateWidth();
-  const unsigned height = renderer.GetHeight(look.text_font, width, text)
-    + 2 * Layout::GetTextPadding();
+  const Font &font = GetFont();
+  const unsigned gap = Layout::GetTextPadding();
 
-  return GetRect({width, height});
+  if (progress_slots.empty() && status_pills.empty())
+    /* Window::IsDefined() is size.width > 0; stay hidden at 1x1 */
+    return {rc.left, rc.top, rc.left + 1, rc.top + 1};
+
+  const unsigned max_w = HudPillMaxWidth(rc);
+
+  unsigned width = 0;
+  unsigned height = 0;
+  auto add = [&](const MapLabel &label) noexcept {
+    const PixelSize size = MapLabelSize(font, label, max_w);
+    width = std::max(width, size.width);
+    if (height > 0)
+      height += gap;
+    height += size.height;
+  };
+
+  for (const auto &s : progress_slots) {
+    const MapLabel label{
+      s.text.c_str(), nullptr, COLOR_WHITE, nullptr,
+      s.position, s.range,
+    };
+    add(label);
+  }
+
+  for (const auto &s : status_pills)
+    add(MapLabel{s.c_str()});
+
+  const int left = rc.left + (int(rc.GetWidth()) - int(width)) / 2;
+  const int top = rc.top + int(gap);
+
+  return {left, top, left + int(width), top + int(height)};
 }
 
 void
@@ -163,21 +223,45 @@ PopupMessage::UpdateLayout(PixelRect _rc) noexcept
 {
   rc = _rc;
 
-  if (!text.empty()) {
-    renderer.InvalidateLayout();
+  if (HasPills()) {
     Move(GetRect());
+    BringToTop();
     Invalidate();
   }
 }
 
 void
+PopupMessage::CollectStatusPills() noexcept
+{
+  struct Item {
+    std::chrono::steady_clock::time_point tstart;
+    const char *text;
+  } items[MAXMESSAGES];
+  unsigned n = 0;
+
+  const auto now = std::chrono::steady_clock::now();
+  for (unsigned i = 0; i < MAXMESSAGES; ++i) {
+    if (!messages[i].IsVisible(now))
+      continue;
+    items[n++] = {messages[i].tstart, messages[i].text.c_str()};
+  }
+
+  std::sort(items, items + n, [](const Item &a, const Item &b) {
+    return a.tstart > b.tstart;
+  });
+
+  status_pills.clear();
+  const unsigned take = std::min(n, MAX_PILLS);
+  for (unsigned i = 0; i < take; ++i)
+    status_pills.append() = items[i].text;
+}
+
+void
 PopupMessage::UpdateTextAndLayout() noexcept
 {
-  if (text.empty()) {
+  if (!HasPills()) {
     Hide();
   } else {
-    renderer.InvalidateLayout();
-
     Move(GetRect());
     ShowOnTop();
     Invalidate();
@@ -194,13 +278,6 @@ PopupMessage::Render() noexcept
 
   const auto now = std::chrono::steady_clock::now();
 
-  // this has to be done quickly, since it happens in GUI thread
-  // at subsecond interval
-
-  // first loop through all messages, and determine which should be
-  // made invisible that were previously visible, or
-  // new messages
-
   bool changed = false;
   [[maybe_unused]] bool appeared = false;
   for (unsigned i = 0; i < MAXMESSAGES; ++i) {
@@ -210,19 +287,23 @@ PopupMessage::Render() noexcept
     changed = messages[i].Update(now) || changed;
   }
 
-  if (!changed) {
-    return false;
+  unsigned i = 0;
+  while (i < progress_slots.size()) {
+    const auto until = progress_slots[i].hold_until;
+    if (until != std::chrono::steady_clock::time_point{} && now >= until) {
+      if (i + 1 < progress_slots.size())
+        progress_slots[i] = std::move(progress_slots.back());
+      progress_slots.shrink(progress_slots.size() - 1);
+      changed = true;
+    } else {
+      ++i;
+    }
   }
 
-  // ok, we've changed the visible messages, so need to regenerate the
-  // text box
+  if (!changed)
+    return false;
 
-  text.clear();
-  n_visible = 0;
-  for (unsigned i = 0; i < MAXMESSAGES; ++i)
-    if (messages[i].AppendTo(text, now))
-      n_visible++;
-
+  CollectStatusPills();
   lock.unlock();
 
 #ifdef HAVE_VIBRATOR
@@ -310,6 +391,119 @@ PopupMessage::Acknowledge(Type type) noexcept
     }
   }
   return false;
+}
+
+int
+PopupMessage::FindProgressLocked(const void *key) const noexcept
+{
+  for (unsigned i = 0; i < progress_slots.size(); ++i)
+    if (progress_slots[i].key == key)
+      return int(i);
+  return -1;
+}
+
+bool
+PopupMessage::HasPills() const noexcept
+{
+  return !progress_slots.empty() || !status_pills.empty();
+}
+
+void
+PopupMessage::BeginProgress(const void *key, const char *text) noexcept
+{
+  {
+    const std::lock_guard lock{mutex};
+    const int i = FindProgressLocked(key);
+    if (i >= 0) {
+      auto &s = progress_slots[i];
+      s.text = text != nullptr ? text : "";
+      s.hold_until = {};
+    } else if (!progress_slots.full()) {
+      auto &s = progress_slots.append();
+      s.key = key;
+      s.text = text != nullptr ? text : "";
+      s.range = 0;
+      s.position = 0;
+      s.env = std::make_unique<SlotEnv>(*this, key);
+    }
+  }
+
+  UpdateTextAndLayout();
+}
+
+void
+PopupMessage::ClearProgress(const void *key) noexcept
+{
+  {
+    const std::lock_guard lock{mutex};
+    const int i = FindProgressLocked(key);
+    if (i < 0)
+      return;
+    auto &s = progress_slots[i];
+    if (s.range > 0)
+      s.position = s.range;
+    s.hold_until = std::chrono::steady_clock::now() + PROGRESS_HOLD;
+  }
+
+  if (IsDefined())
+    Invalidate();
+}
+
+OperationEnvironment &
+PopupMessage::GetProgressEnvironment(const void *key) noexcept
+{
+  const std::lock_guard lock{mutex};
+  const int i = FindProgressLocked(key);
+  assert(i >= 0);
+  return *progress_slots[i].env;
+}
+
+void
+PopupMessage::SetProgressText(const void *key, const char *text) noexcept
+{
+  {
+    const std::lock_guard lock{mutex};
+    const int i = FindProgressLocked(key);
+    if (i < 0)
+      return;
+    progress_slots[i].text = text != nullptr ? text : "";
+  }
+
+  UpdateTextAndLayout();
+}
+
+void
+PopupMessage::SetProgressRange(const void *key, unsigned range) noexcept
+{
+  {
+    const std::lock_guard lock{mutex};
+    const int i = FindProgressLocked(key);
+    if (i < 0)
+      return;
+    if (progress_slots[i].range == range)
+      return;
+    progress_slots[i].range = range;
+  }
+
+  if (IsDefined())
+    Invalidate();
+}
+
+void
+PopupMessage::SetProgressPosition(const void *key, unsigned position) noexcept
+{
+  {
+    const std::lock_guard lock{mutex};
+    const int i = FindProgressLocked(key);
+    if (i < 0)
+      return;
+    if (progress_slots[i].position == position)
+      return;
+    progress_slots[i].position = position;
+  }
+
+  if (IsDefined())
+    Invalidate();
 }
 
 // DoMessage is designed to delegate what to do for a message
