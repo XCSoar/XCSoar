@@ -101,7 +101,7 @@ Server::OnDatagramReceived(Client &&client,
   case TRAFFIC_REQUEST:
     if (const auto request =
           ImportTrafficRequest({(const std::byte *)data, length}))
-      OnTrafficRequest(client, request->near, request->location,
+      OnTrafficRequest(client, request->nearby, request->location,
                        request->altitude);
     break;
 

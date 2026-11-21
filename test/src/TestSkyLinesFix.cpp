@@ -170,7 +170,7 @@ TestTrafficRequest()
   ok1(crc == UpdateCRC16CCITT(ReferenceAsBytes(plain_crc), 0));
 
   const auto imported = ImportTrafficRequest(ReferenceAsBytes(plain));
-  ok1(imported && imported->near && !imported->followees &&
+  ok1(imported && imported->nearby && !imported->followees &&
       !imported->club);
   ok1(imported && !imported->location.IsValid());
   ok1(imported && imported->altitude == -1);
@@ -189,7 +189,7 @@ TestTrafficRequest()
   ok1(crc2 == UpdateCRC16CCITT(ReferenceAsBytes(located_crc), 0));
 
   const auto back = ImportTrafficRequest(ReferenceAsBytes(located));
-  ok1(back && back->near);
+  ok1(back && back->nearby);
   ok1(back && equals(back->location, where));
   ok1(back && back->altitude == 1500);
 
@@ -201,7 +201,7 @@ TestTrafficRequest()
   const auto bytes = ReferenceAsBytes(located);
   const auto short_tail =
     ImportTrafficRequest(bytes.first(sizeof(plain)));
-  ok1(short_tail && short_tail->near && !short_tail->location.IsValid());
+  ok1(short_tail && short_tail->nearby && !short_tail->location.IsValid());
   ok1(short_tail && short_tail->altitude == -1);
 
   const auto truncated =

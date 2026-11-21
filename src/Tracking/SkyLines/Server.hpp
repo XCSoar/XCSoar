@@ -71,7 +71,7 @@ protected:
                      [[maybe_unused]] const ReceivedFix &fix) {}
 
   virtual void OnTrafficRequest([[maybe_unused]] const Client &client,
-                                [[maybe_unused]] bool near,
+                                [[maybe_unused]] bool nearby,
                                 [[maybe_unused]] const ::GeoPoint &location,
                                 [[maybe_unused]] int altitude) {}
 

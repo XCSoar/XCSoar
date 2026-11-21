@@ -144,7 +144,8 @@ ImportFix(std::span<const std::byte> datagram) noexcept
 struct ReceivedTrafficRequest {
   bool followees;
   bool club;
-  bool near;
+  /* "nearby": Windows headers define "near". */
+  bool nearby;
 
   /**
    * Where the client wants traffic.  Invalid if the client did not
@@ -181,7 +182,7 @@ ImportTrafficRequest(std::span<const std::byte> datagram) noexcept
   ReceivedTrafficRequest result;
   result.followees = flags & TrafficRequestPacket::FLAG_FOLLOWEES;
   result.club = flags & TrafficRequestPacket::FLAG_CLUB;
-  result.near = flags & TrafficRequestPacket::FLAG_NEAR;
+  result.nearby = flags & TrafficRequestPacket::FLAG_NEAR;
   result.location = ::GeoPoint::Invalid();
   result.altitude = -1;
 

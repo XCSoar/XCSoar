@@ -294,7 +294,7 @@ protected:
   void ForwardToOGN(CloudClient &client,
                     const SkyLinesTracking::ReceivedFix &fix) noexcept;
 
-  void OnTrafficRequest(const Client &client, bool near,
+  void OnTrafficRequest(const Client &client, bool nearby,
                         const ::GeoPoint &location,
                         int altitude) override;
 
@@ -630,10 +630,10 @@ CloudServer::OnFix(const Client &c,
 }
 
 void
-CloudServer::OnTrafficRequest(const Client &c, bool near,
+CloudServer::OnTrafficRequest(const Client &c, bool nearby,
                              const ::GeoPoint &location, int altitude)
 {
-  if (!near) {
+  if (!nearby) {
     if (GetEnvBool("XCS_CLOUD_DEBUG"))
       cerr << "TRAFFIC_REQUEST\tignored\tnot-near\t"
            << std::hex << c.key << std::dec << endl;
