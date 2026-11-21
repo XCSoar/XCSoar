@@ -57,6 +57,7 @@ static unsigned
 ClassifyStatus(const char *text) noexcept
 {
   if (HasToken(text, "stall") || HasToken(text, "overspeed") ||
+      HasToken(text, "airbrake") || HasToken(text, "gear") ||
       HasToken(text, "failed") || HasToken(text, "error"))
     return 2;
   if (HasToken(text, "warning") || HasToken(text, "battery") ||
@@ -110,6 +111,7 @@ StatusIcon(const MapLook &look, const char *text) noexcept
   if (HasToken(text, "landing"))
     return &look.landing_icon;
   if (HasToken(text, "stall") || HasToken(text, "overspeed") ||
+      HasToken(text, "airbrake") || HasToken(text, "gear") ||
       HasToken(text, "polar"))
     return &look.plane_icon;
   if (HasToken(text, "failed") || HasToken(text, "error"))
@@ -206,6 +208,8 @@ PopupMessage::SeedDebugHud() noexcept
   static constexpr const char *const status[] = {
     "STALL",
     "OVERSPEED",
+    "Airbrakes unlocked",
+    "Check gear",
     "Failed to open configured map file",
     "Battery low",
     "Waiting for GPS fix",

@@ -90,6 +90,10 @@ GetFileName(const char *resource_name)
     { "IDR_WAV_AIRSPACE_NEAR", "airspace_near" },
     { "IDR_WAV_AIRSPACE_ABOVE", "airspace_above" },
     { "IDR_WAV_AIRSPACE_INSIDE", "airspace_inside" },
+    { "IDR_WAV_STALL", "stall" },
+    { "IDR_WAV_OVERSPEED", "overspeed" },
+    { "IDR_WAV_AIRBRAKES", "airbrakes" },
+    { "IDR_WAV_CHECK_GEAR", "check_gear" },
   };
 
   for (const auto &i : files)
