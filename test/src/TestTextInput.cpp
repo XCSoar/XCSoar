@@ -116,9 +116,11 @@ TestKeyboardState()
   keyboard.Update(KEY_NUMLOCK, true);
   ok1(keyboard.GetCharacter(KEY_KP1) == '1');
   ok1(keyboard.GetCharacter(KEY_KPPLUS) == '+');
+  ok1(keyboard.GetCharacter(KEY_KPMINUS) == '-');
   ok1(keyboard.GetCharacter(KEY_KPDOT) == '.');
   keyboard.Reset();
   ok1(keyboard.GetCharacter(KEY_KP1) == 0);
+  ok1(keyboard.GetCharacter(KEY_KPMINUS) == '-');
   ok1(keyboard.GetCharacter(KEY_A) == 'a');
   keyboard.Update(KEY_LEFTSHIFT, true);
   ok1(keyboard.GetCharacter(KEY_A) == 'A');
@@ -183,17 +185,21 @@ TestKeyboardState()
   map[3][KEY_Q] = K(KT_LATIN, '~');
   map[0][KEY_KP1] = K_P1;
   map[0][KEY_KPPLUS] = K_PPLUS;
+  map[0][KEY_KPMINUS] = K_PMINUS;
   map[0][KEY_KPDOT] = K_PDOT;
   UI::KeyboardState german(&map);
   ok1(german.GetCharacter(KEY_KP1) == 0);
+  ok1(german.GetCharacter(KEY_KPMINUS) == '-');
   german.Update(KEY_NUMLOCK, true);
   ok1(german.GetCharacter(KEY_KP1) == '1');
   ok1(german.GetCharacter(KEY_KPPLUS) == '+');
+  ok1(german.GetCharacter(KEY_KPMINUS) == '-');
   ok1(german.GetCharacter(KEY_KPDOT) == '.');
   german.Update(KEY_NUMLOCK, false);
   german.Update(KEY_NUMLOCK, true);
   ok1(german.GetCharacter(KEY_KP1) == 0);
   ok1(german.GetCharacter(KEY_KPPLUS) == '+');
+  ok1(german.GetCharacter(KEY_KPMINUS) == '-');
   ok1(german.GetCharacter(KEY_KPDOT) == 0);
   ok1(german.GetCharacter(KEY_Z) == 'y');
   ok1(german.GetCharacter(KEY_Y) == 'z');
@@ -259,7 +265,7 @@ main()
   plan_tests(7 + 40 + 95
 #ifdef TEST_LINUX_KEYBOARD_STATE
              + 19 + 22
-             + 8 + 14 + 8 + 9 + 6
+             + 8 + 14 + 8 + 9 + 6 + 5
 #endif
              );
   TestKeyEvents();
