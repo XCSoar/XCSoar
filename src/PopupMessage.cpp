@@ -7,10 +7,14 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Font.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/MapLook.hpp"
+#include "Look/Colors.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
 #include "Audio/Sound.hpp"
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"
+#include "util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
 
 #include <algorithm>
 #include <cassert>
@@ -24,6 +28,84 @@ static constexpr std::chrono::steady_clock::duration HAPTIC_INTERVAL =
 #endif
 
 static constexpr auto PROGRESS_HOLD = std::chrono::seconds(1);
+
+/** shortcut: English tokens, add an xcs level if custom files need more */
+static bool
+HasIgnoreCase(const char *text, const char *needle) noexcept
+{
+  const size_t n = StringLength(needle);
+  for (const char *p = text; *p != '\0'; ++p)
+    if (StringIsEqualIgnoreCase(p, needle, n))
+      return true;
+  return false;
+}
+
+static bool
+HasToken(const char *text, const char *needle) noexcept
+{
+  const size_t n = StringLength(needle);
+  for (const char *p = text; *p != '\0'; ++p) {
+    if (p != text && IsAlphaASCII(p[-1]))
+      continue;
+    if (StringIsEqualIgnoreCase(p, needle, n) && !IsAlphaASCII(p[n]))
+      return true;
+  }
+  return false;
+}
+
+static unsigned
+ClassifyStatus(const char *text) noexcept
+{
+  if (HasToken(text, "stall") || HasToken(text, "overspeed") ||
+      HasToken(text, "failed") || HasToken(text, "error"))
+    return 2;
+  if (HasToken(text, "warning") || HasToken(text, "battery") ||
+      HasToken(text, "sunset") || HasToken(text, "invalid") ||
+      HasIgnoreCase(text, "below final") ||
+      HasIgnoreCase(text, "through terrain") ||
+      HasIgnoreCase(text, "wind change") ||
+      HasIgnoreCase(text, "waiting for gps") ||
+      HasIgnoreCase(text, "no polar"))
+    return 1;
+  return 0;
+}
+
+static Color
+StatusFill(unsigned rank) noexcept
+{
+  if (rank >= 2)
+    return COLOR_AIRSPACE_WARNING_INSIDE;
+  if (rank == 1)
+    return COLOR_AIRSPACE_WARNING_NEAR;
+  return COLOR_WHITE;
+}
+
+static const MaskedIcon *
+StatusIcon(const MapLook &look, const char *text) noexcept
+{
+  if (HasToken(text, "simulator"))
+    return &look.simulator_icon;
+  if (HasToken(text, "repository"))
+    return &look.database_icon;
+  if (HasToken(text, "battery"))
+    return &look.battery_icon;
+  if (HasIgnoreCase(text, "waiting for gps"))
+    return &look.waiting_for_fix_icon;
+  if (HasToken(text, "gps"))
+    return &look.no_gps_icon;
+  if (HasIgnoreCase(text, "through terrain"))
+    return &look.terrain_warning_icon;
+  if (HasToken(text, "terrain"))
+    return &look.waypoint.mountain_top_icon;
+  if (HasToken(text, "stall") || HasToken(text, "overspeed") ||
+      HasToken(text, "polar") || HasToken(text, "takeoff"))
+    return &look.plane_icon;
+  if (HasToken(text, "failed") || HasToken(text, "error"))
+    return &look.abort_mode_icon;
+  if (HasToken(text, "warning"))
+    return &look.traffic_warning_icon;
+  return nullptr;
+}
 
 static unsigned
 HudPillMaxWidth(const PixelRect &hud) noexcept
@@ -48,6 +130,8 @@ PopupMessage::Message::Set(Type _type,
   texpiry = now;
   text = _text;
   sound = _sound;
+  rank = ClassifyStatus(_text);
+  fill = StatusFill(rank);
 }
 
 bool
@@ -79,8 +163,9 @@ PopupMessage::Message::IsVisible(std::chrono::steady_clock::time_point now) cons
 }
 
 PopupMessage::PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
+                           const MapLook &_map_look,
                            const UISettings &_settings) noexcept
-  :parent(_parent), look(_look),
+  :parent(_parent), look(_look), map_look(_map_look),
    settings(_settings)
 {
 }
@@ -141,7 +226,7 @@ PopupMessage::OnPaint(Canvas &canvas) noexcept
     unsigned position;
   };
   StaticArray<ProgressView, MAX_PILLS> progress;
-  StaticArray<StaticString<256>, MAX_PILLS> pills;
+  StaticArray<StatusPill, MAX_PILLS> pills;
   {
     const std::lock_guard lock{mutex};
     for (const auto &s : progress_slots) {
@@ -169,14 +254,14 @@ PopupMessage::OnPaint(Canvas &canvas) noexcept
 
   for (const auto &p : progress) {
     const MapLabel progress_label{
-      p.text.c_str(), nullptr, COLOR_WHITE, nullptr,
-      p.position, p.range,
+      p.text.c_str(), StatusIcon(map_look, p.text.c_str()), COLOR_WHITE,
+      nullptr, p.position, p.range,
     };
     draw(progress_label);
   }
 
   for (const auto &s : pills)
-    draw(MapLabel{s.c_str()});
+    draw(MapLabel{s.text.c_str(), s.icon, s.fill});
 }
 
 PixelRect
@@ -203,14 +288,14 @@ PopupMessage::GetRect() const noexcept
 
   for (const auto &s : progress_slots) {
     const MapLabel label{
-      s.text.c_str(), nullptr, COLOR_WHITE, nullptr,
-      s.position, s.range,
+      s.text.c_str(), StatusIcon(map_look, s.text.c_str()), COLOR_WHITE,
+      nullptr, s.position, s.range,
     };
     add(label);
   }
 
   for (const auto &s : status_pills)
-    add(MapLabel{s.c_str()});
+    add(MapLabel{s.text.c_str(), s.icon, s.fill});
 
   const int left = rc.left + (int(rc.GetWidth()) - int(width)) / 2;
   const int top = rc.top + int(gap);
@@ -235,7 +320,9 @@ PopupMessage::CollectStatusPills() noexcept
 {
   struct Item {
     std::chrono::steady_clock::time_point tstart;
+    unsigned rank;
     const char *text;
+    Color fill;
   } items[MAXMESSAGES];
   unsigned n = 0;
 
@@ -243,17 +330,24 @@ PopupMessage::CollectStatusPills() noexcept
   for (unsigned i = 0; i < MAXMESSAGES; ++i) {
     if (!messages[i].IsVisible(now))
       continue;
-    items[n++] = {messages[i].tstart, messages[i].text.c_str()};
+    items[n++] = {messages[i].tstart, messages[i].rank,
+                  messages[i].text.c_str(), messages[i].fill};
   }
 
   std::sort(items, items + n, [](const Item &a, const Item &b) {
+    if (a.rank != b.rank)
+      return a.rank > b.rank;
     return a.tstart > b.tstart;
   });
 
   status_pills.clear();
   const unsigned take = std::min(n, MAX_PILLS);
-  for (unsigned i = 0; i < take; ++i)
-    status_pills.append() = items[i].text;
+  for (unsigned i = 0; i < take; ++i) {
+    auto &p = status_pills.append();
+    p.text = items[i].text;
+    p.fill = items[i].fill;
+    p.icon = StatusIcon(map_look, items[i].text);
+  }
 }
 
 void

@@ -21,9 +21,10 @@ Version 7.47 - not yet released
 * ui
   - show status messages and file-load progress as rounded labels
     at the top of the map, the same look as Simulator on the
-    lower left. Long text wraps. Touch a message to dismiss it;
-    progress fills while the load runs and stays a moment after
-    it finishes
+    lower left, including the same icons when the text matches.
+    Long text wraps. Stall and other errors are red, cautions
+    yellow. Touch a message to dismiss it; progress fills while
+    the load runs and stays a moment after it finishes
   - add a ground-side shadow to the artificial horizon line so it
     stays visible on both sky and ground
   - draw the artificial-horizon aircraft reference as a yellow bar

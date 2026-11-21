@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ui/window/PaintWindow.hpp"
+#include "ui/canvas/Color.hpp"
 #include "Operation/Operation.hpp"
 #include "thread/Mutex.hxx"
 #include "util/StaticArray.hxx"
@@ -14,7 +15,9 @@
 
 struct UISettings;
 struct DialogLook;
+struct MapLook;
 class Font;
+class MaskedIcon;
 namespace UI { class SingleWindow; }
 
 /**
@@ -51,6 +54,9 @@ private:
     std::chrono::steady_clock::duration tshow; // time message is visible for
 
     StaticString<256u> text;
+    Color fill = COLOR_WHITE;
+    /** 2 error, 1 caution, 0 info; HUD stack paints high first */
+    unsigned rank = 0;
 
     /** From #StatusMessage::sound; nullptr if none or not from status file. */
     const char *sound = nullptr;
@@ -91,6 +97,7 @@ private:
 
   UI::SingleWindow &parent;
   const DialogLook &look;
+  const MapLook &map_look;
 
   PixelRect rc; // HUD rectangle (parent coordinates)
 
@@ -99,7 +106,13 @@ private:
   Mutex mutex;
   struct Message messages[MAXMESSAGES];
 
-  StaticArray<StaticString<256>, MAX_PILLS> status_pills;
+  struct StatusPill {
+    StaticString<256> text;
+    Color fill = COLOR_WHITE;
+    const MaskedIcon *icon = nullptr;
+  };
+
+  StaticArray<StatusPill, MAX_PILLS> status_pills;
 
   class SlotEnv final : public QuietOperationEnvironment {
     PopupMessage &host;
@@ -141,6 +154,7 @@ private:
 
 public:
   PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
+               const MapLook &_map_look,
                const UISettings &settings) noexcept;
 
   void Create(const PixelRect _rc) noexcept;
