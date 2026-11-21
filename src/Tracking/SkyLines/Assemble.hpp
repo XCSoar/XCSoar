@@ -23,6 +23,7 @@ struct Thermal;
 struct ThermalSubmitPacket;
 struct ThermalRequestPacket;
 struct TrafficRequestPacket;
+struct LocatedTrafficRequestPacket;
 struct UserNameRequestPacket;
 
 [[gnu::const]]
@@ -87,6 +88,15 @@ MakeThermalRequest(uint64_t key);
 [[gnu::const]]
 TrafficRequestPacket
 MakeTrafficRequest(uint64_t key, bool followees, bool club, bool nearby);
+
+/**
+ * A traffic request for the XCSoar Cloud, with the position where
+ * the client wants traffic.  Do not send it to SkyLines.
+ */
+[[gnu::const]]
+LocatedTrafficRequestPacket
+MakeLocatedTrafficRequest(uint64_t key, bool followees, bool club,
+                          bool nearby, ::GeoPoint location, int altitude);
 
 [[gnu::const]]
 UserNameRequestPacket

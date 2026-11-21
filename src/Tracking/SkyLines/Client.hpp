@@ -108,6 +108,13 @@ public:
   void SendThermalRequest();
 
   void SendTrafficRequest(bool followees, bool club, bool near_);
+
+  /**
+   * Ask the XCSoar Cloud for traffic at @p location.  Do not send
+   * this to SkyLines.
+   */
+  void SendTrafficRequest(bool followees, bool club, bool near_,
+                          ::GeoPoint location, int altitude);
   void SendUserNameRequest(uint32_t user_id);
 
 private:

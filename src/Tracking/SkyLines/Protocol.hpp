@@ -327,11 +327,20 @@ struct TrafficRequestPacket {
   static const uint32_t FLAG_CLUB = 0x2;
 
   /**
-   * The client wants to receive information about all traffic near
-   * the location he submitted recently in a #FixPacket.  The server
-   * chooses a reasonable range.
+   * The client wants traffic near a position: the
+   * #TrafficRequestLocation in this datagram, or the location he
+   * submitted recently in a #FixPacket when that tail is absent.
+   * The server chooses a reasonable range.
    */
   static const uint32_t FLAG_NEAR = 0x4;
+
+  /**
+   * A #TrafficRequestLocation follows this struct.  It says where
+   * the client wants traffic.  It is not a position report.  Clients
+   * that do not send it leave this flag clear, and the datagram
+   * stays 24 bytes.
+   */
+  static const uint32_t FLAG_LOCATION = 0x8;
 
   Header header;
 
@@ -342,6 +351,49 @@ struct TrafficRequestPacket {
 
 #ifdef __cplusplus
 static_assert(sizeof(TrafficRequestPacket) == 24, "Wrong struct size");
+#endif
+
+/**
+ * Optional tail of #TrafficRequestPacket.  Present when
+ * #TrafficRequestPacket::FLAG_LOCATION is set and the datagram is
+ * long enough.  Send it only to the XCSoar Cloud.
+ */
+struct TrafficRequestLocation {
+  GeoPoint location;
+
+  /**
+   * Altitude in metres.  Below 0 means the client did not send one.
+   */
+  int16_t altitude;
+
+  /**
+   * Reserved for future use.  Set to zero.
+   */
+  uint16_t reserved;
+
+  /**
+   * Reserved.  Pads this tail to 16 bytes, a multiple of the
+   * alignment of #Header::key, so the packet has no implicit padding.
+   */
+  uint32_t reserved2;
+};
+
+#ifdef __cplusplus
+static_assert(sizeof(TrafficRequestLocation) == 16,
+              "Wrong struct size");
+#endif
+
+/**
+ * A #TrafficRequestPacket with #TrafficRequestLocation.
+ */
+struct LocatedTrafficRequestPacket {
+  TrafficRequestPacket request;
+  TrafficRequestLocation tail;
+};
+
+#ifdef __cplusplus
+static_assert(sizeof(LocatedTrafficRequestPacket) == 40,
+              "Wrong struct size");
 #endif
 
 /**

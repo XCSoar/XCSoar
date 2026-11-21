@@ -245,6 +245,11 @@ private:
                            uint32_t pilot_id,
                            const std::string &callsign) noexcept;
 
+  void SendNearTrafficSnapshot(SocketAddress address, uint64_t key,
+                               const GeoPoint &location, int altitude,
+                               unsigned client_id,
+                               const char *reason) noexcept;
+
   void SendNearTrafficSnapshot(CloudClient &client,
                                const char *reason) noexcept;
 
@@ -289,8 +294,9 @@ protected:
   void ForwardToOGN(CloudClient &client,
                     const SkyLinesTracking::ReceivedFix &fix) noexcept;
 
-  void OnTrafficRequest(const Client &client,
-                        bool near) override;
+  void OnTrafficRequest(const Client &client, bool near,
+                        const ::GeoPoint &location,
+                        int altitude) override;
 
   void OnUserNameRequest(const Client &client,
                          uint32_t user_id) override;
@@ -429,24 +435,34 @@ void
 CloudServer::SendNearTrafficSnapshot(CloudClient &client,
                                        const char *reason) noexcept
 {
+  SendNearTrafficSnapshot(client.address, client.key, client.location,
+                          client.altitude, client.id, reason);
+}
+
+void
+CloudServer::SendNearTrafficSnapshot(SocketAddress address, uint64_t key,
+                                     const GeoPoint &location, int altitude,
+                                     unsigned client_id,
+                                     const char *reason) noexcept
+{
   const auto now = std::chrono::steady_clock::now();
   const auto min_stamp = now - MAX_TRAFFIC_AGE;
   const auto min_ogn_stamp = now - MAX_OGN_TRAFFIC_AGE;
 
-  TrafficResponseSender s(*this, client.address, client.key);
+  TrafficResponseSender s(*this, address, key);
 
   unsigned n = 0;
   unsigned n_cloud = 0;
   unsigned n_ogn = 0;
-  for (const auto &traffic : clients.QueryWithinRange(client.location,
+  for (const auto &traffic : clients.QueryWithinRange(location,
                                                       TRAFFIC_RANGE)) {
-    if (traffic.get() == &client)
+    if (traffic->key == key)
       continue;
 
     if (traffic->stamp < min_stamp)
       continue;
 
-    if (!IsTrafficRelevantToClient(client.location, client.altitude,
+    if (!IsTrafficRelevantToClient(location, altitude,
                                    traffic->location, traffic->altitude,
                                    traffic->altitude >= 0))
       continue;
@@ -468,14 +484,14 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
   if (n < MAX_TRAFFIC_TARGETS_PER_RESPONSE) {
     const uint32_t time_ms = MsUtcMidnight();
     for (const auto &og :
-         ogn_traffic.QueryWithinRange(client.location, TRAFFIC_RANGE)) {
+         ogn_traffic.QueryWithinRange(location, TRAFFIC_RANGE)) {
       if (og->stamp < min_ogn_stamp)
         continue;
 
       if (!IsForwardableOgnTraffic(*og))
         continue;
 
-      if (!IsTrafficRelevantToClient(client.location, client.altitude,
+      if (!IsTrafficRelevantToClient(location, altitude,
                                      og->location, og->altitude,
                                      og->altitude_valid))
         continue;
@@ -485,8 +501,7 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
 
       s.Add(og->pilot_id, time_ms, og->location, og->altitude,
             TrafficRecordExtensions::FromOgn(*og));
-      SendTrafficCallsign(client.address, client.key,
-                          og->pilot_id, og->callsign);
+      SendTrafficCallsign(address, key, og->pilot_id, og->callsign);
       ++n_ogn;
       ++n;
     }
@@ -495,10 +510,10 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
   s.Flush();
 
   if (n > 0 || std::strcmp(reason, "TRAFFIC_FIX") == 0) {
-    cout << reason << '\t' << client.address << '\t'
-         << std::hex << client.key << std::dec << '\t'
-         << client.id << '\t' << client.location << '\t'
-         << "alt=" << client.altitude << "m\t"
+    cout << reason << '\t' << address << '\t'
+         << std::hex << key << std::dec << '\t'
+         << client_id << '\t' << location << '\t'
+         << "alt=" << altitude << "m\t"
          << "cloud=" << n_cloud << "\togn=" << n_ogn
          << "\ttotal=" << n << endl;
   }
@@ -615,12 +630,21 @@ CloudServer::OnFix(const Client &c,
 }
 
 void
-CloudServer::OnTrafficRequest(const Client &c, bool near)
+CloudServer::OnTrafficRequest(const Client &c, bool near,
+                             const ::GeoPoint &location, int altitude)
 {
   if (!near) {
     if (GetEnvBool("XCS_CLOUD_DEBUG"))
       cerr << "TRAFFIC_REQUEST\tignored\tnot-near\t"
            << std::hex << c.key << std::dec << endl;
+    return;
+  }
+
+  /* the position in the request is where the client wants traffic;
+     it is not stored and not forwarded */
+  if (location.IsValid()) {
+    SendNearTrafficSnapshot(c.address, c.key, location, altitude,
+                            0, "TRAFFIC_REQUEST");
     return;
   }
 

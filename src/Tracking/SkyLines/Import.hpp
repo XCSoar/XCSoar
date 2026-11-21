@@ -138,4 +138,65 @@ ImportFix(std::span<const std::byte> datagram) noexcept
   return result;
 }
 
+/**
+ * A #TrafficRequestPacket as the server receives it.
+ */
+struct ReceivedTrafficRequest {
+  bool followees;
+  bool club;
+  bool near;
+
+  /**
+   * Where the client wants traffic.  Invalid if the client did not
+   * send one.  Not a position report.
+   */
+  ::GeoPoint location;
+
+  /**
+   * Altitude in metres, or below 0 if the client did not send one.
+   */
+  int altitude;
+};
+
+/**
+ * Import a datagram of type #TRAFFIC_REQUEST.  A missing or truncated
+ * #TrafficRequestLocation leaves #ReceivedTrafficRequest::location
+ * invalid, which is what a 24-byte client sends.
+ *
+ * @return std::nullopt if the datagram is shorter than a
+ * #TrafficRequestPacket
+ */
+[[gnu::pure]]
+inline std::optional<ReceivedTrafficRequest>
+ImportTrafficRequest(std::span<const std::byte> datagram) noexcept
+{
+  if (datagram.size() < sizeof(TrafficRequestPacket))
+    return std::nullopt;
+
+  /* copy: the datagram buffer is not aligned for the packet */
+  TrafficRequestPacket packet;
+  std::memcpy(&packet, datagram.data(), sizeof(packet));
+  const uint32_t flags = FromBE32(packet.flags);
+
+  ReceivedTrafficRequest result;
+  result.followees = flags & TrafficRequestPacket::FLAG_FOLLOWEES;
+  result.club = flags & TrafficRequestPacket::FLAG_CLUB;
+  result.near = flags & TrafficRequestPacket::FLAG_NEAR;
+  result.location = ::GeoPoint::Invalid();
+  result.altitude = -1;
+
+  if ((flags & TrafficRequestPacket::FLAG_LOCATION) &&
+      datagram.size() >= sizeof(LocatedTrafficRequestPacket)) {
+    TrafficRequestLocation tail;
+    std::memcpy(&tail, datagram.data() + sizeof(packet), sizeof(tail));
+    const ::GeoPoint location = ImportGeoPoint(tail.location);
+    if (location.Check()) {
+      result.location = location;
+      result.altitude = (int16_t)FromBE16(tail.altitude);
+    }
+  }
+
+  return result;
+}
+
 } /* namespace SkyLinesTracking */

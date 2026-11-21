@@ -149,15 +149,77 @@ TestShortDatagrams()
   ok1(!ImportFix(bytes.first(sizeof(FixPacket) - 1)));
 }
 
+/**
+ * A 24-byte traffic request is unchanged.  The Cloud request adds a
+ * position; a short datagram that claims one does not yield it.
+ */
+static void
+TestTrafficRequest()
+{
+  const TrafficRequestPacket plain =
+    MakeTrafficRequest(KEY, false, false, true);
+  ok1(sizeof(plain) == 24);
+  const uint32_t plain_flags = FromBE32(plain.flags);
+  ok1(plain_flags & TrafficRequestPacket::FLAG_NEAR);
+  ok1(!(plain_flags & TrafficRequestPacket::FLAG_LOCATION));
+  ok1(plain.reserved == 0);
+
+  TrafficRequestPacket plain_crc = plain;
+  const uint16_t crc = FromBE16(plain_crc.header.crc);
+  plain_crc.header.crc = 0;
+  ok1(crc == UpdateCRC16CCITT(ReferenceAsBytes(plain_crc), 0));
+
+  const auto imported = ImportTrafficRequest(ReferenceAsBytes(plain));
+  ok1(imported && imported->near && !imported->followees &&
+      !imported->club);
+  ok1(imported && !imported->location.IsValid());
+  ok1(imported && imported->altitude == -1);
+
+  const ::GeoPoint where(Angle::Degrees(11.5), Angle::Degrees(48.5));
+  const LocatedTrafficRequestPacket located =
+    MakeLocatedTrafficRequest(KEY, false, false, true, where, 1500);
+  ok1(sizeof(located) == 40);
+  const uint32_t located_flags = FromBE32(located.request.flags);
+  ok1(located_flags & TrafficRequestPacket::FLAG_NEAR);
+  ok1(located_flags & TrafficRequestPacket::FLAG_LOCATION);
+
+  LocatedTrafficRequestPacket located_crc = located;
+  const uint16_t crc2 = FromBE16(located_crc.request.header.crc);
+  located_crc.request.header.crc = 0;
+  ok1(crc2 == UpdateCRC16CCITT(ReferenceAsBytes(located_crc), 0));
+
+  const auto back = ImportTrafficRequest(ReferenceAsBytes(located));
+  ok1(back && back->near);
+  ok1(back && equals(back->location, where));
+  ok1(back && back->altitude == 1500);
+
+  const auto no_alt = ImportTrafficRequest(ReferenceAsBytes(
+    MakeLocatedTrafficRequest(KEY, false, false, true, where, -1)));
+  ok1(no_alt && no_alt->location.IsValid());
+  ok1(no_alt && no_alt->altitude == -1);
+
+  const auto bytes = ReferenceAsBytes(located);
+  const auto short_tail =
+    ImportTrafficRequest(bytes.first(sizeof(plain)));
+  ok1(short_tail && short_tail->near && !short_tail->location.IsValid());
+  ok1(short_tail && short_tail->altitude == -1);
+
+  const auto truncated =
+    ImportTrafficRequest(bytes.first(sizeof(located) - 1));
+  ok1(truncated && !truncated->location.IsValid());
+  ok1(!ImportTrafficRequest(bytes.first(sizeof(plain) - 1)));
+}
+
 int
 main()
 {
-  plan_tests(9 + 13 + 4 + 3);
+  plan_tests(9 + 13 + 4 + 3 + 21);
 
   TestSkyLinesFix();
   TestOGNFix();
   TestOGNId();
   TestShortDatagrams();
+  TestTrafficRequest();
 
   return exit_status();
 }

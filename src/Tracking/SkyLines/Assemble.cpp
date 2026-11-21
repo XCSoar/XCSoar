@@ -230,6 +230,25 @@ SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
   return packet;
 }
 
+SkyLinesTracking::LocatedTrafficRequestPacket
+SkyLinesTracking::MakeLocatedTrafficRequest(uint64_t key, bool followees,
+                                           bool club, bool nearby,
+                                           ::GeoPoint location, int altitude)
+{
+  LocatedTrafficRequestPacket packet{};
+  packet.request = MakeTrafficRequest(key, followees, club, nearby);
+  packet.request.header.crc = 0;
+  packet.request.flags |= ToBE32(TrafficRequestPacket::FLAG_LOCATION);
+  packet.tail.location = ExportGeoPoint(location);
+  packet.tail.altitude = ToBE16(uint16_t(int16_t(altitude)));
+  packet.tail.reserved = 0;
+  packet.tail.reserved2 = 0;
+
+  packet.request.header.crc =
+    ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
+  return packet;
+}
+
 SkyLinesTracking::UserNameRequestPacket
 SkyLinesTracking::MakeUserNameRequest(uint64_t key, uint32_t user_id)
 {

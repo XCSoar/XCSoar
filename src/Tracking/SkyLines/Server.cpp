@@ -81,7 +81,6 @@ Server::OnDatagramReceived(Client &&client,
   client.key = FromBE64(header.key);
 
   const auto &ping = *(const PingPacket *)data;
-  const auto &traffic = *(const TrafficRequestPacket *)data;
   const auto &user_name = *(const UserNameRequestPacket *)data;
   const auto &wave = ((const WaveSubmitPacket *)data)->wave;
   const auto &thermal = ((const ThermalSubmitPacket *)data)->thermal;
@@ -100,11 +99,10 @@ Server::OnDatagramReceived(Client &&client,
     break;
 
   case TRAFFIC_REQUEST:
-    if (length < sizeof(traffic))
-      return;
-
-    OnTrafficRequest(client,
-                     traffic.flags & ToBE32(TrafficRequestPacket::FLAG_NEAR));
+    if (const auto request =
+          ImportTrafficRequest({(const std::byte *)data, length}))
+      OnTrafficRequest(client, request->near, request->location,
+                       request->altitude);
     break;
 
   case USER_NAME_REQUEST:
