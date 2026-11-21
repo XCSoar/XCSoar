@@ -4,7 +4,8 @@
 #include "KeyboardWidget.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Asset.hpp"
-#include "Language/Language.hpp"
+#include "Look/ButtonLook.hpp"
+#include "ui/canvas/Font.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/CharUtil.hxx"
@@ -33,6 +34,15 @@ static_assert(sizeof(KEYBOARD_SYMBOLS) - 1 == 32);
 static constexpr int NUMBER_ROW_KEY_COUNT = 10;
 
 static constexpr int DEFAULT_NUMBER_ROW_PREFER = 4; /* '5' */
+
+/** Open box (U+2423), the usual mark for a space key. */
+static const char *
+SpaceCaption(const ButtonLook &look) noexcept
+{
+  return look.font != nullptr && look.font->HasGlyph(0x2423)
+    ? "\u2423"
+    : "___";
+}
 
 static bool
 ArrowToDirection(unsigned key_code, int &dix, int &diy) noexcept
@@ -70,7 +80,7 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
     AddButton(parent, caption, *i);
   }
 
-  AddButton(parent, "Space", ' ');
+  AddButton(parent, SpaceCaption(look), ' ');
   AddButton(parent, ".", '.');
   AddButton(parent, "@", '@');
   AddButton(parent, "-", '-');
@@ -317,7 +327,7 @@ KeyboardWidget::UpdatePage() noexcept
       buttons[i].Hide();
   }
   UpdateShiftState();
-  buttons[sizeof(KEYBOARD_LETTERS) - 1].SetCaption(_("Space"));
+  buttons[sizeof(KEYBOARD_LETTERS) - 1].SetCaption(SpaceCaption(look));
   if (show_shift_button && !symbols)
     shift_button.Show();
   else if (show_shift_button)

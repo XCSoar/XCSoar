@@ -5,7 +5,6 @@
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
-#include "Form/Edit.hpp"
 #include "Form/TextEntryBuffer.hpp"
 #include "Widget/KeyboardWidget.hpp"
 #include "Asset.hpp"
@@ -18,7 +17,6 @@
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/TruncateString.hpp"
-#include "ui/window/Window.hpp"
 
 #include <algorithm>
 
@@ -39,7 +37,7 @@ struct TextEntryLayout {
  */
 static void
 ComputeTextEntryLayout(const PixelRect &rc, bool with_keyboard, bool with_paste,
-                       TextEntryLayout &o) noexcept
+                       unsigned text_height, TextEntryLayout &o) noexcept
 {
   const int padding = Layout::Scale(2);
   const int backspace_width = Layout::Scale(36);
@@ -47,7 +45,9 @@ ComputeTextEntryLayout(const PixelRect &rc, bool with_keyboard, bool with_paste,
   const int paste_width = with_paste ? Layout::Scale(60) : 0;
   const int paste_left = backspace_left - (with_paste ? padding : 0) -
     paste_width;
-  const int editor_height = Layout::Scale(22);
+  const int editor_height =
+    std::max((int)text_height + 2 * Layout::Scale(6),
+             (int)Layout::GetMinimumControlHeight());
   const int editor_bottom = rc.top + padding + editor_height;
   const int button_height = Layout::Scale(40);
   const int keyboard_top = editor_bottom + padding;
@@ -67,7 +67,8 @@ ComputeTextEntryLayout(const PixelRect &rc, bool with_keyboard, bool with_paste,
   const int clear_left = cancel_right;
   const int clear_right = rc.right;
 
-  o.editor = {rc.left, rc.top + padding, paste_left - padding, editor_bottom};
+  o.editor = {rc.left + padding, rc.top + padding,
+              paste_left - padding, editor_bottom};
   o.paste = {paste_left, rc.top + padding, paste_left + paste_width,
              editor_bottom};
   o.backspace = {backspace_left, rc.top + padding, rc.right - padding,
@@ -93,7 +94,7 @@ BackspaceCaption(const ButtonLook &look) noexcept
 }
 
 static void
-ApplyTextEntryLayout(const TextEntryLayout &L, WndProperty &editor, Button &ok,
+ApplyTextEntryLayout(const TextEntryLayout &L, Window &editor, Button &ok,
                      Button &cancel, Button &clear, KeyboardWidget *keyboard,
                      Button &backspace, Button *paste,
                      ContainerWindow &client_area) noexcept
@@ -109,9 +110,10 @@ ApplyTextEntryLayout(const TextEntryLayout &L, WndProperty &editor, Button &ok,
     paste->Move(L.paste);
   client_area.Invalidate();
 }
+
 } // namespace
 
-static WndProperty *editor;
+static TextEntryField *editor;
 static KeyboardWidget *kb = NULL;
 static ContainerWindow *textentry_client = NULL;
 static Button *textentry_backspace = NULL;
@@ -147,8 +149,7 @@ FilterCharacter(unsigned ch)
 static void
 UpdateTextboxProp()
 {
-  editor->SetText(edit_buffer->GetValue());
-
+  editor->SetValue(edit_buffer->GetValue(), edit_buffer->GetCursor());
   UpdateAllowedCharacters();
 }
 
@@ -332,15 +333,14 @@ TouchTextEntry(char *text, size_t width,
   ContainerWindow &client_area = form.GetClientAreaWindow();
   textentry_client = &client_area;
   const PixelRect rc0 = client_area.GetClientRect();
+  const unsigned text_height = look.text_font.GetHeight();
   TextEntryLayout L;
-  ComputeTextEntryLayout(rc0, !system_keyboard, with_paste, L);
+  ComputeTextEntryLayout(rc0, !system_keyboard, with_paste, text_height, L);
 
-  WndProperty _editor(client_area, look, "",
-                      L.editor,
-                      0, WindowStyle());
-  _editor.SetReadOnly();
+  TextEntryField _editor;
+  WindowStyle editor_style;
+  _editor.Create(client_area, L.editor, editor_style);
   editor = &_editor;
-  _editor.SetAlignment(WndProperty::Alignment::AUTO);
 
   WindowStyle button_style;
   button_style.TabStop();
@@ -394,7 +394,8 @@ TouchTextEntry(char *text, size_t width,
   form.SetClientLayoutFunction([&]() {
     const PixelRect rc = client_area.GetClientRect();
     TextEntryLayout layout;
-    ComputeTextEntryLayout(rc, !system_keyboard, with_paste, layout);
+    ComputeTextEntryLayout(rc, !system_keyboard, with_paste, text_height,
+                           layout);
     ApplyTextEntryLayout(layout, _editor, ok_button, cancel_button, clear_button,
                          kb, backspace_button,
                          with_paste ? &paste_button : nullptr, client_area);
