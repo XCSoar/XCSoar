@@ -97,8 +97,18 @@ StatusIcon(const MapLook &look, const char *text) noexcept
     return &look.terrain_warning_icon;
   if (HasToken(text, "terrain"))
     return &look.waypoint.mountain_top_icon;
+  if (HasToken(text, "airspace"))
+    return &look.airspace.intercept_icon;
+  if (HasToken(text, "sunset"))
+    return &look.sunset_icon;
+  if (HasToken(text, "weather"))
+    return &look.weather_icon;
+  if (HasToken(text, "wind"))
+    return &look.wind_icon;
   if (HasToken(text, "takeoff"))
     return &look.takeoff_icon;
+  if (HasToken(text, "landing"))
+    return &look.landing_icon;
   if (HasToken(text, "stall") || HasToken(text, "overspeed") ||
       HasToken(text, "polar"))
     return &look.plane_icon;
@@ -182,7 +192,54 @@ PopupMessage::Create(const PixelRect _rc) noexcept
 
   PaintWindow::Create(parent, GetRect(), style);
   SetTransparent();
+
+#if DEBUG_ALL_MAP_OVERLAYS
+  SeedDebugHud();
+#endif
 }
+
+#if DEBUG_ALL_MAP_OVERLAYS
+void
+PopupMessage::SeedDebugHud() noexcept
+{
+  static constexpr auto show = std::chrono::hours(24);
+  static constexpr const char *const status[] = {
+    "STALL",
+    "OVERSPEED",
+    "Failed to open configured map file",
+    "Battery low",
+    "Waiting for GPS fix",
+    "The polar of this plane is invalid.",
+    "Airspace warning",
+    "Final glide through terrain",
+    "Significant wind change",
+    "Expect arrival past sunset",
+    "Below final glide",
+    "Takeoff",
+    "Landing",
+    "Simulator Steer by dragging from the glider, "
+    "or using InfoBoxes Altitude and Speed Ground",
+  };
+
+  {
+    const std::lock_guard lock{mutex};
+    for (const char *text : status)
+      AddMessage(show, MSG_USERINTERFACE, text);
+    CollectStatusPills();
+  }
+
+  static constexpr char terrain_key = 0, repo_key = 1, weather_key = 2;
+  BeginProgress(&terrain_key, "Loading Terrain File...");
+  SetProgressRange(&terrain_key, 100);
+  SetProgressPosition(&terrain_key, 35);
+  BeginProgress(&repo_key, "Updating repository");
+  SetProgressRange(&repo_key, 100);
+  SetProgressPosition(&repo_key, 70);
+  BeginProgress(&weather_key, "Downloading weather");
+  SetProgressRange(&weather_key, 100);
+  SetProgressPosition(&weather_key, 15);
+}
+#endif
 
 bool
 PopupMessage::OnMouseDown(PixelPoint p) noexcept

@@ -13,6 +13,10 @@
 #include <chrono>
 #include <memory>
 
+#ifndef DEBUG_ALL_MAP_OVERLAYS
+#define DEBUG_ALL_MAP_OVERLAYS 0
+#endif
+
 struct UISettings;
 struct DialogLook;
 struct MapLook;
@@ -45,7 +49,11 @@ public:
 
 private:
   static constexpr unsigned MAXMESSAGES = 20;
+#if DEBUG_ALL_MAP_OVERLAYS
+  static constexpr unsigned MAX_PILLS = 16;
+#else
   static constexpr unsigned MAX_PILLS = 8;
+#endif
 
   struct Message {
     Type type = MSG_UNKNOWN;
@@ -204,6 +212,10 @@ private:
   void CollectStatusPills() noexcept;
   void UpdateTextAndLayout() noexcept;
   int GetEmptySlot() noexcept;
+
+#if DEBUG_ALL_MAP_OVERLAYS
+  void SeedDebugHud() noexcept;
+#endif
 
 protected:
   /* virtual methods from class Window */
