@@ -15,11 +15,18 @@ struct OverlayLook;
 
 /** One lower-left label. @c right_icon is the scale's far chevron. */
 struct MapLabel {
-  const char *text;
+  const char *text = "";
   const MaskedIcon *icon = nullptr;
   Color fill = COLOR_WHITE;
   const MaskedIcon *right_icon = nullptr;
+  unsigned progress_position = 0;
+  unsigned progress_range = 0;
 };
+
+[[gnu::pure]]
+PixelSize
+MapLabelSize(const Font &font, const MapLabel &label,
+             unsigned max_width = 0) noexcept;
 
 /** shortcut: 8 labels; raise the cap when a ninth condition is added */
 using MapLabelList = StaticArray<MapLabel, 8>;
@@ -38,7 +45,8 @@ GetMapScaleBandHeight(const Font &font) noexcept;
  */
 PixelRect
 DrawMapLabel(Canvas &canvas, const Font &font,
-            int left, int bottom, const MapLabel &label) noexcept;
+            int left, int bottom, const MapLabel &label,
+            unsigned max_width = 0) noexcept;
 
 /**
  * Draw @p list left to right. The gap is two text paddings, the same

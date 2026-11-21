@@ -10,11 +10,15 @@
 #include "Screen/Layout.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Look/OverlayLook.hpp"
+#include "Look/Colors.hpp"
+#include "ui/canvas/TextWrapper.hpp"
 #include "util/StaticString.hxx"
 #include "util/StringBuffer.hxx"
 #include "Formatter/UserUnits.hpp"
 
+#include <algorithm>
 #include <cassert>
+#include <cstdint>
 
 unsigned
 GetMapScaleBandHeight(const Font &font) noexcept
@@ -71,27 +75,70 @@ DrawSlotIcon(Canvas &canvas, const MaskedIcon &icon,
             icon_px);
 }
 
-static unsigned
-MapLabelWidth(Canvas &canvas, const Font &font,
-              const MapLabel &label) noexcept
-{
-  canvas.Select(font);
+struct LabelChrome {
+  unsigned padding, before_text, trail, lead, icon_px;
 
-  const unsigned padding = Layout::GetTextPadding();
-  const unsigned icon_px = font.GetHeight();
-  const unsigned lead = IconSlot(label.icon, icon_px, padding);
+  unsigned Chrome() const noexcept {
+    return before_text + padding + trail;
+  }
+};
+
+static LabelChrome
+MakeChrome(const Font &font, const MapLabel &label) noexcept
+{
+  LabelChrome c;
+  c.padding = Layout::GetTextPadding();
+  c.icon_px = font.GetHeight();
+  c.lead = IconSlot(label.icon, c.icon_px, c.padding);
   /* text sits one padding past an icon, and against the padding when
      there is none */
-  const unsigned before_text = label.icon != nullptr ? lead + padding : lead;
-  const unsigned trail = label.right_icon == nullptr
+  c.before_text = label.icon != nullptr ? c.lead + c.padding : c.lead;
+  c.trail = label.right_icon == nullptr
     ? 0
-    : label.right_icon->GetScaledSize(icon_px).width + padding;
-  return before_text + canvas.CalcTextSize(label.text).width + padding + trail;
+    : label.right_icon->GetScaledSize(c.icon_px).width + c.padding;
+  return c;
+}
+
+struct LabelLayout {
+  LabelChrome chrome;
+  WrappedText wrapped;
+  PixelSize size;
+};
+
+static LabelLayout
+LayoutLabel(const Font &font, const MapLabel &label,
+            unsigned max_width) noexcept
+{
+  LabelLayout l;
+  l.chrome = MakeChrome(font, label);
+  const unsigned chrome = l.chrome.Chrome();
+  const unsigned text_w = font.TextSize(label.text).width;
+  if (max_width == 0 || chrome + text_w <= max_width)
+    l.wrapped = {};
+  else {
+    const unsigned inner = max_width > chrome ? max_width - chrome : 1;
+    l.wrapped = WrapText(font, inner, label.text);
+  }
+
+  const unsigned n = l.wrapped.lines.empty()
+    ? 1u
+    : unsigned(l.wrapped.lines.size());
+  l.size = {
+    l.wrapped.lines.empty() ? chrome + text_w : max_width,
+    n * font.GetHeight() + l.chrome.padding,
+  };
+  return l;
+}
+
+PixelSize
+MapLabelSize(const Font &font, const MapLabel &label,
+             unsigned max_width) noexcept
+{
+  return LayoutLabel(font, label, max_width).size;
 }
 
 static unsigned
-MapLabelRowWidth(Canvas &canvas, const Font &font,
-                 const MapLabelList &list) noexcept
+MapLabelRowWidth(const Font &font, const MapLabelList &list) noexcept
 {
   const unsigned gap = Layout::GetTextPadding() * 2;
   unsigned width = 0;
@@ -99,7 +146,7 @@ MapLabelRowWidth(Canvas &canvas, const Font &font,
   for (const MapLabel &item : list) {
     if (width != 0)
       width += gap;
-    width += MapLabelWidth(canvas, font, item);
+    width += MapLabelSize(font, item).width;
   }
 
   return width;
@@ -107,45 +154,64 @@ MapLabelRowWidth(Canvas &canvas, const Font &font,
 
 PixelRect
 DrawMapLabel(Canvas &canvas, const Font &font,
-            int left, int bottom, const MapLabel &label) noexcept
+            int left, int bottom, const MapLabel &label,
+            unsigned max_width) noexcept
 {
   canvas.Select(font);
 
-  const PixelSize text = canvas.CalcTextSize(label.text);
-  const unsigned padding = Layout::GetTextPadding();
-  const unsigned height = GetMapScaleBandHeight(font);
-  const unsigned icon_px = font.GetHeight();
-  const unsigned lead = IconSlot(label.icon, icon_px, padding);
-  /* text sits one padding past an icon, and against the padding when
-     there is none */
-  const unsigned before_text = label.icon != nullptr ? lead + padding : lead;
-  const unsigned trail = label.right_icon == nullptr
-    ? 0
-    : label.right_icon->GetScaledSize(icon_px).width + padding;
+  const auto layout = LayoutLabel(font, label, max_width);
+  const auto &c = layout.chrome;
+  const auto &size = layout.size;
 
   PixelRect rc;
   rc.left = left;
   rc.bottom = bottom;
-  rc.top = bottom - int(height);
-  rc.right = left + int(before_text + text.width + padding + trail);
+  rc.top = bottom - int(size.height);
+  rc.right = left + int(size.width);
 
   /* white stays translucent; a warning or an error is opaque */
   const bool solid = label.fill != COLOR_WHITE;
   const Color ink = LabelInk(label.fill);
   DrawRoundedLabel(canvas, rc, 0xff, LabelFill(label.fill), solid);
+
+  if (label.progress_range > 0 && HasColors() && !IsDithered()) {
+    const unsigned bar_w = rc.GetWidth();
+    const unsigned pos = std::min(label.progress_position,
+                                  label.progress_range);
+    const unsigned filled =
+      (unsigned)((uint64_t(pos) * bar_w) / label.progress_range);
+    if (filled > 0) {
+      PixelRect fill_rc = rc;
+      fill_rc.right = fill_rc.left + int(filled);
+      DrawRoundedLabel(canvas, fill_rc, 0xff, COLOR_XCSOAR_LIGHT, true);
+    }
+  }
+
   canvas.SetTextColor(ink);
 
   if (label.icon != nullptr)
-    DrawSlotIcon(canvas, *label.icon, rc.left, lead,
-                 rc.top, height, icon_px);
+    DrawSlotIcon(canvas, *label.icon, rc.left, c.lead,
+                 rc.top, size.height, c.icon_px);
   if (label.right_icon != nullptr)
-    DrawSlotIcon(canvas, *label.right_icon, rc.right - int(trail), trail,
-                 rc.top, height, icon_px);
+    DrawSlotIcon(canvas, *label.right_icon, rc.right - int(c.trail), c.trail,
+                 rc.top, size.height, c.icon_px);
 
   canvas.SetBackgroundTransparent();
-  canvas.DrawText({rc.left + int(before_text),
-                   rc.top + (int(height) - int(text.height)) / 2},
-                  label.text);
+
+  const int text_x = rc.left + int(c.before_text);
+  if (layout.wrapped.lines.empty()) {
+    const PixelSize text = canvas.CalcTextSize(label.text);
+    canvas.DrawText({text_x,
+                     rc.top + (int(size.height) - int(text.height)) / 2},
+                    label.text);
+  } else {
+    const unsigned line_h = font.GetHeight();
+    int y = rc.top + int(c.padding) / 2;
+    for (const auto &line : layout.wrapped.lines) {
+      canvas.DrawText({text_x, y}, line.GetText(label.text));
+      y += int(line_h);
+    }
+  }
   return rc;
 }
 
@@ -190,7 +256,7 @@ AppendMapScale(MapLabelList &list,
     &look.map_scale_right_icon,
   };
   /* the whole scale label, icons included, not only the digits */
-  if (MapLabelWidth(canvas, font, range_label) > unsigned(rc.GetWidth()))
+  if (MapLabelSize(font, range_label).width > unsigned(rc.GetWidth()))
     return false;
 
   if (!list.checked_append(range_label)) {
@@ -205,8 +271,8 @@ AppendMapScale(MapLabelList &list,
       &look.contour_spacing_icon,
     };
     const unsigned gap = Layout::GetTextPadding() * 2;
-    const unsigned used = MapLabelRowWidth(canvas, font, list);
-    if (used + gap + MapLabelWidth(canvas, font, contour_label)
+    const unsigned used = MapLabelRowWidth(font, list);
+    if (used + gap + MapLabelSize(font, contour_label).width
         <= unsigned(rc.GetWidth())) {
       if (!list.checked_append(contour_label)) {
         assert(false);
@@ -246,8 +312,8 @@ RenderMapScale(Canvas &canvas,
   if (tail != nullptr) {
     const Font &font = *look.overlay_font;
     const unsigned gap = Layout::GetTextPadding() * 2;
-    const unsigned used = MapLabelRowWidth(canvas, font, list);
-    const unsigned tail_width = MapLabelWidth(canvas, font, *tail);
+    const unsigned used = MapLabelRowWidth(font, list);
+    const unsigned tail_width = MapLabelSize(font, *tail).width;
     if (used + gap + tail_width <= unsigned(rc.GetWidth()) &&
         !list.checked_append(*tail))
       assert(false);
