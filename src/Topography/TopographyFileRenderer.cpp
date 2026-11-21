@@ -784,14 +784,16 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     return;
 
   const unsigned fill_level = file.GetFillThinningLevel(map_scale);
+#ifdef ENABLE_OPENGL
   const unsigned lod = MapLod(map_scale);
 
-#ifdef ENABLE_OPENGL
   const auto t0 = std::chrono::steady_clock::now();
   unsigned line_draws = 0, fill_draws = 0;
   const unsigned vtx0 = topo_frame_vertices;
-#endif
   const bool vis_rebuild = UpdateVisibleShapes(projection);
+#else
+  UpdateVisibleShapes(projection);
+#endif
   PaintPoints(canvas, projection);
 
   if (visible_shapes.empty()) {

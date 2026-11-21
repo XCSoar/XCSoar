@@ -87,7 +87,9 @@ MapLook::Initialise(const MapSettings &settings,
   weather_icon.LoadResource(IDB_WEATHER_ALL, false);
 
   topography.Initialise();
-  airspace.Initialise(settings.airspace, topography.important_label_font);
+  airspace.Initialise(settings.airspace,
+                      topography.GetLabelFont(true,
+                                              TopographyLook::LabelSize::SMALL));
 
   overlay.Initialise(font, bold_font);
 }

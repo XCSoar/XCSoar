@@ -109,8 +109,6 @@ private:
 
   PixelRect rc; // HUD rectangle (parent coordinates)
 
-  const UISettings &settings;
-
   Mutex mutex;
   struct Message messages[MAXMESSAGES];
 
@@ -163,7 +161,7 @@ private:
 public:
   PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
                const MapLook &_map_look,
-               const UISettings &settings) noexcept;
+               [[maybe_unused]] const UISettings &settings) noexcept;
 
   void Create(const PixelRect _rc) noexcept;
 
