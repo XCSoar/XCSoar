@@ -1031,11 +1031,17 @@ service have a look at \url{https://skylines.aero}.
 
 The XCSoar Cloud is XCSoar's own tracking service.  While flying, XCSoar
 sends your position to it and receives the other participants and the
-traffic of the Open Glider Network (OGN) in return.
+traffic of the Open Glider Network (OGN) in return.  With Show traffic
+on, it also asks for that traffic on the ground and in the simulator.
+That request is not a position report, and XCSoar does not upload a
+track then.
 
 \begin{description}
 \item[XCSoar Cloud]  Take part in the XCSoar Cloud.
-\item[Show traffic]  Show the traffic of the XCSoar Cloud and of OGN.
+\item[Show traffic]  Show the traffic of the XCSoar Cloud and of OGN,
+  also on the ground and in the simulator.  XCSoar asks for it every
+  5 seconds for the place the map is showing, so panning the map asks
+  for traffic there.  That request does not upload a track.
 \item[Roaming]  Use the XCSoar Cloud also on a roaming mobile data
   connection.
 \item[Show thermals]  Show the thermals that others reported.

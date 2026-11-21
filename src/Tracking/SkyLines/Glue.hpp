@@ -75,9 +75,11 @@ private:
   bool IsNetConnected(bool roaming_allowed) const;
 
   void ReconnectClients();
+  void ReconnectCloud();
 
   void SendFixes(const NMEAInfo &basic);
   void SendCloudFix(const MoreData &basic, const DerivedInfo &calculated);
+  void SendCloudTrafficRequest(const MoreData &basic);
 };
 
 } /* namespace SkyLinesTracking */

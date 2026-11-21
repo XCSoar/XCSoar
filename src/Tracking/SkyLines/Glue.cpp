@@ -15,6 +15,9 @@
 #include "util/EnvParser.hpp"
 #include "util/StringCompare.hxx"
 #include "LogFile.hpp"
+#include "Interface.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
+#include "UIGlobals.hpp"
 
 #include <cassert>
 
@@ -131,6 +134,10 @@ SkyLinesTracking::Glue::SendCloudFix(const MoreData &basic,
   if (!calculated.flight.flying)
     return;
 
+  /* a simulator or replay position is not a track */
+  if (!basic.gps.real && !GetEnvBool("XCS_CLOUD_DEBUG"))
+    return;
+
   if (!IsNetConnected(cloud_roaming)) {
     if (GetEnvBool("XCS_CLOUD_DEBUG"))
       LogFmt("Cloud: FIX skipped (network/roaming gate)");
@@ -194,9 +201,15 @@ SkyLinesTracking::Glue::Tick(const MoreData &basic,
     basic.location_available && !basic.gps.real;
   const bool cloud_debug = GetEnvBool("XCS_CLOUD_DEBUG");
 
-  if (simulator && !cloud_debug)
-    /* disable in simulator/replay */
+  if (simulator && !cloud_debug) {
+    /* no track from the simulator or from replay; traffic still */
+    if (cloud_show_traffic) {
+      ReconnectCloud();
+      if (cloud_client.IsConnected())
+        SendCloudTrafficRequest(basic);
+    }
     return;
+  }
 
   ReconnectClients();
 
@@ -210,19 +223,73 @@ SkyLinesTracking::Glue::Tick(const MoreData &basic,
 
   if (cloud_client.IsConnected()) {
     SendCloudFix(basic, calculated);
-
-    if (cloud_show_traffic && basic.location_available &&
-        (calculated.flight.flying || cloud_debug) &&
-        cloud_traffic_clock.CheckAdvance(basic.clock, minutes(1))) {
-      /* near=true: cloud server returns nearby cloud + OGN traffic */
-      cloud_client.SendTrafficRequest(false, false, true);
-      if (cloud_debug)
-        LogFmt("Cloud: sent TRAFFIC_REQUEST (near)");
-    }
+    SendCloudTrafficRequest(basic);
 
     if (thermal_enabled &&
         thermal_clock.CheckAdvance(basic.clock, minutes(1)))
       cloud_client.SendThermalRequest();
+  }
+}
+
+static int
+CloudRequestAltitude(const MoreData &basic) noexcept
+{
+  if (basic.baro_altitude_available)
+    return int(basic.baro_altitude);
+
+  if (basic.gps_altitude_available)
+    return int(basic.gps_altitude);
+
+  return -1;
+}
+
+/** Map centre while the map is showing, otherwise the aircraft. */
+static ::GeoPoint
+CloudRequestLocation(const MoreData &basic) noexcept
+{
+  if (CommonInterface::main_window != nullptr) {
+    if (const GlueMapWindow *map = UIGlobals::GetMapIfActive();
+        map != nullptr) {
+      const auto &projection = map->VisibleProjection();
+      if (projection.IsValid())
+        return projection.GetGeoScreenCenter();
+    }
+  }
+
+  if (basic.location_available)
+    return basic.location;
+
+  return GeoPoint::Invalid();
+}
+
+void
+SkyLinesTracking::Glue::SendCloudTrafficRequest(const MoreData &basic)
+{
+  if (!cloud_show_traffic)
+    return;
+
+  const ::GeoPoint location = CloudRequestLocation(basic);
+  if (!location.IsValid())
+    return;
+
+  if (!cloud_traffic_clock.CheckAdvance(basic.clock, seconds(5)))
+    return;
+
+  cloud_client.SendTrafficRequest(false, false, true, location,
+                                  CloudRequestAltitude(basic));
+  if (GetEnvBool("XCS_CLOUD_DEBUG"))
+    LogFmt("Cloud: sent TRAFFIC_REQUEST (near)");
+}
+
+void
+SkyLinesTracking::Glue::ReconnectCloud()
+{
+  const auto now = steady_clock::now();
+  if (cloud_client.IsEnabled() && !cloud_client.IsDefined() &&
+      !cloud_host.empty() && IsNetConnected(cloud_roaming) &&
+      now >= cloud_retry_at) {
+    cloud_retry_at = now + RECONNECT_INTERVAL;
+    cloud_client.Open(*global_cares_channel, cloud_host.c_str(), cloud_port);
   }
 }
 
@@ -236,12 +303,7 @@ SkyLinesTracking::Glue::ReconnectClients()
     client.Open(*global_cares_channel, "tracking.skylines.aero");
   }
 
-  if (cloud_client.IsEnabled() && !cloud_client.IsDefined() &&
-      !cloud_host.empty() && IsNetConnected(cloud_roaming) &&
-      now >= cloud_retry_at) {
-    cloud_retry_at = now + RECONNECT_INTERVAL;
-    cloud_client.Open(*global_cares_channel, cloud_host.c_str(), cloud_port);
-  }
+  ReconnectCloud();
 }
 
 void

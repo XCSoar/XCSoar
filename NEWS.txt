@@ -151,6 +151,10 @@ Version 7.47 - not yet released
     hears you; off by default (Config → Services → XCSoar Cloud,
     "Send to OGN"), only with a connected FLARM that is not set to
     privacy or no tracking #1282
+* tracking
+  - show XCSoar Cloud and OGN traffic on the ground and in the
+    simulator, for the place the map is showing, every 5 seconds,
+    without uploading a track
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
