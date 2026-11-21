@@ -398,7 +398,7 @@ class RepositoryAutoUpdate final : public Net::DownloadListener {
     if (stop || !terrain_idle || queued.empty() || progress)
       return;
 
-    BackgroundDownloadProgress::Get().Begin(_("Updating"));
+    BackgroundDownloadProgress::Get().Begin(_("Updating repository"));
     progress = true;
   }
 

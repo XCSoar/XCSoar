@@ -3,7 +3,7 @@
 
 #include "GlueMapWindow.hpp"
 #include "UserMapScale.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
 #include "Interface.hpp"

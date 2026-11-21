@@ -34,6 +34,11 @@ public:
     return size;
   }
 
+  /** Hotspot subtracted by Draw(); (0,0) is top-left, centre for map symbols. */
+  const PixelPoint &GetOrigin() const noexcept {
+    return origin;
+  }
+
   /**
    * The size Draw(Canvas&, PixelPoint, unsigned) will paint for the
    * given target height.

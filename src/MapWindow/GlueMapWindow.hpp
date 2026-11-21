@@ -14,6 +14,9 @@
 #include "ui/event/Timer.hpp"
 #include "ui/event/Notify.hpp"
 #include "ui/window/Features.hpp"
+#include "Device/Features.hpp"
+#include "util/StaticArray.hxx"
+#include "util/StaticString.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "ui/event/PeriodicTimer.hpp"
@@ -219,6 +222,9 @@ private:
 
   OffsetHistory offset_history;
 
+  /** Lower-left device faults; filled in ExchangeBlackboard(). */
+  StaticArray<StaticString<96>, NUMDEV> device_faults;
+
   /*
    * Area of the map where no HUD items should be drawn
    */
@@ -291,7 +297,7 @@ public:
   virtual ~GlueMapWindow() noexcept;
 
   void SetTopography(TopographyStore *_topography) noexcept;
-  void SetTerrain(RasterTerrain *_terrain) noexcept;
+  void SetTerrain(TerrainBase *_terrain) noexcept;
 
   void SetMapSettings(const MapSettings &new_value) noexcept;
   void SetComputerSettings(const ComputerSettings &new_value) noexcept;
@@ -329,6 +335,11 @@ public:
    * InterfaceBlackboard.
    */
   void ExchangeBlackboard() noexcept;
+
+private:
+  void RefreshDeviceFaults() noexcept;
+
+public:
 
   /**
    * Suspend threads that are owned by this object.

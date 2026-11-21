@@ -3,6 +3,7 @@
 
 #include "Terrain/RasterRenderer.hpp"
 #include "Terrain/RasterMap.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Constants.hpp"
 #include "Screen/Layout.hpp"
@@ -23,9 +24,6 @@
 #include "ui/canvas/opengl/Texture.hpp"
 #include "ui/canvas/opengl/Shaders.hpp"
 #include "ui/canvas/opengl/Program.hpp"
-#include "ui/canvas/opengl/Attribute.hpp"
-#include "ui/canvas/opengl/VertexPointer.hpp"
-#include "ui/dim/BulkPoint.hpp"
 #endif
 
 #include <algorithm> // for std::clamp()
@@ -280,9 +278,39 @@ RasterRenderer::FillHeightRect(const RasterMap &map,
   }
 }
 
+void
+RasterRenderer::FillHeightRect(const TerrainBase &terrain,
+                               unsigned x, unsigned y,
+                               unsigned w, unsigned h) noexcept
+{
+  if (w < 2 || h == 0)
+    return;
+
+  const unsigned width = height_matrix.GetSize().x;
+  const unsigned height = height_matrix.GetSize().y;
+  const Angle north = bounds.GetNorth();
+  const Angle west = bounds.GetWest();
+  const Angle dlat = bounds.GetHeight() / double(height);
+  const Angle width_angle = bounds.GetWidth();
+  const double x_denom = double(width - 1);
+  const unsigned q = HeightMatrix::TerrainQuantisation(bounds,
+                                                       height_matrix.GetSize());
+
+  for (unsigned row = y; row < y + h; ++row) {
+    const Angle lat = north - dlat * double(row);
+    const Angle lon0 = west + width_angle * (double(x) / x_denom);
+    const Angle lon1 =
+      west + width_angle * (double(x + w - 1) / x_denom);
+    terrain.ScanTerrainLine(GeoPoint(lon0, lat), GeoPoint(lon1, lat),
+                            height_matrix.GetRow(row) + x,
+                            w, q);
+  }
+}
+
 bool
-RasterRenderer::ScrollMap(const RasterMap &map, const GeoBounds &desired,
-                         UnsignedPoint2D matrix_size) noexcept
+RasterRenderer::ScrollMatrix(const GeoBounds &desired,
+                             UnsignedPoint2D matrix_size,
+                             int &east, int &north) noexcept
 {
   if (!bounds.IsValid() || height_matrix.GetSize() != matrix_size)
     return false;
@@ -304,9 +332,9 @@ RasterRenderer::ScrollMap(const RasterMap &map, const GeoBounds &desired,
       > dlat * 0.5)
     return false;
 
-  const int east = (int)std::lround(
+  east = (int)std::lround(
     (desired.GetWest() - bounds.GetWest()).Degrees() / dlon);
-  const int north = (int)std::lround(
+  north = (int)std::lround(
     (desired.GetNorth() - bounds.GetNorth()).Degrees() / dlat);
 
   if (east == 0 && north == 0) {
@@ -328,6 +356,21 @@ RasterRenderer::ScrollMap(const RasterMap &map, const GeoBounds &desired,
 
   height_matrix.Scroll(east, north);
   last_quantisation_pixels = quantisation_pixels;
+  return true;
+}
+
+void
+RasterRenderer::FillScrollEdges(int east, int north,
+                                unsigned width, unsigned height,
+                                const RasterMap *map,
+                                const TerrainBase *terrain) noexcept
+{
+  auto fill = [&](unsigned x, unsigned y, unsigned w, unsigned h) {
+    if (map != nullptr)
+      FillHeightRect(*map, x, y, w, h);
+    else
+      FillHeightRect(*terrain, x, y, w, h);
+  };
 
   /* The GPU texture is not shifted by Scroll().  The whole picture
      is uploaded later; uploading only the new edge would leave the
@@ -342,7 +385,7 @@ RasterRenderer::ScrollMap(const RasterMap &map, const GeoBounds &desired,
     row_y = height - row_h;
   }
   if (row_h > 0)
-    FillHeightRect(map, 0, row_y, width, row_h);
+    fill(0, row_y, width, row_h);
 
   unsigned col_x = 0, col_w = 0;
   if (east > 0) {
@@ -368,8 +411,40 @@ RasterRenderer::ScrollMap(const RasterMap &map, const GeoBounds &desired,
     col_h = height - unsigned(-north);
   }
   if (col_w >= 2 && col_h > 0)
-    FillHeightRect(map, col_x, col_y, col_w, col_h);
+    fill(col_x, col_y, col_w, col_h);
+}
 
+bool
+RasterRenderer::ScrollMap(const RasterMap &map, const GeoBounds &desired,
+                         UnsignedPoint2D matrix_size) noexcept
+{
+  int east = 0, north = 0;
+  if (!ScrollMatrix(desired, matrix_size, east, north))
+    return false;
+  if (east == 0 && north == 0)
+    return true;
+
+  FillScrollEdges(east, north, matrix_size.x, matrix_size.y, &map, nullptr);
+  height_matrix_changed = true;
+  return true;
+}
+
+bool
+RasterRenderer::ScrollTerrain(const TerrainBase &terrain,
+                              const GeoBounds &desired,
+                              UnsignedPoint2D matrix_size) noexcept
+{
+  int east = 0, north = 0;
+  if (!ScrollMatrix(desired, matrix_size, east, north))
+    return false;
+  if (east == 0 && north == 0)
+    return true;
+
+  terrain.PreCacheTiles(bounds,
+                        HeightMatrix::TerrainQuantisation(bounds,
+                                                          matrix_size));
+  FillScrollEdges(east, north, matrix_size.x, matrix_size.y,
+                  nullptr, &terrain);
   height_matrix_changed = true;
   return true;
 }
@@ -435,6 +510,13 @@ RasterRenderer::ScanMap(const RasterMap &map,
   }
 
 #ifdef ENABLE_OPENGL
+  if (!map.IsDefined()) {
+    /* terrain not yet loaded */
+    height_matrix_changed = false;
+    quantisation_effective = 0;
+    return;
+  }
+
   GeoBounds desired =
     projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
   if (!desired.IntersectWith(map.GetBounds())) {
@@ -487,6 +569,96 @@ RasterRenderer::ScanMap(const RasterMap &map,
 #else
   (void)force_full;
   height_matrix.Fill(map, projection, quantisation_pixels, true);
+
+  ClampQuantisationEffectiveToMatrix(quantisation_effective,
+                                     height_matrix.GetSize());
+#endif
+}
+
+void
+RasterRenderer::ScanTerrain(const TerrainBase &terrain,
+                            const WindowProjection &projection,
+                            bool force_full) noexcept
+{
+  const GeoPoint center =
+    projection.ScreenToGeo(projection.GetScreenCenter());
+  if (!center.IsValid())
+    return;
+
+  const auto terrain_bounds = terrain.GetBounds();
+  if (!terrain_bounds.IsValid())
+    return;
+
+  /* Slope setup copied from ScanMap().  Do not replace pixel_size
+     with a 111 km/deg span: that inflated n2 and washed the shade. */
+  if (quantisation_pixels < 1)
+    quantisation_pixels = 1;
+
+  pixel_size = quantisation_pixels / projection.GetScale();
+  const double map_pixel_size =
+    terrain.PixelDistance(center, 1);
+
+  if (pixel_size < PIXEL_SIZE_NORMAL_THRESHOLD) {
+    auto q = map_pixel_size / pixel_size;
+    quantisation_effective = std::max(1, (int)q);
+    const unsigned max_quantisation_near =
+      Layout::FastScale(MAX_QUANTISATION_NEAR);
+    if (quantisation_effective > max_quantisation_near)
+      quantisation_effective = max_quantisation_near;
+  } else if (pixel_size < PIXEL_SIZE_LOW_ZOOM_THRESHOLD) {
+    auto q = map_pixel_size / pixel_size;
+    const double zoom_factor =
+      1.0 + (pixel_size - PIXEL_SIZE_NORMAL_THRESHOLD) / ZOOM_FACTOR_DIVISOR;
+    quantisation_effective = std::max(1, (int)(q * zoom_factor));
+    const unsigned max_quantisation_low_zoom =
+      Layout::FastScale(MAX_QUANTISATION_LOW_ZOOM);
+    if (quantisation_effective > max_quantisation_low_zoom)
+      quantisation_effective = max_quantisation_low_zoom;
+  } else {
+    quantisation_effective = 0;
+  }
+
+#ifdef ENABLE_OPENGL
+  GeoBounds desired = projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
+  if (!desired.IntersectWith(terrain_bounds)) {
+    height_matrix_changed = false;
+    quantisation_effective = 0;
+    return;
+  }
+
+  UnsignedPoint2D matrix_size =
+    (UnsignedPoint2D)projection.GetScreenSize()
+    * static_cast<unsigned>(BOUNDS_SCALE_FACTOR * 128.0f + 0.5f)
+    / quantisation_pixels / 128;
+  if (matrix_size.x == 0 || matrix_size.y == 0) {
+    height_matrix_changed = false;
+    quantisation_effective = 0;
+    return;
+  }
+
+  const unsigned max_texture = OpenGL::max_texture_size > 0
+    ? OpenGL::max_texture_size
+    : OpenGL::DEFAULT_MAX_TEXTURE_SIZE;
+  if (matrix_size.x > max_texture || matrix_size.y > max_texture) {
+    const double scale = std::min(double(max_texture) / matrix_size.x,
+                                  double(max_texture) / matrix_size.y);
+    matrix_size = {std::max(1u, unsigned(matrix_size.x * scale)),
+                   std::max(1u, unsigned(matrix_size.y * scale))};
+  }
+
+  if (!force_full && ScrollTerrain(terrain, desired, matrix_size))
+    return;
+
+  bounds = desired;
+  height_matrix_changed = true;
+  height_matrix.FillFromTerrain(terrain, bounds, matrix_size);
+
+  ClampQuantisationEffectiveToMatrix(quantisation_effective,
+                                     height_matrix.GetSize());
+  last_quantisation_pixels = quantisation_pixels;
+#else
+  (void)force_full;
+  height_matrix.FillFromTerrain(terrain, projection, quantisation_pixels);
 
   ClampQuantisationEffectiveToMatrix(quantisation_effective,
                                      height_matrix.GetSize());
@@ -1116,15 +1288,6 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
   assert(height_texture != nullptr);
   assert(ramp_texture != nullptr);
 
-  const BulkPixelPoint vertices[] = {
-    projection.GeoToScreen(bounds.GetNorthWest()),
-    projection.GeoToScreen(bounds.GetNorthEast()),
-    projection.GeoToScreen(bounds.GetSouthWest()),
-    projection.GeoToScreen(bounds.GetSouthEast()),
-  };
-
-  const ScopeVertexPointer vp(vertices);
-
   glActiveTexture(GL_TEXTURE0);
   height_texture->Bind();
   glActiveTexture(GL_TEXTURE1);
@@ -1137,16 +1300,6 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
   const auto matrix_size = height_matrix.GetSize();
   const GLfloat x1 = GLfloat(matrix_size.x) / allocated.width;
   const GLfloat y1 = GLfloat(matrix_size.y) / allocated.height;
-  const GLfloat coord[] = {
-    0, 0,
-    x1, 0,
-    0, y1,
-    x1, y1,
-  };
-
-  glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
-                        0, coord);
 
   const unsigned q = std::max(1u, quantisation_effective);
   glUniform2f(OpenGL::hillshade_texel_step,
@@ -1171,12 +1324,10 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
 
   if (alpha < 1.0f) {
     const GLBlend blend(alpha);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    DrawGeoQuad(bounds, projection, x1, y1);
   } else {
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    DrawGeoQuad(bounds, projection, x1, y1);
   }
-
-  glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
 
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, 0);

@@ -2,24 +2,17 @@
 // Copyright The XCSoar Project
 
 #include "RoutePlannerGlue.hpp"
-#include "Terrain/RasterTerrain.hpp"
 #include "Airspace/ActivePredicate.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Route/ReachFan.hpp"
 
 void
-RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
+RoutePlannerGlue::SetTerrain([[maybe_unused]] const TerrainBase *_terrain)
 {
-  terrain = _terrain;
-  if (terrain) {
-    RasterTerrain::Lease lease(*terrain);
-    planner.Reset();
-    planner.SetTerrain(&terrain->map);
-  } else {
-    planner.Reset();
-    planner.SetTerrain(nullptr);
-  }
+  planner.Reset();
+  /* Route/reach still sample RasterMap; COG never fills that cache. */
+  planner.SetTerrain(nullptr);
 }
 
 void
@@ -41,7 +34,6 @@ RoutePlannerGlue::Solve(const AGeoPoint &origin,
                         const RoutePlannerConfig &config,
                         const int h_ceiling)
 {
-  RasterTerrain::Lease lease(*terrain);
   return planner.Solve(origin, destination, config, h_ceiling);
 }
 
@@ -51,18 +43,12 @@ RoutePlannerGlue::SolveReach(const AGeoPoint &origin,
                              const int h_ceiling, const bool do_solve,
                              const bool working) noexcept
 {
-  if (terrain) {
-    RasterTerrain::Lease lease(*terrain);
-    return planner.SolveReach(origin, config, h_ceiling, do_solve, working);
-  } else {
-    return planner.SolveReach(origin, config, h_ceiling, do_solve, working);
-  }
+  return planner.SolveReach(origin, config, h_ceiling, do_solve, working);
 }
 
 GeoPoint
 RoutePlannerGlue::Intersection(const AGeoPoint &origin,
                                const AGeoPoint &destination) const
 {
-  RasterTerrain::Lease lease(*terrain);
   return planner.Intersection(origin, destination);
 }

@@ -12,11 +12,13 @@
 #include "Repository/Glue.hpp"
 #include "UtilsSettings.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Form/DataField/File.hpp"
 #include "system/Path.hpp"
 
 enum ControlIndex {
   DataPath,
   MapFile,
+  TerrainFile,
   WaypointFileList,
   WatchedWaypointFileList,
   AirfieldFileList,
@@ -55,6 +57,13 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
           _("The name of the file (.xcm) containing terrain, topography, and optionally "
             "waypoints, their details and airspaces."),
           ProfileKeys::MapFile, GetFileTypePatterns(FileType::MAP),
+          FileType::MAP);
+
+  AddFile(_("Terrain"),
+          _("Optional GeoTIFF elevation file. If empty, terrain comes from "
+            "the map database (a .tif inside the .xcm, or JPEG2000 "
+            "converted on first load)."),
+          ProfileKeys::TerrainFile, "*.tif\0*.tiff\0",
           FileType::MAP);
 
   AddMultipleFiles(_("Waypoints"),
@@ -140,6 +149,9 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   MapFileChanged = SaveValueFileReader(MapFile, ProfileKeys::MapFile);
+
+  if (SaveValueFileReader(TerrainFile, ProfileKeys::TerrainFile))
+    MapFileChanged = true;
 
   // WaypointFileChanged has already a meaningful value
   const bool primary_changed = SaveValueMultiFileReader(

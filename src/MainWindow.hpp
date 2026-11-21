@@ -28,7 +28,7 @@ class MenuBar;
 class GlueMapWindow;
 class Widget;
 class WindowWidget;
-class RasterTerrain;
+class TerrainBase;
 class TopographyStore;
 class MapWindowProjection;
 class PopupMessage;
@@ -293,6 +293,9 @@ protected:
 
   /** Keep the banner above page content, below menu buttons and dialogs. */
   void RaiseBottomBannerWidget() noexcept;
+
+  /** Keep the top strip (terrain progress) above the map. */
+  void RaiseTopWidget() noexcept;
 
 public:
   Widget *GetBottomWidget() const noexcept {
@@ -568,7 +571,7 @@ public:
    */
   void OnTaskReceived() noexcept;
 
-  void SetTerrain(RasterTerrain *terrain) noexcept;
+  void SetTerrain(TerrainBase *terrain) noexcept;
   void SetTopography(TopographyStore *topography) noexcept;
 
   const Look &GetLook() const noexcept {
@@ -639,6 +642,11 @@ public:
    * method with widget==nullptr.
    */
   void SetTopWidget(Widget *widget) noexcept;
+
+  [[gnu::pure]]
+  bool HasTopWidget() const noexcept {
+    return top_widget != nullptr;
+  }
 
   /**
    * Show this #Widget below the main content.  This replaces (deletes) the

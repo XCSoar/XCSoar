@@ -15,11 +15,11 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "NMEA/Info.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 
 void
 MapItemListBuilder::AddLocation(const NMEAInfo &basic,
-                                const RasterTerrain *terrain)
+                                const TerrainBase *terrain)
 {
   if (list.full())
     return;
@@ -41,7 +41,7 @@ MapItemListBuilder::AddLocation(const NMEAInfo &basic,
 void
 MapItemListBuilder::AddArrivalAltitudes(
     const ProtectedRoutePlanner &route_planner,
-    const RasterTerrain *terrain, double safety_height)
+    const TerrainBase *terrain, double safety_height)
 {
   if (list.full())
     return;

@@ -71,16 +71,25 @@ MapLook::Initialise(const MapSettings &settings,
   climb_mode_icon.LoadResource(IDB_CLIMB_ALL, false);
   final_glide_mode_icon.LoadResource(IDB_FINALGLIDE_ALL, false);
   abort_mode_icon.LoadResource(IDB_ABORT_ALL, false);
+  takeoff_icon.LoadResource(IDB_TAKEOFF_ALL, false);
+  landing_icon.LoadResource(IDB_LANDING_ALL, false);
 
   waiting_for_fix_icon.LoadResource(IDB_GPSSTATUS1_ALL, false);
   no_gps_icon.LoadResource(IDB_GPSSTATUS2_ALL, false);
+  device_icon.LoadResource(IDB_DEVICE_ALL, false);
   plane_icon.LoadResource(IDB_PLANE_ALL, false);
   battery_icon.LoadResource(IDB_BATTERY_ALL, false);
   simulator_icon.LoadResource(IDB_SIMULATOR_ALL, false);
   replay_icon.LoadResource(IDB_REPLAY_ALL, false);
+  database_icon.LoadResource(IDB_DATABASE_ALL, false);
+  sunset_icon.LoadResource(IDB_SUNSET_ALL, false);
+  wind_icon.LoadResource(IDB_WEATHER_STATION_ALL, false);
+  weather_icon.LoadResource(IDB_WEATHER_ALL, false);
 
   topography.Initialise();
-  airspace.Initialise(settings.airspace, topography.important_label_font);
+  airspace.Initialise(settings.airspace,
+                      topography.GetLabelFont(true,
+                                              TopographyLook::LabelSize::SMALL));
 
   overlay.Initialise(font, bold_font);
 }

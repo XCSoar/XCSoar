@@ -30,7 +30,7 @@ BackgroundRenderer::Flush() noexcept
 }
 
 void
-BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain) noexcept
+BackgroundRenderer::SetTerrain(const TerrainBase *_terrain) noexcept
 {
   terrain = _terrain;
   renderer.reset();

@@ -3,12 +3,12 @@
 
 #pragma once
 
-class RasterTerrain;
+class TerrainBase;
 struct GeoPoint;
 struct SpeedVector;
 
 void
-EstimateThermalBase(const RasterTerrain *terrain,
+EstimateThermalBase(const TerrainBase *terrain,
                     const GeoPoint location, const double altitude,
                     const double average, const SpeedVector wind,
                     GeoPoint &ground_location, double &ground_alt);

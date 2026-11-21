@@ -32,7 +32,7 @@
 #include "Geo/GeoVector.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Waypoint/Factory.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Operation/Operation.hpp"
 #include "system/Path.hpp"
 
@@ -259,8 +259,8 @@ TestTerrainElevation()
 {
   NullOperationEnvironment operation;
   const auto terrain =
-    RasterTerrain::OpenTerrain(nullptr, Path("test/data/benalla9.xcm"),
-                               operation);
+    TerrainBase::OpenTerrain(nullptr, Path("test/data/benalla9.xcm"),
+                            operation);
 
   const GeoPoint on_map = terrain->GetTerrainCenter();
   const GeoPoint off_map(Angle::Degrees(7.0), Angle::Degrees(47.0));

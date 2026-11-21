@@ -21,8 +21,14 @@ void
 TopographyRenderer::Draw(Canvas &canvas,
                          const WindowProjection &projection) noexcept
 {
+#ifdef ENABLE_OPENGL
+  TopographyGpuStatsBeginDraw();
+#endif
   for (auto &i : files)
     i.Paint(canvas, projection);
+#ifdef ENABLE_OPENGL
+  TopographyGpuStatsEndDraw(projection);
+#endif
 }
 
 void

@@ -191,7 +191,7 @@ TaskComputer::ProcessAutoTask([[maybe_unused]] const NMEAInfo &basic,
 }
 
 void 
-TaskComputer::SetTerrain(const RasterTerrain* _terrain)
+TaskComputer::SetTerrain(const TerrainBase* _terrain)
 {
   route.set_terrain(_terrain);
 }

@@ -4,52 +4,44 @@
 #include "BackgroundDownloadProgress.hpp"
 
 #include "Interface.hpp"
-#include "MainWindow.hpp"
-#include "Operation/PluggableOperationEnvironment.hpp"
-#include "Widget/ProgressWidget.hpp"
+#include "Message.hpp"
 #include "time/PeriodClock.hpp"
 
 BackgroundDownloadProgress BackgroundDownloadProgress::instance;
 
-void
+bool
 BackgroundDownloadProgress::ShowOnMainThread(const char *text) noexcept
 {
   if (CommonInterface::main_window == nullptr)
-    return;
+    return false;
 
-  if (widget != nullptr) {
-    env->SetText(text);
-    return;
+  const void *key = this;
+
+  if (shown) {
+    Message::SetProgressText(key, text);
+    return true;
   }
 
-  env = std::make_unique<PluggableOperationEnvironment>();
-  widget = new ProgressWidget(*env, text);
+  Message::ShowProgress(text, key);
+  shown = true;
   displayed_range = pending_range.load();
   displayed_position = pending_position.load();
 
-  CommonInterface::main_window->SetTopWidget(widget);
-
   if (displayed_range > 0) {
-    env->SetProgressRange(displayed_range);
-    env->SetProgressPosition(displayed_position);
+    Message::SetProgressRange(key, displayed_range);
+    Message::SetProgressPosition(key, displayed_position);
   }
+  return true;
 }
 
 void
 BackgroundDownloadProgress::HideOnMainThread() noexcept
 {
-  if (widget == nullptr)
+  if (!shown)
     return;
 
-  if (CommonInterface::main_window == nullptr) {
-    widget = nullptr;
-    env.reset();
-    return;
-  }
-
-  CommonInterface::main_window->SetTopWidget(nullptr);
-  widget = nullptr;
-  env.reset();
+  Message::ClearProgress(this);
+  shown = false;
   displayed_range = 0;
   displayed_position = 0;
 }
@@ -57,7 +49,7 @@ BackgroundDownloadProgress::HideOnMainThread() noexcept
 void
 BackgroundDownloadProgress::ApplyPendingProgress() noexcept
 {
-  if (env == nullptr)
+  if (!shown)
     return;
 
   StaticString<128> text;
@@ -71,20 +63,22 @@ BackgroundDownloadProgress::ApplyPendingProgress() noexcept
     }
   }
 
+  const void *key = this;
+
   if (update_text)
-    env->SetText(text);
+    Message::SetProgressText(key, text);
 
   const unsigned range = pending_range.load();
   const unsigned position = pending_position.load();
 
   if (range != displayed_range) {
     displayed_range = range;
-    env->SetProgressRange(range);
+    Message::SetProgressRange(key, range);
   }
 
   if (position != displayed_position) {
     displayed_position = position;
-    env->SetProgressPosition(position);
+    Message::SetProgressPosition(key, position);
   }
 }
 
@@ -103,11 +97,11 @@ BackgroundDownloadProgress::ProcessPendingVisibility() noexcept
     StaticString<128> text;
     {
       const std::lock_guard lock{text_mutex};
-      pending_show.store(false, std::memory_order_relaxed);
       text = pending_text;
     }
 
-    ShowOnMainThread(text);
+    if (ShowOnMainThread(text))
+      pending_show.store(false, std::memory_order_relaxed);
   }
 }
 

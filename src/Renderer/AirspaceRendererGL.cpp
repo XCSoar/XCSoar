@@ -6,6 +6,7 @@
 #include "AirspaceRenderer.hpp"
 #include "AirspaceRendererSettings.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Projection/MapLod.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
@@ -13,8 +14,19 @@
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
-#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
+#include "Airspace/AbstractAirspace.hpp"
+#include "Airspace/AirspaceClass.hpp"
+#include "Geo/SearchPointVector.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/Geo.hpp"
+#include "ui/canvas/opengl/Shaders.hpp"
+#include "ui/canvas/opengl/Program.hpp"
+#include "Geo/FAISphere.hpp"
+#include "util/MapBenchToggles.hpp"
+#include "AirspaceLod.hpp"
+
+#include <glm/gtc/type_ptr.hpp>
 
 #include <algorithm>
 #include <array>
@@ -82,27 +94,13 @@ static constexpr float PADDING_MITER_LIMIT = 4;
  * extreme miter or a reversal is bevelled.
  */
 static unsigned
-BuildPaddingLoop(const BulkPixelPoint *src, unsigned src_size,
-                 float line_width) noexcept
+BuildPaddingFromWorkspace(unsigned size, float line_width) noexcept
 {
-  if (src_size < 3 || src_size > MAX_AIRSPACE_VERTICES)
+  if (size < 3 || size > MAX_AIRSPACE_VERTICES)
     return 0;
 
   auto &points = airspace_workspace.points;
   auto &normals = airspace_workspace.normals;
-
-  unsigned size = 0;
-  for (unsigned i = 0; i < src_size; ++i) {
-    if (size == 0 ||
-        points[size - 1].x != src[i].x || points[size - 1].y != src[i].y)
-      points[size++] = {float(src[i].x), float(src[i].y)};
-  }
-
-  if (size > 1 && points[0] == points[size - 1])
-    --size;
-
-  if (size < 3)
-    return 0;
 
   const float half_width = line_width * 0.5f;
   for (unsigned i = 0; i < size; ++i) {
@@ -190,6 +188,28 @@ BuildPaddingLoop(const BulkPixelPoint *src, unsigned src_size,
   return n;
 }
 
+static unsigned
+BuildPaddingLoop(const BulkPixelPoint *src, unsigned src_size,
+                 float line_width) noexcept
+{
+  if (src_size < 3 || src_size > MAX_AIRSPACE_VERTICES)
+    return 0;
+
+  auto &points = airspace_workspace.points;
+
+  unsigned size = 0;
+  for (unsigned i = 0; i < src_size; ++i) {
+    if (size == 0 ||
+        points[size - 1].x != src[i].x || points[size - 1].y != src[i].y)
+      points[size++] = {float(src[i].x), float(src[i].y)};
+  }
+
+  if (size > 1 && points[0] == points[size - 1])
+    --size;
+
+  return BuildPaddingFromWorkspace(size, line_width);
+}
+
 /**
  * Fill a possibly degenerate polygon using the even-odd rule.
  *
@@ -214,6 +234,9 @@ static EvenOddCoverage
 PrepareEvenOddCoverage(const BulkPixelPoint *points,
                        unsigned num_points) noexcept
 {
+  if (points == nullptr || num_points == 0)
+    return {nullptr, 0, {}};
+
   auto min_x = points[0].x;
   auto max_x = points[0].x;
   auto min_y = points[0].y;
@@ -259,6 +282,8 @@ DrawEvenOddPolygon(Canvas &canvas, const BulkPixelPoint *points,
                    GLuint stencil_mask) noexcept
 {
   const auto coverage = PrepareEvenOddCoverage(points, num_points);
+  if (coverage.num_vertices == 0)
+    return;
 
   glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
   glStencilFunc(GL_ALWAYS, polygon_stencil, polygon_stencil);
@@ -284,6 +309,8 @@ StampEvenOddClearance(Canvas &canvas, const BulkPixelPoint *points,
                       unsigned num_points) noexcept
 {
   const auto coverage = PrepareEvenOddCoverage(points, num_points);
+  if (coverage.num_vertices == 0)
+    return;
 
   glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
   glStencilFunc(GL_ALWAYS, POLYGON_STENCIL, POLYGON_STENCIL);
@@ -301,6 +328,139 @@ StampEvenOddClearance(Canvas &canvas, const BulkPixelPoint *points,
   glStencilMask(POLYGON_STENCIL);
   glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
   canvas.DrawTriangleFan(coverage.bounds, 4);
+}
+
+class GLModelviewIdentity {
+public:
+  ~GLModelviewIdentity() noexcept {
+    OpenGL::solid_shader->Use();
+    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                       glm::value_ptr(glm::mat4(1)));
+  }
+};
+
+static void
+SetGeoModelview(const WindowProjection &projection,
+                const GeoPoint &origin) noexcept
+{
+  OpenGL::solid_shader->Use();
+  glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
+                     glm::value_ptr(ToGLM(projection, origin)));
+}
+
+static void
+DrawEvenOddNative(Canvas &canvas, const FloatPoint2D *points,
+                  unsigned num_points, float pad,
+                  GLuint polygon_stencil, GLuint stencil_value,
+                  GLuint stencil_mask) noexcept
+{
+  if (points == nullptr || num_points == 0)
+    return;
+
+  auto min_x = points[0].x, max_x = points[0].x;
+  auto min_y = points[0].y, max_y = points[0].y;
+  for (unsigned i = 1; i < num_points; ++i) {
+    min_x = std::min(min_x, points[i].x);
+    max_x = std::max(max_x, points[i].x);
+    min_y = std::min(min_y, points[i].y);
+    max_y = std::max(max_y, points[i].y);
+  }
+
+  auto &fan = airspace_workspace.fan;
+  fan[0] = {
+    (min_x + max_x) * 0.5f + pad * 0.25f,
+    (min_y + max_y) * 0.5f + pad * 0.375f,
+  };
+  for (unsigned i = 0; i < num_points; ++i)
+    fan[i + 1] = points[i];
+  fan[num_points + 1] = fan[1];
+
+  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+  glStencilFunc(GL_ALWAYS, polygon_stencil, polygon_stencil);
+  glStencilMask(polygon_stencil);
+  glStencilOp(GL_KEEP, GL_KEEP, GL_INVERT);
+  canvas.DrawFilledTriangleFan(fan.data(), num_points + 2);
+
+  const FloatPoint2D cover[] = {
+    {min_x - pad, min_y - pad},
+    {max_x + pad, min_y - pad},
+    {max_x + pad, max_y + pad},
+    {min_x - pad, max_y + pad},
+  };
+
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  glStencilFunc(GL_EQUAL, stencil_value | polygon_stencil,
+                stencil_mask | polygon_stencil);
+  glStencilMask(polygon_stencil);
+  glStencilOp(GL_ZERO, GL_ZERO, GL_ZERO);
+  canvas.DrawFilledTriangleFan(cover, 4);
+}
+
+static bool
+FillGeoRing(const SearchPointVector &src,
+            AirspaceRenderer::GeoPolyCache &cache) noexcept
+{
+  if (cache.n > 0)
+    return cache.n >= 3 && cache.n <= MAX_AIRSPACE_VERTICES;
+
+  unsigned n = src.size();
+  if (n < 3)
+    return false;
+  if (n >= 2 && src[0].GetLocation() == src[n - 1].GetLocation())
+    n--;
+  if (n < 3 || n > MAX_AIRSPACE_VERTICES)
+    return false;
+
+  cache.origin = src[0].GetLocation();
+  cache.ring.GrowDiscard(n);
+  for (unsigned i = 0; i < n; ++i) {
+    const GeoPoint p = src[i].GetLocation();
+    cache.ring[i] = FloatPoint2D(
+      float((p.longitude - cache.origin.longitude).Native()),
+      float((p.latitude - cache.origin.latitude).Native()));
+  }
+  cache.n = n;
+  return true;
+}
+
+static void
+EnsureGeoPadding(AirspaceRenderer::GeoPolyCache &cache,
+                 const WindowProjection &projection,
+                 float pen_width) noexcept
+{
+  const double scale = projection.GetScale();
+  const double cos_lat =
+    projection.GetGeoLocation().latitude.fastcosine();
+  if (cache.padding_n > 0 && cache.pad_scale == scale &&
+      cache.pad_cos == cos_lat)
+    return;
+
+  const double scale_r = scale * FAISphere::REARTH;
+  const float sx = float(scale_r * cos_lat);
+  const float sy = float(-scale_r);
+  if (sx == 0 || sy == 0) {
+    cache.padding_n = 0;
+    return;
+  }
+
+  for (unsigned i = 0; i < cache.n; ++i)
+    airspace_workspace.points[i] = {
+      cache.ring[i].x * sx, cache.ring[i].y * sy
+    };
+
+  const unsigned n =
+    BuildPaddingFromWorkspace(cache.n, pen_width);
+  cache.padding.GrowDiscard(n);
+  const float inv_sx = 1.f / sx;
+  const float inv_sy = 1.f / sy;
+  for (unsigned i = 0; i < n; ++i)
+    cache.padding[i] = {
+      airspace_workspace.triangles[i].x * inv_sx,
+      airspace_workspace.triangles[i].y * inv_sy
+    };
+  cache.padding_n = n;
+  cache.pad_scale = scale;
+  cache.pad_cos = cos_lat;
 }
 
 /** Restore the OpenGL state changed by a fill-enabled airspace pass. */
@@ -365,26 +525,33 @@ public:
 class AirspaceVisitorRenderer final
   : protected MapCanvas
 {
+  AirspaceRenderer &owner;
   const AirspaceLook &look;
   const AirspaceWarningCopy &warning_manager;
   const AirspaceRendererSettings &settings;
   const bool use_even_odd;
+  const bool use_geo;
   const bool use_outline_stencil;
   /** CLEARED_RING_STENCIL is bit 4, so it needs five stencil bits. */
   const bool use_cleared_ring;
+  bool area_fill = true;
   unsigned num_padding_vertices = 0;
 
 public:
   AirspaceVisitorRenderer(Canvas &_canvas, const WindowProjection &_projection,
+                          AirspaceRenderer &_owner,
                           const AirspaceLook &_look,
                           const AirspaceWarningCopy &_warnings,
                           const AirspaceRendererSettings &_settings,
-                          bool _use_even_odd, bool _use_outline_stencil,
+                          bool _use_even_odd, bool _use_geo,
+                          bool _use_outline_stencil,
                           bool _use_cleared_ring)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().Scale(1.1)),
+     owner(_owner),
      look(_look), warning_manager(_warnings), settings(_settings),
-     use_even_odd(_use_even_odd), use_outline_stencil(_use_outline_stencil),
+     use_even_odd(_use_even_odd), use_geo(_use_geo),
+     use_outline_stencil(_use_outline_stencil),
      use_cleared_ring(_use_cleared_ring)
   {
     if (use_outline_stencil || use_even_odd) {
@@ -394,6 +561,10 @@ public:
 
     if (settings.fill_mode != AirspaceRendererSettings::FillMode::NONE)
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  }
+
+  void SetAreaFill(bool fill) noexcept {
+    area_fill = fill;
   }
 
 private:
@@ -429,6 +600,7 @@ private:
       projection.GeoToScreenDistance(airspace.GetRadius());
 
     if (!warning_manager.IsAcked(airspace) &&
+        area_fill &&
         class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
       const GLEnable<GL_STENCIL_TEST> stencil;
@@ -463,14 +635,82 @@ private:
     DrawOutline(airspace, screen_center, screen_radius);
   }
 
+  bool PaintGeoPolygon(const AirspacePolygon &airspace,
+                       AirspaceClass as_type_or_class) noexcept {
+    if (!use_even_odd || !use_geo)
+      return false;
+    if (!clip.Overlaps(airspace.GetGeoBounds()))
+      return true;
+
+    auto &cache = owner.GetGeoPoly(airspace);
+    if (!FillGeoRing(airspace.GetPoints(), cache))
+      return false;
+
+    const AirspaceClassRendererSettings &class_settings =
+      settings.classes[as_type_or_class];
+    const bool fill_airspace = warning_manager.HasWarning(airspace) ||
+      warning_manager.IsInside(airspace) ||
+      class_settings.fill_mode ==
+      AirspaceClassRendererSettings::FillMode::ALL;
+    const auto &wproj =
+      static_cast<const WindowProjection &>(projection);
+    const float pad = float(1. /
+      std::max(wproj.GetScale() * FAISphere::REARTH, 1e-9));
+
+    if (!warning_manager.IsAcked(airspace) &&
+        area_fill &&
+        class_settings.fill_mode !=
+        AirspaceClassRendererSettings::FillMode::NONE) {
+      const GLEnable<GL_STENCIL_TEST> stencil;
+      const GLModelviewIdentity restore_mv;
+      SetGeoModelview(wproj, cache.origin);
+
+      if (!fill_airspace) {
+        EnsureGeoPadding(cache, wproj,
+                         float(look.thick_pen.GetWidth()));
+        if (cache.padding_n == 0)
+          return false;
+        SetFillStencil();
+        canvas.DrawFilledTriangles(cache.padding.data(),
+                                   cache.padding_n);
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+      }
+
+      {
+        SetupInterior(airspace, !fill_airspace);
+        const GLEnable<GL_BLEND> blend;
+        DrawEvenOddNative(canvas, cache.ring.data(), cache.n, pad,
+                          fill_airspace ? FILL_STENCIL : POLYGON_STENCIL,
+                          fill_airspace ? 0 : FILL_STENCIL,
+                          FILL_STENCIL | OUTLINE_STENCIL);
+      }
+
+      if (!fill_airspace) {
+        ClearFillStencil();
+        canvas.DrawFilledTriangles(cache.padding.data(),
+                                   cache.padding_n);
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+      }
+    }
+
+    DrawOutline(airspace);
+    return true;
+  }
+
   void VisitPolygon(const AirspacePolygon &airspace) {
     const auto type_or_class = airspace.GetTypeOrClass();
     AirspaceClass as_type_or_class = settings.classes[type_or_class].display
       ? type_or_class : airspace.GetClass();
-    if (!PreparePolygon(airspace.GetPoints()))
+    if (PaintGeoPolygon(airspace, as_type_or_class))
       return;
 
-    if (!use_even_odd || num_raster_points > MAX_AIRSPACE_VERTICES) {
+    if (!owner.PrepareCachedPolygon(*this, airspace, use_even_odd))
+      return;
+
+    /* Cached geographic triangles: pan only reprojects.  Even-odd
+       clip is the fallback when ear-clip fails or the ring is huge. */
+    if (!use_even_odd || num_triangle_indices >= 3 ||
+        num_raster_points > MAX_AIRSPACE_VERTICES) {
       VisitPreparedPolygon(airspace, as_type_or_class);
       return;
     }
@@ -484,6 +724,7 @@ private:
       AirspaceClassRendererSettings::FillMode::ALL;
 
     if (!warning_manager.IsAcked(airspace) &&
+        area_fill &&
         class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
       const GLEnable<GL_STENCIL_TEST> stencil;
@@ -609,6 +850,7 @@ private:
       class_settings.fill_mode == AirspaceClassRendererSettings::FillMode::ALL;
 
     if (!warning_manager.IsAcked(airspace) &&
+        area_fill &&
         class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
       const GLEnable<GL_STENCIL_TEST> stencil;
@@ -644,11 +886,12 @@ private:
     if (!SetupOutline(airspace))
       return;
 
+    /* ClipPolygon inserts view-box edges; stroke the original ring. */
     if (use_outline_stencil) {
       const GLEnable<GL_STENCIL_TEST> stencil;
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
     } else
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
   }
 
   void DrawOutline(const AbstractAirspace &airspace, PixelPoint center,
@@ -762,22 +1005,29 @@ private:
 class AirspaceFillRenderer final
   : protected MapCanvas
 {
+  AirspaceRenderer &owner;
   const AirspaceLook &look;
   const AirspaceWarningCopy &warning_manager;
   const AirspaceRendererSettings &settings;
   const bool use_even_odd;
+  const bool use_geo;
   const bool use_outline_stencil;
+  bool area_fill = true;
 
 public:
   AirspaceFillRenderer(Canvas &_canvas, const WindowProjection &_projection,
+                       AirspaceRenderer &_owner,
                        const AirspaceLook &_look,
                        const AirspaceWarningCopy &_warnings,
                        const AirspaceRendererSettings &_settings,
-                       bool _use_even_odd, bool _use_outline_stencil)
+                       bool _use_even_odd, bool _use_geo,
+                       bool _use_outline_stencil)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().Scale(1.1)),
+     owner(_owner),
      look(_look), warning_manager(_warnings), settings(_settings),
-     use_even_odd(_use_even_odd), use_outline_stencil(_use_outline_stencil)
+     use_even_odd(_use_even_odd), use_geo(_use_geo),
+     use_outline_stencil(_use_outline_stencil)
   {
     if (use_outline_stencil || use_even_odd) {
       glStencilMask(0xff);
@@ -788,6 +1038,10 @@ public:
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   }
 
+  void SetAreaFill(bool fill) noexcept {
+    area_fill = fill;
+  }
+
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
     auto screen_center =
@@ -795,7 +1049,8 @@ private:
     unsigned screen_radius =
       projection.GeoToScreenDistance(airspace.GetRadius());
 
-    if (!warning_manager.IsAcked(airspace) && SetupInterior(airspace)) {
+    if (!warning_manager.IsAcked(airspace) &&
+        area_fill && SetupInterior(airspace)) {
       if (use_outline_stencil) {
         const GLEnable<GL_STENCIL_TEST> stencil;
         const GLEnable<GL_BLEND> blend;
@@ -809,14 +1064,51 @@ private:
     DrawOutline(airspace, screen_center, screen_radius);
   }
 
+  bool PaintGeoPolygon(const AirspacePolygon &airspace) noexcept {
+    if (!use_even_odd || !use_geo)
+      return false;
+    if (!clip.Overlaps(airspace.GetGeoBounds()))
+      return true;
+
+    auto &cache = owner.GetGeoPoly(airspace);
+    if (!FillGeoRing(airspace.GetPoints(), cache))
+      return false;
+
+    const auto &wproj =
+      static_cast<const WindowProjection &>(projection);
+    const float pad = float(1. /
+      std::max(wproj.GetScale() * FAISphere::REARTH, 1e-9));
+
+    if (!warning_manager.IsAcked(airspace) &&
+        area_fill && SetupInterior(airspace)) {
+      const GLEnable<GL_STENCIL_TEST> stencil;
+      const GLEnable<GL_BLEND> blend;
+      const GLModelviewIdentity restore_mv;
+      SetGeoModelview(wproj, cache.origin);
+      DrawEvenOddNative(canvas, cache.ring.data(), cache.n, pad,
+                        FILL_STENCIL, 0, OUTLINE_STENCIL);
+    }
+
+    DrawOutline(airspace);
+    return true;
+  }
+
   void VisitPolygon(const AirspacePolygon &airspace) {
-    if (!PreparePolygon(airspace.GetPoints()))
+    if (PaintGeoPolygon(airspace))
+      return;
+
+    const bool skip_triangulate =
+      use_even_odd ||
+      settings.fill_mode == AirspaceRendererSettings::FillMode::NONE;
+    if (!owner.PrepareCachedPolygon(*this, airspace, skip_triangulate))
       return;
 
     const bool use_polygon_even_odd =
-      use_even_odd && num_raster_points <= MAX_AIRSPACE_VERTICES;
+      use_even_odd && num_triangle_indices < 3 &&
+      num_raster_points <= MAX_AIRSPACE_VERTICES;
 
-    if (!warning_manager.IsAcked(airspace) && SetupInterior(airspace)) {
+    if (!warning_manager.IsAcked(airspace) &&
+        area_fill && SetupInterior(airspace)) {
       if (use_polygon_even_odd) {
         const GLEnable<GL_STENCIL_TEST> stencil;
         const GLEnable<GL_BLEND> blend;
@@ -853,11 +1145,12 @@ private:
     if (!SetupOutline(airspace))
       return;
 
+    /* ClipPolygon inserts view-box edges; stroke the original ring. */
     if (use_outline_stencil) {
       const GLEnable<GL_STENCIL_TEST> stencil;
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
     } else
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
   }
 
   void DrawOutline(const AbstractAirspace &airspace, PixelPoint center,
@@ -919,6 +1212,116 @@ private:
   }
 };
 
+bool
+AirspaceRenderer::PrepareCachedPolygon(MapCanvas &canvas,
+                                       const AirspacePolygon &airspace,
+                                       bool skip_triangulate) noexcept
+{
+  const auto &points = airspace.GetPoints();
+  if (GetMapBenchAirspace() == MapBenchAirspace::Ear)
+    return canvas.PreparePolygon(points, skip_triangulate);
+
+  if (skip_triangulate)
+    /* View-box clip + even-odd fill.  No O(n²) ear-clip. */
+    return canvas.PreparePolygon(points, true);
+
+  auto &entry = triangle_cache[&airspace];
+  if (!entry.tried) {
+    entry.tried = true;
+    entry.ok = MapCanvas::BuildTriangleCache(points, entry.indices,
+                                             entry.index_count,
+                                             entry.vertex_count);
+  }
+
+  if (entry.ok)
+    return canvas.PreparePolygon(points, entry.indices.data(),
+                                 entry.index_count, entry.vertex_count);
+
+  /* Degenerate / self-touching: even-odd clip path.  Do not ear-clip
+     again every frame. */
+  return canvas.PreparePolygon(points, true);
+}
+
+static unsigned
+AirspaceVisSettingsKey(const AirspaceRendererSettings &s) noexcept
+{
+  unsigned h = unsigned(s.fill_mode);
+  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i) {
+    h = h * 33u + unsigned(s.classes[i].display);
+    h = h * 33u + unsigned(s.classes[i].fill_mode);
+  }
+  return h;
+}
+
+static bool
+WantAreaFill(const AbstractAirspace &airspace,
+             const AirspaceRendererSettings &settings,
+             const AirspaceWarningCopy &awc,
+             unsigned lod, const GeoQuadrilateral &view) noexcept
+{
+  if (settings.fill_mode == AirspaceRendererSettings::FillMode::NONE)
+    return false;
+  if (awc.IsAcked(airspace))
+    return false;
+
+  const auto toc = airspace.GetTypeOrClass();
+  const AirspaceClass c = settings.classes[toc].display
+    ? toc : airspace.GetClass();
+  if (settings.classes[c].fill_mode ==
+      AirspaceClassRendererSettings::FillMode::NONE)
+    return false;
+
+  const bool warning = awc.HasWarning(airspace) || awc.IsInside(airspace);
+  const GeoBounds b = airspace.GetGeoBounds();
+  const bool covers = MapLodQuadInside(b, view);
+  if (AirspaceLodOutlineOnly(lod, AirspaceIsLargeFeature(airspace),
+                             covers, warning))
+    return false;
+
+  return true;
+}
+
+void
+AirspaceRenderer::UpdateVisibleAirspaces(const WindowProjection &projection,
+                                         const AirspaceRendererSettings &settings,
+                                         const AirspaceWarningCopy &awc,
+                                         const AirspacePredicate &visible) noexcept
+{
+  const unsigned lod = MapLod(projection.GetMapScale());
+  const unsigned settings_key = AirspaceVisSettingsKey(settings);
+  const GeoBounds screen = projection.GetScreenBounds();
+  const auto view = projection.GetGeoQuadrilateral();
+  if (airspaces->GetSerial() == visible_airspaces_serial &&
+      awc.GetSerial() == visible_warning_serial &&
+      lod == visible_lod &&
+      settings_key == visible_settings_key &&
+      MapLodQuadInside(visible_bounds, view))
+    return;
+
+  visible_airspaces_serial = airspaces->GetSerial();
+  visible_warning_serial = awc.GetSerial();
+  visible_lod = lod;
+  visible_settings_key = settings_key;
+  visible_bounds = screen.Scale(VIS_BOUNDS_SCALE);
+  visible_airspaces.clear();
+
+  const auto range =
+    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                projection.GetScreenDistanceMeters() *
+                                VIS_BOUNDS_SCALE);
+
+  for (const auto &i : range) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+    if (!visible(airspace))
+      continue;
+
+    visible_airspaces.push_back({
+      &airspace,
+      WantAreaFill(airspace, settings, awc, lod, view),
+    });
+  }
+}
+
 void
 AirspaceRenderer::DrawInternal(Canvas &canvas,
                                const WindowProjection &projection,
@@ -926,59 +1329,62 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
                                const AirspaceWarningCopy &awc,
                                const AirspacePredicate &visible)
 {
-  const auto range =
-    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                projection.GetScreenDistanceMeters());
+  UpdateVisibleAirspaces(projection, settings, awc, visible);
+
+  auto paint = [&](auto &renderer) {
+    for (const auto &e : visible_airspaces) {
+      renderer.SetAreaFill(e.fill);
+      renderer.Visit(*e.airspace);
+    }
+  };
 
   if (settings.fill_mode == AirspaceRendererSettings::FillMode::NONE) {
-    AirspaceFillRenderer renderer(canvas, projection, look, awc, settings,
-                                  false, false);
-    for (const auto &i : range) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        renderer.Visit(airspace);
-    }
+    AirspaceFillRenderer renderer(canvas, projection, *this, look, awc,
+                                  settings, false, false, false);
+    paint(renderer);
     return;
   }
 
   GLint stencil_bits = 0;
-  glGetIntegerv(GL_STENCIL_BITS, &stencil_bits);
-  const bool use_even_odd = stencil_bits >= EVEN_ODD_STENCIL_BITS;
+  static GLint cached_stencil_bits = -1;
+  if (cached_stencil_bits < 0) {
+    glGetIntegerv(GL_STENCIL_BITS, &cached_stencil_bits);
+    if (cached_stencil_bits < 0)
+      cached_stencil_bits = 0;
+  }
+  stencil_bits = cached_stencil_bits;
+  const auto as_bench = GetMapBenchAirspace();
+  bool use_even_odd = stencil_bits >= EVEN_ODD_STENCIL_BITS;
+  if (as_bench == MapBenchAirspace::Cache ||
+      as_bench == MapBenchAirspace::Ear)
+    use_even_odd = false;
+  const bool use_geo = use_even_odd &&
+    as_bench != MapBenchAirspace::Clip;
   const bool use_outline_stencil = stencil_bits >= 2;
 
   GLStateGuard state_guard;
   if (settings.fill_mode == AirspaceRendererSettings::FillMode::ALL) {
-    AirspaceFillRenderer renderer(canvas, projection, look, awc, settings,
-                                  use_even_odd, use_outline_stencil);
-    for (const auto &i : range) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        renderer.Visit(airspace);
-    }
+    AirspaceFillRenderer renderer(canvas, projection, *this, look, awc,
+                                  settings, use_even_odd, use_geo,
+                                  use_outline_stencil);
+    paint(renderer);
   } else {
     /* CLEARANCE_STENCIL is bit 3 (four bits).  The cleared-boundary
        ring is bit 4 and needs a fifth. */
     const bool use_cleared_ring = stencil_bits >= 5;
-    AirspaceVisitorRenderer renderer(canvas, projection, look, awc, settings,
-                                     use_even_odd, use_outline_stencil,
-                                     use_cleared_ring);
+    AirspaceVisitorRenderer renderer(canvas, projection, *this, look, awc,
+                                     settings, use_even_odd, use_geo,
+                                     use_outline_stencil, use_cleared_ring);
 
     /* Stamp visible cleared airspaces so the warning fill leaves
        those areas empty.  Needs a fourth stencil bit; bit 2 is
        POLYGON_STENCIL. */
     if (stencil_bits >= 4) {
-      for (const auto &i : range) {
-        const AbstractAirspace &airspace = i.GetAirspace();
-        if (visible(airspace))
-          renderer.VisitClearance(airspace);
-      }
+      for (const auto &e : visible_airspaces)
+        renderer.VisitClearance(*e.airspace);
     }
 
-    for (const auto &i : range) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        renderer.Visit(airspace);
-    }
+    paint(renderer);
   }
 }
 

@@ -32,12 +32,13 @@ directory at the right place.
 
 \section{Map Database}\label{sec:map}
 
-A map database (extension \verb|.xcm|) contains terrain,
-topography and optional contents like waypoints and airspaces.
-
-Terrain is a raster digital elevation model represented as an array of
-elevations in meters on a latitude/longitude grid.  The internal file
-format is GeoJPEG2000.
+A map database (extension \verb|.xcm|) contains topography and
+optional contents like waypoints and airspaces.  Elevation is a
+GeoTIFF: \verb|terrain.tif| inside the zip if present, otherwise
+JPEG2000 converted into a GeoTIFF cache on first load (a progress
+label at the top of the map).  Topography stays in the zip.  An optional Terrain
+file in Site files overrides elevation only.  Old XCSoar versions
+ignore \verb|terrain.tif| and keep using \verb|terrain.jp2|.
 
 The topography is vector data such as roads, railway lines, large
 built-up areas (cities), miscellaneous populated areas (towns and

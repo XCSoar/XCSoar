@@ -17,7 +17,8 @@
 #include "Hardware/CPU.hpp"
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
+#include "Terrain/CogRaster.hpp"
 #include "Terrain/AsyncLoader.hpp"
 #include "io/ZipArchive.hpp"
 #include "Message.hpp"
@@ -86,6 +87,7 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Waypoint/Factory.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Storage/StorageManager.hpp"
 #include "DataLayoutMigration.hpp"
 
@@ -101,7 +103,6 @@
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "Operation/SubOperationEnvironment.hpp"
-#include "Widget/ProgressWidget.hpp"
 #include "PageActions.hpp"
 #include "Weather/Features.hpp"
 #include "Weather/NOAAGlue.hpp"
@@ -173,6 +174,7 @@ WasStartupCancelledByUser() noexcept
 static bool
 LoadProfile()
 {
+  LogString("LoadProfile() called");
   /* run the data-layout migration BEFORE the profile is selected and
      loaded: it moves root-level profiles into profiles/ - selecting or
      loading first ends up with an empty profile that later overwrites
@@ -180,7 +182,13 @@ LoadProfile()
      upgrade) */
   MigrateDataLayoutToSubdirs();
 
-  if (Profile::GetPath() == nullptr &&
+  const auto profile_path = Profile::GetPath();
+  if (profile_path != nullptr)
+    LogFormat("Profile path: %s", profile_path.c_str());
+  else
+    LogString("Profile path: (null)");
+
+  if (profile_path == nullptr &&
       !dlgStartupShowModal()) {
     LogString("LoadProfile: no profile path and startup dialog was cancelled");
     startup_cancelled_by_user = true;
@@ -188,6 +196,7 @@ LoadProfile()
   }
 
   Profile::Load();
+  LogString("Profile loaded, calling Use()");
   Profile::Use(Profile::map);
 
   Units::SetConfig(CommonInterface::GetUISettings().format.units);
@@ -259,37 +268,51 @@ AfterStartup()
 #endif
 }
 
+
 void
 MainWindow::LoadTerrain() noexcept
 {
   SetTopWidget(nullptr);
+  terrain_loader_env.reset();
 
   delete terrain_loader;
   terrain_loader = nullptr;
 
-  if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
-      path != nullptr) {
-    LogFormat("Loading terrain: %s", path.c_str());
+  const auto terrain_path = Profile::GetPath(ProfileKeys::TerrainFile);
+  const bool has_tif =
+    terrain_path != nullptr && CogRaster::IsCogFile(terrain_path.c_str());
+  const auto map_path = Profile::GetPath(ProfileKeys::MapFile);
 
-    /* Quick synchronous validation: try opening the ZIP archive
-       before launching the async loader to fail fast on missing or
-       unreadable files. */
-    try {
-      ZipArchive test_archive{path};
-    } catch (...) {
-      LogFormat("Failed to open map file: %s", path.c_str());
-      Message::AddMessage(_("Failed to open configured map file"));
-      return;
+  const Path zip = !has_tif && map_path != nullptr ? Path{map_path}
+    : !has_tif ? Path{terrain_path} : nullptr;
+
+  if (has_tif || zip != nullptr) {
+    if (has_tif)
+      LogFormat("Loading terrain: %s", terrain_path.c_str());
+    else {
+      LogFormat("Loading terrain from map: %s", zip.c_str());
+      try {
+        ZipArchive test_archive{zip};
+      } catch (...) {
+        LogFormat("Failed to open map file: %s", zip.c_str());
+        Message::AddMessage(_("Failed to open configured map file"));
+        if (data_components->terrain) {
+          const ScopeSuspendAllThreads suspend;
+          DataGlobals::UnsetTerrain();
+          DataGlobals::SetTerrain(nullptr);
+        }
+        return;
+      }
     }
 
     terrain_loader = new AsyncTerrainOverviewLoader();
 
     terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
-    auto *progress = new ProgressWidget(*terrain_loader_env,
-                                        _("Loading Terrain File..."));
-    SetTopWidget(progress);
+    Message::ShowProgress(_("Loading Terrain File..."),
+                          terrain_loader_env.get(),
+                          terrain_loader_env.get());
 
-    terrain_loader->Start(file_cache, path, *terrain_loader_env,
+    terrain_loader->Start(file_cache, nullptr, *terrain_loader_env,
                           terrain_loader_notify);
   } else if (data_components->terrain) {
     /* the map file has been disabled - remove the terrain from all
@@ -313,7 +336,7 @@ try {
   auto new_terrain = loader->Wait();
   loader.reset();
 
-  SetTopWidget(nullptr);
+  Message::ClearProgress(terrain_loader_env.get());
   terrain_loader_env.reset();
 
   const ScopeSuspendAllThreads suspend;
@@ -323,18 +346,38 @@ try {
 
   /* Dependents of the new terrain. Topography stays as loaded.
      Waypoints were usually read before the terrain was there. */
-  if (data_components->terrain && data_components->waypoints)
+  if (data_components->terrain && data_components->terrain->IsDefined() &&
+      data_components->waypoints) {
     UpdateTerrainElevations(*data_components->waypoints,
                             *data_components->terrain);
-  DataGlobals::UpdateHome(false);
 
-  SetAirspaceGroundLevels(*data_components->airspaces,
-                          *data_components->terrain);
+    /* Keep the configured home. UpdateHome() would SaveHome() and
+       FindHomeLocation() can clear it when the id is briefly stale. */
+    auto &poi = CommonInterface::SetComputerSettings().poi;
+    if (poi.home_waypoint >= 0) {
+      auto wp = data_components->waypoints->LookupId(poi.home_waypoint);
+      if (wp != nullptr && wp->HasElevation()) {
+        poi.home_elevation = wp->elevation;
+        poi.home_elevation_available = true;
+      } else if (wp != nullptr) {
+        poi.home_elevation_available = false;
+      }
+    }
+  }
+  ActionInterface::SetStartupLocation();
+
+  if (data_components->terrain && data_components->terrain->IsDefined())
+    SetAirspaceGroundLevels(*data_components->airspaces,
+                            *data_components->terrain);
+
+  /* the map was painted before this terrain existed */
+  if (map != nullptr)
+    map->FullRedraw();
 #ifdef HAVE_DOWNLOAD_MANAGER
   RepositoryAutoUpdateTerrainIdle();
 #endif
 } catch (...) {
-  SetTopWidget(nullptr);
+  Message::ClearProgress(terrain_loader_env.get());
   terrain_loader_env.reset();
   LogError(std::current_exception(), "LoadTerrain failed");
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -693,9 +736,6 @@ Startup(UI::Display &display)
   backend_components->protected_task_manager->SetGotoPersistedHandler(
     Session::NoteGoto);
 
-  // Read the terrain file
-  main_window->LoadTerrain();
-
   backend_components->glide_computer =
     std::make_unique<GlideComputer>(computer_settings,
                                     *data_components->waypoints,
@@ -790,6 +830,7 @@ Startup(UI::Display &display)
                         false);
   RestoreSessionGoto();
   Session::SetReady();
+
   ActionInterface::SetStartupLocation();
 
   // ReSynchronise the blackboards here since SetStartupLocation
@@ -948,6 +989,10 @@ Startup(UI::Display &display)
 
   main_window->FinishStartup();
   main_window->SchedulePageActionsUpdate();
+
+  /* Top progress bar; event loop can paint. Convert stays on the
+     loader thread. */
+  main_window->LoadTerrain();
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   StartRepositoryAutoUpdate();

@@ -3,7 +3,7 @@
 
 #include "Factory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 
 #include <vector>
 
@@ -43,7 +43,7 @@ UsesTerrainElevation(const Waypoint &waypoint) noexcept
 
 void
 UpdateTerrainElevations(Waypoints &waypoints,
-                        const RasterTerrain &terrain) noexcept
+                        const TerrainBase &terrain) noexcept
 {
   /* collect first: Waypoints::Replace() changes the tree being
      iterated */

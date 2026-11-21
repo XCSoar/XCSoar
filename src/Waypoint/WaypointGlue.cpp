@@ -24,7 +24,7 @@ LoadWaypointFile(Waypoints &waypoints, Path path,
                  WaypointFileType file_type,
                  WaypointOrigin origin,
                  uint8_t file_num,
-                 const RasterTerrain *terrain,
+                 const TerrainBase *terrain,
                  ProgressListener &progress) noexcept
 try {
   ReadWaypointFile(path, file_type, waypoints,
@@ -41,7 +41,7 @@ static bool
 LoadWaypointFile(Waypoints &waypoints, Path path,
                  WaypointOrigin origin,
                  uint8_t file_num,
-                 const RasterTerrain *terrain,
+                 const TerrainBase *terrain,
                  ProgressListener &progress) noexcept
 try {
   ReadWaypointFile(path, waypoints,
@@ -59,7 +59,7 @@ LoadWaypointFile(Waypoints &waypoints, struct zzip_dir *dir, const char *path,
                  WaypointFileType file_type,
                  WaypointOrigin origin,
                  uint8_t file_num,
-                 const RasterTerrain *terrain,
+                 const TerrainBase *terrain,
                  ProgressListener &progressg) noexcept
 try {
   ReadWaypointFile(dir, path, file_type, waypoints,
@@ -73,7 +73,7 @@ try {
 }
 
 static bool
-LoadPrimaryFiles(Waypoints &way_points, const RasterTerrain *terrain,
+LoadPrimaryFiles(Waypoints &way_points, const TerrainBase *terrain,
                  ProgressListener &progress) noexcept
 {
   bool found = false;
@@ -88,7 +88,7 @@ LoadPrimaryFiles(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 static bool
-LoadWatchedFiles(Waypoints &way_points, const RasterTerrain *terrain,
+LoadWatchedFiles(Waypoints &way_points, const TerrainBase *terrain,
                  ProgressListener &progress) noexcept
 {
   bool found = false;
@@ -103,7 +103,7 @@ LoadWatchedFiles(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 static bool
-LoadMapFiles(Waypoints &way_points, const RasterTerrain *terrain,
+LoadMapFiles(Waypoints &way_points, const TerrainBase *terrain,
              ProgressListener &progress) noexcept
 {
   bool found = false;
@@ -136,7 +136,7 @@ HasOrigin(const Waypoints &way_points, WaypointOrigin origin) noexcept
 }
 
 static void
-UpdateMapMembers(Waypoints &way_points, const RasterTerrain *terrain,
+UpdateMapMembers(Waypoints &way_points, const TerrainBase *terrain,
                  ProgressListener &progress) noexcept
 {
   const bool have_files =
@@ -148,7 +148,7 @@ UpdateMapMembers(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 bool
-LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
+LoadWaypoints(Waypoints &way_points, const TerrainBase *terrain,
               ProgressListener &progress)
 {
   way_points.Clear();
@@ -169,7 +169,7 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 void
-ReloadWaypointFiles(Waypoints &way_points, const RasterTerrain *terrain,
+ReloadWaypointFiles(Waypoints &way_points, const TerrainBase *terrain,
                     ProgressListener &progress,
                     bool primary, bool watched, bool map_file)
 {

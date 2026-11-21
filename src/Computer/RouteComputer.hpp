@@ -13,7 +13,7 @@ struct DerivedInfo;
 struct GlideSettings;
 struct RoutePlannerConfig;
 class ProtectedAirspaceWarningManager;
-class RasterTerrain;
+class TerrainBase;
 class GlidePolar;
 
 class RouteComputer {
@@ -25,7 +25,7 @@ class RouteComputer {
   GPSClock route_clock;
   GPSClock reach_clock;
 
-  const RasterTerrain *terrain;
+  const TerrainBase *terrain;
 
   TaskType last_task_type;
   unsigned last_active_tp;
@@ -53,7 +53,7 @@ public:
                     const GlidePolar &glide_polar,
                     const GlidePolar &safety_polar);
 
-  void set_terrain(const RasterTerrain* _terrain);
+  void set_terrain(const TerrainBase* _terrain);
 
 private:
   void TerrainWarning(const MoreData &basic,

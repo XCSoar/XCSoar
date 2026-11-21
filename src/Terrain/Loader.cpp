@@ -47,7 +47,7 @@ TerrainLoader::SkipMarkerSegment(long file_offset) const
     if (segment >= raster_tile_cache.segments.end())
       /* last segment is hidden; shouldn't happen either, because we
          expect EOC there */
-      break;
+      return skip_to - file_offset;
 
     skip_to = segment->file_offset;
   }
@@ -179,6 +179,11 @@ TerrainLoader::PutTileData(unsigned index,
       raster_tile_cache.tiles.GetLinear(index).CopyFrom(m);
     else
       raster_tile_cache.PutTileData(index, m);
+
+    env.SetProgressPosition(index + 1);
+
+    if (tile_loaded != nullptr)
+      tile_loaded(tile_loaded_ctx, index);
   }
 }
 
@@ -246,9 +251,17 @@ LoadJPG2000(jas_stream_t *in, void *loader)
 inline void
 TerrainLoader::LoadJPG2000(struct zzip_dir *dir, const char *path)
 {
+  remaining_segments = 0;
+
   const auto in = OpenJasperZzipStream(dir, path);
   AtScopeExit(in) { jas_stream_close(in); };
-  env.SetProgressRange(jas_stream_length(in) / 65536);
+  if (scan_overview) {
+    /* zzip SEEK_END often fails on deflated members; range 0
+       makes SubOperationEnvironment drop every position. */
+    const long length = jas_stream_length(in);
+    if (length > 65536)
+      env.SetProgressRange(unsigned(length / 65536));
+  }
   ::LoadJPG2000(in, this);
 }
 

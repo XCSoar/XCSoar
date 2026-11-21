@@ -36,7 +36,7 @@ public:
   FlightStatisticsRenderer(const ChartLook &_chart_look,
                            const MapLook &_map_look) noexcept;
 
-  void SetTerrain(const RasterTerrain *terrain) noexcept {
+  void SetTerrain(const TerrainBase *terrain) noexcept {
     background_renderer.SetTerrain(terrain);
   }
 

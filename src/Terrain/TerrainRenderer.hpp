@@ -7,14 +7,17 @@
 #include "util/Serial.hpp"
 #include "Terrain/TerrainSettings.hpp"
 #include "Projection/CompareProjection.hpp"
+#ifdef ENABLE_OPENGL
+#include "Projection/MapLod.hpp"
+#endif
 
 class Canvas;
 class WindowProjection;
-class RasterTerrain;
+class TerrainBase;
 struct ColorRamp;
 
 class TerrainRenderer {
-  const RasterTerrain &terrain;
+  const TerrainBase &terrain;
 
   Serial terrain_serial;
 
@@ -28,11 +31,14 @@ protected:
   const ColorRamp *last_color_ramp = nullptr;
   double last_projection_scale = 0;
   unsigned last_contour_spacing = 0;
+#ifdef ENABLE_OPENGL
+  unsigned last_lod = MAP_LOD_COUNT;
+#endif
 
   RasterRenderer raster_renderer;
 
 public:
-  TerrainRenderer(const RasterTerrain &_terrain);
+  TerrainRenderer(const TerrainBase &_terrain);
   ~TerrainRenderer() {}
 
   TerrainRenderer(const TerrainRenderer &) = delete;
@@ -89,7 +95,5 @@ public:
   bool Generate(const WindowProjection &map_projection,
                 const Angle sunazimuth);
 
-  void Draw(Canvas &canvas, const WindowProjection &projection) const {
-    raster_renderer.Draw(canvas, projection);
-  }
+  void Draw(Canvas &canvas, const WindowProjection &projection) const;
 };

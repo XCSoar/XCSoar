@@ -10,6 +10,14 @@
 #ifndef ENABLE_OPENGL
 #include "TransparentRendererCache.hpp"
 #include "util/Serial.hpp"
+#else
+#include "util/AllocatedArray.hxx"
+#include "util/Serial.hpp"
+#include "Math/Point2D.hpp"
+#include "Geo/GeoBounds.hpp"
+#include <cstdint>
+#include <unordered_map>
+#include <vector>
 #endif
 
 struct AirspaceLook;
@@ -17,11 +25,14 @@ struct MoreData;
 struct DerivedInfo;
 struct AirspaceComputerSettings;
 struct AirspaceRendererSettings;
+class AbstractAirspace;
+class AirspacePolygon;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
 class AirspaceWarningCopy;
 class Canvas;
 class WindowProjection;
+class MapCanvas;
 
 class AirspaceRenderer
 {
@@ -40,6 +51,54 @@ class AirspaceRenderer
   TransparentRendererCache fill_cache;
 
   Serial last_warning_serial;
+#else
+  /**
+   * Geographic ear-clip indices per airspace.  Pan only reprojects.
+   * A failed clip is remembered so we do not retry every frame.
+   */
+  struct TriangleCacheEntry {
+    AllocatedArray<uint16_t> indices;
+    unsigned index_count = 0;
+    unsigned vertex_count = 0;
+    bool tried = false;
+    bool ok = false;
+  };
+
+  std::unordered_map<const AbstractAirspace *, TriangleCacheEntry>
+    triangle_cache;
+
+public:
+  /**
+   * Ring in native lon/lat offsets from #origin.  Drawn with
+   * #ToGLM so pan/rotate does not ClipPolygon or ear-clip.
+   */
+  struct GeoPolyCache {
+    GeoPoint origin = GeoPoint::Invalid();
+    AllocatedArray<FloatPoint2D> ring;
+    unsigned n = 0;
+    AllocatedArray<FloatPoint2D> padding;
+    unsigned padding_n = 0;
+    double pad_scale = 0;
+    double pad_cos = 0;
+  };
+
+  struct VisibleAirspace {
+    const AbstractAirspace *airspace = nullptr;
+    bool fill = true;
+  };
+
+private:
+  std::unordered_map<const AbstractAirspace *, GeoPolyCache>
+    geo_poly_cache;
+
+  std::vector<VisibleAirspace> visible_airspaces;
+  GeoBounds visible_bounds = GeoBounds::Invalid();
+  unsigned visible_lod = ~0u;
+  unsigned visible_settings_key = 0;
+  Serial visible_airspaces_serial;
+  Serial visible_warning_serial;
+
+  static constexpr double VIS_BOUNDS_SCALE = 2;
 #endif
 
 public:
@@ -59,6 +118,8 @@ public:
   }
 
   void SetAirspaces(const Airspaces *_airspaces) {
+    if (airspaces != _airspaces)
+      Flush();
     airspaces = _airspaces;
   }
 
@@ -69,13 +130,36 @@ public:
   void Clear() {
     airspaces = nullptr;
     warning_manager = nullptr;
+    Flush();
   }
 
   void Flush() {
 #ifndef ENABLE_OPENGL
     fill_cache.Invalidate();
+#else
+    triangle_cache.clear();
+    geo_poly_cache.clear();
+    visible_airspaces.clear();
+    visible_bounds = GeoBounds::Invalid();
+    visible_lod = ~0u;
+    visible_settings_key = 0;
 #endif
   }
+
+#ifdef ENABLE_OPENGL
+  bool PrepareCachedPolygon(MapCanvas &canvas,
+                            const AirspacePolygon &airspace,
+                            bool skip_triangulate) noexcept;
+
+  GeoPolyCache &GetGeoPoly(const AbstractAirspace &airspace) noexcept {
+    return geo_poly_cache[&airspace];
+  }
+
+  void UpdateVisibleAirspaces(const WindowProjection &projection,
+                              const AirspaceRendererSettings &settings,
+                              const AirspaceWarningCopy &awc,
+                              const AirspacePredicate &visible) noexcept;
+#endif
 
 private:
 #ifndef ENABLE_OPENGL

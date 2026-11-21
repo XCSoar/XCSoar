@@ -6,7 +6,7 @@
 #include "Engine/Waypoint/Ptr.hpp"
 
 class Waypoints;
-class RasterTerrain;
+class TerrainBase;
 class ProgressListener;
 struct PlacesOfInterestSettings;
 struct TeamCodeSettings;
@@ -81,11 +81,11 @@ SaveHome(ProfileMap &profile,
  * Reads the waypoints out of the two waypoint files and appends them to the
  * specified waypoint list
  * @param way_points The waypoint list to fill
- * @param terrain RasterTerrain (for automatic waypoint height)
+ * @param terrain Terrain (for automatic waypoint height)
  */
 bool
 LoadWaypoints(Waypoints &way_points,
-              const RasterTerrain *terrain,
+              const TerrainBase *terrain,
               ProgressListener &progress);
 
 /**
@@ -96,7 +96,7 @@ LoadWaypoints(Waypoints &way_points,
  */
 void
 ReloadWaypointFiles(Waypoints &way_points,
-                    const RasterTerrain *terrain,
+                    const TerrainBase *terrain,
                     ProgressListener &progress,
                     bool primary, bool watched, bool map_file);
 

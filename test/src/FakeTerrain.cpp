@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/RasterMap.hpp"
 
 TerrainHeight
 RasterMap::GetHeight([[maybe_unused]] const GeoPoint &location) const noexcept

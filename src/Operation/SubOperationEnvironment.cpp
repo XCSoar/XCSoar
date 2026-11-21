@@ -13,5 +13,9 @@ SubOperationEnvironment::SetProgressRange(unsigned _range) noexcept
 void
 SubOperationEnvironment::SetProgressPosition(unsigned position) noexcept
 {
-  ProxyOperationEnvironment::SetProgressPosition(parent_start + position * parent_range / range);
+  if (range == 0)
+    return;
+
+  ProxyOperationEnvironment::SetProgressPosition(
+    parent_start + position * parent_range / range);
 }

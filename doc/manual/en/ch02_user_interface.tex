@@ -22,7 +22,8 @@ Whenever actual situations are worthy of grabbing the pilot's attention, an
 \emph{overlay} is put in front of the main screen. This happens especially 
 when urgent reaction by the pilot is required as are the situation of a 
 possible collision or an entering of a restricted airspace expected to happen
-soon.
+soon.  Stall, overspeed, unlocked airbrakes, and a missing landing gear
+are spoken and shown as red labels at the top of the map.
 
 Evidently, menu buttons and menu screens are overlays too, and there are many 
 more. As a result, the elements put on each other form a display stack with 
@@ -69,9 +70,9 @@ typically laid out such that menu items can be selected by pressing the
 button adjacent to the item.  If the device has a touch screen, the menu
 items can be selected by touching them.  These buttons are drawn in black
 text on a grey background.
-\item[Status messages] Text is displayed over the screen in status message
-boxes.  This text is used to present detailed information to the pilot when
-certain events occur.
+\item[Status messages] Rounded labels at the top of the map, the same
+look as Simulator on the lower left.  They present a short text when
+an event occurs.
 \item[Dialogue windows] Larger dialogue windows, usually containing graphics and
 buttons, are used to present detailed data to the pilot regarding waypoint
 details, statistics and analysis etc.
@@ -595,12 +596,19 @@ The dialogues give a wide variety to set up the look and feel of the XCSoar page
 
 \section{Status messages}
 
-Status messages appear over the map area to present text for a short period of
-time.  The message disappears after the time period has elapsed, and different
+Status messages appear as rounded labels at the top of the map, stacked
+downward when more than one is visible.  Long text wraps.  Errors such
+as stall, overspeed, unlocked airbrakes, or a missing landing gear
+are red and spoken; cautions such as battery low are yellow;
+other messages are white, the same colours and icons as the labels on
+the lower left.  Map and repository load progress uses the same labels, with a
+fill, and stays a moment after the load finishes.
+A status message disappears after its period has elapsed, and different
 types of message have different periods. Additionally, status messages can be
 made to disappear by acknowledging the message.  Acknowledgement is achieved by
-either pressing the enter key, touching the status
-message (on touch-screen devices) or clicking the screen (mouse enabled devices).
+either pressing the enter key, or touching that label
+(on touch-screen or mouse devices). Touching the progress label does not
+dismiss it.
 
 Additional user buttons may be assigned to a status message repeat function,
 which brings up the last message again.

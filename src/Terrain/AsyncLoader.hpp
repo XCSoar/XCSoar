@@ -10,7 +10,7 @@
 class OperationEnvironment;
 class FileCache;
 class Path;
-class RasterTerrain;
+class TerrainBase;
 
 /**
  * This class loads a terrain file in a separate thread.
@@ -32,5 +32,5 @@ public:
   /**
    * Throws on error.
    */
-  std::unique_ptr<RasterTerrain> Wait();
+  std::unique_ptr<TerrainBase> Wait();
 };

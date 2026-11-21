@@ -24,8 +24,12 @@ class DrmDisplay {
 public:
   /**
    * Throws on error.
+   *
+   * @param preferred_mode if @p use_preferred_mode is true, select a
+   * matching connector mode (e.g. from @c -800x600)
    */
-  DrmDisplay();
+  explicit DrmDisplay(PixelSize preferred_mode = {},
+                      bool use_preferred_mode = false);
 
   ~DrmDisplay() noexcept;
 

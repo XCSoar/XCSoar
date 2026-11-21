@@ -3,7 +3,7 @@
 
 #pragma once
 
-class RasterTerrain;
+class TerrainBase;
 class AtmosphericPressure;
 class Airspaces;
 class OperationEnvironment;
@@ -19,7 +19,7 @@ ReadAirspace(Airspaces &airspaces,
 
 void
 SetAirspaceGroundLevels(Airspaces &airspaces,
-                        const RasterTerrain &terrain) noexcept;
+                        const TerrainBase &terrain) noexcept;
 
 /**
  * Reads the airspace files from path.

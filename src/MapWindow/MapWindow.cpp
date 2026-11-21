@@ -6,7 +6,8 @@
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Topography/TopographyStore.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Screen/Layout.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Computer/GlideComputer.hpp"
 
@@ -126,7 +127,8 @@ unsigned
 MapWindow::UpdateTopography(unsigned max_update) noexcept
 {
   if (topography != nullptr && GetMapSettings().topography_enabled)
-    return topography->ScanVisibility(visible_projection, max_update);
+    return topography->ScanVisibility(visible_projection, max_update,
+                                      Layout::Scale(1u));
   else
     return 0;
 }
@@ -187,7 +189,7 @@ MapWindow::SetTopography(TopographyStore *_topography) noexcept
 }
 
 void
-MapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
+MapWindow::SetTerrain(TerrainBase *_terrain) noexcept
 {
   terrain = _terrain;
   background.SetTerrain(_terrain);

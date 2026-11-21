@@ -8,22 +8,16 @@
 #include "util/StaticString.hxx"
 
 #include <atomic>
-#include <memory>
 #include <mutex>
 
-class PluggableOperationEnvironment;
-class ProgressWidget;
-
 /**
- * Top-of-map green progress bar for long-running weather downloads
- * (same widget style as terrain loading).
+ * HUD-top progress pill for long-running weather downloads
+ * (same look as terrain loading).
  *
  * Thread-safe progress updates from the network thread; UI changes
  * are marshalled to the main thread.
  */
 class BackgroundDownloadProgress final : public ProgressListener {
-  std::unique_ptr<PluggableOperationEnvironment> env;
-  ProgressWidget *widget = nullptr;
   UI::Notify progress_notify{[this]{ OnProgressNotify(); }};
 
   std::atomic<unsigned> active_sessions{0};
@@ -34,6 +28,7 @@ class BackgroundDownloadProgress final : public ProgressListener {
   std::mutex text_mutex;
   StaticString<128> pending_text;
   bool text_pending = false;
+  bool shown = false;
 
   unsigned displayed_range = 0;
   unsigned displayed_position = 0;
@@ -41,7 +36,7 @@ class BackgroundDownloadProgress final : public ProgressListener {
   void OnProgressNotify() noexcept;
 
   void ProcessPendingVisibility() noexcept;
-  void ShowOnMainThread(const char *text) noexcept;
+  bool ShowOnMainThread(const char *text) noexcept;
   void HideOnMainThread() noexcept;
   void ApplyPendingProgress() noexcept;
 
@@ -53,13 +48,13 @@ public:
   }
 
   /**
-   * Show the bar (main thread).  Nested calls increment an internal
-   * counter; the bar stays visible until the last matching #End().
+   * Show the pill (main thread).  Nested calls increment an internal
+   * counter; the pill stays visible until the last matching #End().
    */
   void Begin(const char *text) noexcept;
 
   /**
-   * Hide the bar once all sessions have ended (main thread).
+   * Hide the pill once all sessions have ended (main thread).
    */
   void End() noexcept;
 

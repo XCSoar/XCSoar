@@ -223,11 +223,13 @@ public:
     return serial;
   }
 
+  void IncrementSerial() noexcept {
+    ++serial;
+  }
+
   void Reset() noexcept;
 
   const GeoBounds &GetBounds() const noexcept {
-    assert(bounds.IsValid());
-
     return bounds;
   }
 
@@ -278,6 +280,18 @@ public:
 
   const auto &GetSize() const noexcept {
     return size;
+  }
+
+  UnsignedPoint2D GetTileGridSize() const noexcept {
+    return {tiles.GetWidth(), tiles.GetHeight()};
+  }
+
+  Point2D<uint_least16_t> GetTilePixelSize() const noexcept {
+    return tile_size;
+  }
+
+  RasterTile &GetTile(unsigned x, unsigned y) noexcept {
+    return tiles.Get(x, y);
   }
 
   RasterLocation GetFineSize() const noexcept {

@@ -1,6 +1,8 @@
-# GeoTIFF-backed raster overlays are available on all non-Kobo targets.
+# GeoTIFF-backed raster overlays. Kobo needs libtiff so elevation
+# can be a COG (write+read); libgeotiff/PROJ stay off there.
 ifeq ($(TARGET_IS_KOBO),y)
 GEOTIFF = n
+TIFF ?= y
 else ifeq ($(TARGET_IS_DARWIN),y)
 GEOTIFF ?= y
 else ifeq ($(TARGET),PC)

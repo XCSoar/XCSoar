@@ -19,7 +19,7 @@ struct DerivedInfo;
 class ProtectedTaskManager;
 struct TrafficList;
 struct NMEAInfo;
-class RasterTerrain;
+class TerrainBase;
 class ProtectedRoutePlanner;
 struct ComputerSettings;
 class NOAAStore;
@@ -35,9 +35,9 @@ public:
   MapItemListBuilder(MapItemList &_list, GeoPoint _location, double _range)
     :list(_list), location(_location), range(_range) {}
 
-  void AddLocation(const NMEAInfo &basic, const RasterTerrain *terrain);
+  void AddLocation(const NMEAInfo &basic, const TerrainBase *terrain);
   void AddArrivalAltitudes(const ProtectedRoutePlanner &route_planner,
-                     const RasterTerrain *terrain, double safety_height);
+                     const TerrainBase *terrain, double safety_height);
   void AddSelfIfNear(const GeoPoint &self, Angle bearing);
   void AddWaypoints(const Waypoints &waypoints,
                     const ProtectedRoutePlanner *route_planner,

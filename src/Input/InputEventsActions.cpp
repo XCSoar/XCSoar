@@ -77,7 +77,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 
 #include <cassert>
 #include <algorithm>

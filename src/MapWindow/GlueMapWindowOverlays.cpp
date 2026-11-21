@@ -21,7 +21,7 @@
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "UIState.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 #include "Look/GestureLook.hpp"
@@ -432,6 +432,17 @@ GlueMapWindow::DrawWarnings(Canvas &canvas,
   if (faults && (!basic.alive || DEBUG_ALL_MAP_OVERLAYS))
     AddLabel(list, _("GPS not connected"), &look.no_gps_icon,
             COLOR_AIRSPACE_WARNING_INSIDE);
+
+  if (faults) {
+    for (const auto &text : device_faults)
+      AddLabel(list, text.c_str(), &look.device_icon,
+               COLOR_AIRSPACE_WARNING_INSIDE);
+#if DEBUG_ALL_MAP_OVERLAYS
+    if (device_faults.empty())
+      AddLabel(list, "A: Not connected", &look.device_icon,
+               COLOR_AIRSPACE_WARNING_INSIDE);
+#endif
+  }
 
   if (faults &&
       (!GetComputerSettings().polar.glide_polar_task.IsValid() ||

@@ -2,20 +2,19 @@
 // Copyright The XCSoar Project
 
 #include "ThermalBase.hpp"
-#include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterMap.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Geo/Math.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
 
 static double
-GetElevation(RasterTerrain::Lease &map, const GeoPoint loc)
+GetElevation(const TerrainBase &terrain, const GeoPoint loc)
 {
-  return (double)map->GetHeight(loc).GetValueOr0();
+  return (double)terrain.GetTerrainHeight(loc).GetValueOr0();
 }
 
 void
-EstimateThermalBase(const RasterTerrain *terrain,
+EstimateThermalBase(const TerrainBase *terrain,
                     const GeoPoint location, const double altitude,
                     const double average, const SpeedVector wind,
                     GeoPoint &ground_location, double &ground_alt)
@@ -39,8 +38,6 @@ EstimateThermalBase(const RasterTerrain *terrain,
     return;
   }
 
-  RasterTerrain::Lease map(*terrain);
-
   // Height step of the 10 calculation intervals
   const auto dh = altitude / 10;
 
@@ -59,7 +56,7 @@ EstimateThermalBase(const RasterTerrain *terrain,
                                 wind.norm * t);
 
     // Calculate altitude above ground
-    auto dh = h - GetElevation(map, loc);
+    auto dh = h - GetElevation(*terrain, loc);
 
     // At or below ground level, use linear interpolation
     // to estimate intersection
@@ -80,6 +77,6 @@ EstimateThermalBase(const RasterTerrain *terrain,
   }
 
   ground_location = loc;
-  ground_alt = GetElevation(map, ground_location);
+  ground_alt = GetElevation(*terrain, ground_location);
 }
 

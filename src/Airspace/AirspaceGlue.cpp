@@ -107,7 +107,7 @@ ReadAirspace(Airspaces &airspaces,
 
 void
 SetAirspaceGroundLevels(Airspaces &airspaces,
-                        const RasterTerrain &terrain) noexcept
+                        const TerrainBase &terrain) noexcept
 {
   airspaces.SetGroundLevels(terrain);
 }

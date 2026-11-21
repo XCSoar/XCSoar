@@ -6,7 +6,7 @@
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Observation/Database.hpp"
 #include "Topography/TopographyStore.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 
 DataComponents::DataComponents() noexcept
   :airspaces(new Airspaces()),

@@ -17,6 +17,7 @@ static constexpr unsigned NUM_COLOR_RAMP_LEVELS = 13;
 class Angle;
 class Canvas;
 class RasterMap;
+class TerrainBase;
 class WindowProjection;
 class RawBitmap;
 struct RawColor;
@@ -238,6 +239,18 @@ public:
                const WindowProjection &projection,
                bool force_full = false) noexcept;
 
+  /**
+   * Scan terrain and fill the height matrix point by point.
+   * Used for terrain implementations that don't use RasterMap's tile cache.
+   *
+   * @param force_full replace every sample.  Same role as ScanMap():
+   * newly loaded tiles must show in the interior, not only on the
+   * pan edge.
+   */
+  void ScanTerrain(const TerrainBase &terrain,
+                   const WindowProjection &projection,
+                   bool force_full = false) noexcept;
+
 #ifdef ENABLE_OPENGL
   /**
    * True when the last ScanMap() changed samples that still need
@@ -309,8 +322,19 @@ private:
   void FillHeightRect(const RasterMap &map,
                       unsigned x, unsigned y,
                       unsigned w, unsigned h) noexcept;
+  void FillHeightRect(const TerrainBase &terrain,
+                      unsigned x, unsigned y,
+                      unsigned w, unsigned h) noexcept;
+  bool ScrollMatrix(const GeoBounds &desired, UnsignedPoint2D matrix_size,
+                    int &east, int &north) noexcept;
+  void FillScrollEdges(int east, int north,
+                       unsigned width, unsigned height,
+                       const RasterMap *map,
+                       const TerrainBase *terrain) noexcept;
   bool ScrollMap(const RasterMap &map, const GeoBounds &desired,
                  UnsignedPoint2D matrix_size) noexcept;
+  bool ScrollTerrain(const TerrainBase &terrain, const GeoBounds &desired,
+                     UnsignedPoint2D matrix_size) noexcept;
   void DrawHillshade(const WindowProjection &projection,
                      float alpha) const noexcept;
 #endif
