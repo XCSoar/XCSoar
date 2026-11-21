@@ -508,10 +508,10 @@ MainWindow::LayoutMapArea() noexcept
     top_widget->Move(top_rect);
     hud_rect = GetMapRectBelow(hud_rect, top_rect);
 
-    /* cut the map short only where it would end at the widget anyway;
-       where it reaches further, it slides underneath and stays
-       visible beyond the widget, like it does with the InfoBoxes */
-    if (main_rect.top >= top_rect.top)
+    /* Do not let the map paint this strip.  On Wayland the map is
+       the same EGL surface as the bar; sliding under it covers the
+       pixels even after RaiseTopWidget(). */
+    if (main_rect.top < top_rect.bottom)
       main_rect = GetMapRectBelow(main_rect, top_rect);
   }
 
@@ -535,6 +535,7 @@ MainWindow::LayoutMapArea() noexcept
   else
     SetDialogOverlay(nullptr);
 
+  RaiseTopWidget();
   RaiseBottomBannerWidget();
 
   /* keep the HUD elements (compass, map scale, final glide bar, ...)
@@ -632,6 +633,7 @@ MainWindow::UpdateMapOverlayButtonLayout() noexcept
      underneath them (same as ReinitialiseLayout()). */
   if (overlay_buttons_active)
     map->BringToBottom();
+  RaiseTopWidget();
 }
 
 void
@@ -1052,6 +1054,7 @@ MainWindow::ReinitialiseLayout() noexcept
   if (map != nullptr)
     map->BringToBottom();
 
+  RaiseTopWidget();
   RaiseBottomBannerWidget();
 }
 
@@ -1952,6 +1955,8 @@ MainWindow::SetTopWidget(Widget *_widget) noexcept
     map->FullRedraw();
 
   UpdateMapOverlayButtonLayout();
+  LayoutHudElements();
+  RaiseTopWidget();
 }
 
 void
@@ -1984,6 +1989,20 @@ MainWindow::KillBottomBannerWidget() noexcept
 
   old->Unprepare();
   delete old;
+}
+
+void
+MainWindow::RaiseTopWidget() noexcept
+{
+  if (!HaveTopWidget())
+    return;
+
+  auto *ww = dynamic_cast<WindowWidget *>(top_widget);
+  if (ww == nullptr || !ww->GetWindow().IsDefined() ||
+      !ww->GetWindow().IsVisible())
+    return;
+
+  BringToTopBelowDialogs(ww->GetWindow());
 }
 
 void
@@ -2041,6 +2060,7 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
   map->FullRedraw();
 
   UpdateMapOverlayButtonLayout();
+  LayoutHudElements();
 }
 
 void
@@ -2076,6 +2096,7 @@ MainWindow::SetBottomBannerWidget(WindowWidget *_widget) noexcept
   map->FullRedraw();
 
   UpdateMapOverlayButtonLayout();
+  LayoutHudElements();
 }
 
 void
