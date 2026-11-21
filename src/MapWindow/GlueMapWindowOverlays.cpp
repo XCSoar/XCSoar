@@ -433,6 +433,17 @@ GlueMapWindow::DrawWarnings(Canvas &canvas,
     AddLabel(list, _("GPS not connected"), &look.no_gps_icon,
             COLOR_AIRSPACE_WARNING_INSIDE);
 
+  if (faults) {
+    for (const auto &text : device_faults)
+      AddLabel(list, text.c_str(), &look.device_icon,
+               COLOR_AIRSPACE_WARNING_INSIDE);
+#if DEBUG_ALL_MAP_OVERLAYS
+    if (device_faults.empty())
+      AddLabel(list, "A: Not connected", &look.device_icon,
+               COLOR_AIRSPACE_WARNING_INSIDE);
+#endif
+  }
+
   if (faults &&
       (!GetComputerSettings().polar.glide_polar_task.IsValid() ||
        DEBUG_ALL_MAP_OVERLAYS))

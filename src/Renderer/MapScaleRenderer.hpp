@@ -28,8 +28,8 @@ PixelSize
 MapLabelSize(const Font &font, const MapLabel &label,
              unsigned max_width = 0) noexcept;
 
-/** shortcut: 8 labels; raise the cap when a ninth condition is added */
-using MapLabelList = StaticArray<MapLabel, 8>;
+/** GPS, polar, battery, session, plus one fault per device (NUMDEV). */
+using MapLabelList = StaticArray<MapLabel, 16>;
 
 /**
  * Height of the map-scale bar band inside #RenderMapScale /

@@ -76,6 +76,7 @@ MapLook::Initialise(const MapSettings &settings,
 
   waiting_for_fix_icon.LoadResource(IDB_GPSSTATUS1_ALL, false);
   no_gps_icon.LoadResource(IDB_GPSSTATUS2_ALL, false);
+  device_icon.LoadResource(IDB_DEVICE_ALL, false);
   plane_icon.LoadResource(IDB_PLANE_ALL, false);
   battery_icon.LoadResource(IDB_BATTERY_ALL, false);
   simulator_icon.LoadResource(IDB_SIMULATOR_ALL, false);
