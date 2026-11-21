@@ -285,8 +285,12 @@ struct CogRaster::Impl {
   mutable TileCursor last_cur, last_ov;
   mutable std::set<TileCacheKey> pending_internal_tiles;
   /* One screen is ~12 tiles; pan/zoom needs neighbours and the
-     overview.  256×256 Int16 ≈ 128 kB, so 256 slots ≈ 32 MB. */
+     overview.  256×256 Int16 ≈ 128 kB, so 256 slots ≈ 32 MB.
+     OpenTiffFile allows tiles up to 1024² (2 MB Int16); the byte
+     cap keeps that case at 32 MB instead of 512 MB. */
   static constexpr size_t MAX_CACHED_TILES = 256;
+  static constexpr size_t MAX_CACHED_BYTES = 32 * 1024 * 1024;
+  size_t cached_bytes = 0;
 
   void CloseTiff() noexcept {
 #ifdef USE_LIBTIFF
@@ -432,6 +436,7 @@ struct CogRaster::Impl {
     tile_ptr.clear();
     last_cur = {};
     last_ov = {};
+    cached_bytes = 0;
   }
 
   void RebuildTilePtr() noexcept {
@@ -456,33 +461,42 @@ struct CogRaster::Impl {
       tile_ptr[key.level][i] = p;
   }
 
+  void EvictOne() noexcept {
+    /* Keep the level ScanTerrain is using.  Evicting it made
+       ScanLine fall back to the overview for a frame. */
+    auto it = tile_cache.end();
+    for (auto i = tile_cache.begin(); i != tile_cache.end(); ++i) {
+      if (i->first.level != last_scan_level) {
+        it = i;
+        break;
+      }
+    }
+    if (it == tile_cache.end())
+      it = tile_cache.begin();
+    const TerrainHeight *p = it->second.data();
+    cached_bytes -= it->second.size() * sizeof(TerrainHeight);
+    SetPtr(it->first, nullptr);
+    if (last_cur.data == p)
+      last_cur = {};
+    if (last_ov.data == p)
+      last_ov = {};
+    tile_cache.erase(it);
+  }
+
   void InsertTile(const TileCacheKey &key,
                   std::vector<TerrainHeight> &&tile_buffer) noexcept
   {
     if (tile_cache.find(key) != tile_cache.end())
       return;
-    if (tile_cache.size() >= MAX_CACHED_TILES) {
-      /* Keep the level ScanTerrain is using.  Evicting it made
-         ScanLine fall back to the overview for a frame. */
-      auto it = tile_cache.end();
-      for (auto i = tile_cache.begin(); i != tile_cache.end(); ++i) {
-        if (i->first.level != last_scan_level) {
-          it = i;
-          break;
-        }
-      }
-      if (it == tile_cache.end())
-        it = tile_cache.begin();
-      const TerrainHeight *p = it->second.data();
-      SetPtr(it->first, nullptr);
-      if (last_cur.data == p)
-        last_cur = {};
-      if (last_ov.data == p)
-        last_ov = {};
-      tile_cache.erase(it);
-    }
+    const size_t new_bytes = tile_buffer.size() * sizeof(TerrainHeight);
+    while (!tile_cache.empty() &&
+           (tile_cache.size() >= MAX_CACHED_TILES ||
+            (cached_bytes + new_bytes > MAX_CACHED_BYTES &&
+             new_bytes <= MAX_CACHED_BYTES)))
+      EvictOne();
     auto &slot = tile_cache[key];
     slot = std::move(tile_buffer);
+    cached_bytes += slot.size() * sizeof(TerrainHeight);
     SetPtr(key, slot.data());
 
     if (key.level < levels.size()) {
