@@ -147,6 +147,8 @@ KeyboardState::GetCharacter(unsigned key) const noexcept
     if (KTYP(value) == KT_PAD) {
       if (value == K_PPLUS)
         return '+';
+      if (value == K_PMINUS)
+        return '-';
       if (!num_lock)
         return 0;
       if (value == K_PDOT)
@@ -163,6 +165,8 @@ KeyboardState::GetCharacter(unsigned key) const noexcept
     return 0; // the US fallback has no AltGr table
   if (key == KEY_KPPLUS)
     return '+';
+  if (key == KEY_KPMINUS)
+    return '-';
   if (num_lock) {
     if (key == KEY_KPDOT)
       return '.';
