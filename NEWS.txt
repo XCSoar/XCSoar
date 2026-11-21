@@ -19,6 +19,11 @@ Version 7.47 - not yet released
   - deactivate the current plane from the Planes dialog, which
     clears its polar #3270
 * ui
+  - show status messages and file-load progress as rounded labels
+    at the top of the map, the same look as Simulator on the
+    lower left. Long text wraps. Touch a message to dismiss it;
+    progress fills while the load runs and stays a moment after
+    it finishes
   - add a ground-side shadow to the artificial horizon line so it
     stays visible on both sky and ground
   - draw the artificial-horizon aircraft reference as a yellow bar
@@ -180,9 +185,11 @@ Version 7.47 - not yet released
     data directory, as in waypoints/details/ETSI_1.png #3453
   - describe which airspace the list of map elements selects
   - describe the Imhof Atlas lite terrain colour ramp
+  - describe status messages and file-load progress as rounded
+    labels at the top of the map
 * data
   - add an option on Site files to download newer copies of files
-    already on the device when XCSoar starts. The progress bar
+    already on the device when XCSoar starts. A progress label
     shows the download, and a message reports when files were
     updated. A download that finishes in flight is loaded at the
     next start #417
