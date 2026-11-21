@@ -4,14 +4,17 @@
 #pragma once
 
 #include "ui/window/PaintWindow.hpp"
-#include "Renderer/TextRenderer.hpp"
+#include "Operation/Operation.hpp"
 #include "thread/Mutex.hxx"
+#include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"
 
 #include <chrono>
+#include <memory>
 
 struct UISettings;
 struct DialogLook;
+class Font;
 namespace UI { class SingleWindow; }
 
 /**
@@ -39,6 +42,7 @@ public:
 
 private:
   static constexpr unsigned MAXMESSAGES = 20;
+  static constexpr unsigned MAX_PILLS = 8;
 
   struct Message {
     Type type = MSG_UNKNOWN;
@@ -81,27 +85,54 @@ private:
      */
     bool Update(std::chrono::steady_clock::time_point now) noexcept;
 
-    /**
-     * @return true if a message has been appended
-     */
-    bool AppendTo(StaticString<2000> &buffer,
-                  std::chrono::steady_clock::time_point now) noexcept;
+    [[gnu::pure]]
+    bool IsVisible(std::chrono::steady_clock::time_point now) const noexcept;
   };
 
   UI::SingleWindow &parent;
   const DialogLook &look;
 
-  PixelRect rc; // maximum message size
-
-  TextRenderer renderer;
+  PixelRect rc; // HUD rectangle (parent coordinates)
 
   const UISettings &settings;
 
   Mutex mutex;
   struct Message messages[MAXMESSAGES];
-  StaticString<2000> text;
 
-  unsigned n_visible = 0;
+  StaticArray<StaticString<256>, MAX_PILLS> status_pills;
+
+  class SlotEnv final : public QuietOperationEnvironment {
+    PopupMessage &host;
+    const void *key;
+
+  public:
+    SlotEnv(PopupMessage &_host, const void *_key) noexcept
+      :host(_host), key(_key) {}
+
+    void SetText(const char *text) noexcept override {
+      host.SetProgressText(key, text);
+    }
+
+    void SetProgressRange(unsigned range) noexcept override {
+      host.SetProgressRange(key, range);
+    }
+
+    void SetProgressPosition(unsigned position) noexcept override {
+      host.SetProgressPosition(key, position);
+    }
+  };
+
+  struct ProgressSlot {
+    const void *key = nullptr;
+    StaticString<128> text;
+    unsigned range = 0;
+    unsigned position = 0;
+    /** {} while live; set by ClearProgress to linger at 100% */
+    std::chrono::steady_clock::time_point hold_until{};
+    std::unique_ptr<SlotEnv> env;
+  };
+
+  StaticArray<ProgressSlot, MAX_PILLS> progress_slots;
 
   /** when was the last haptic feedback for a new message generated? */
   std::chrono::steady_clock::time_point last_haptic{};
@@ -118,6 +149,13 @@ public:
 
   /** returns true if messages have changed */
   bool Render() noexcept;
+
+  void BeginProgress(const void *key, const char *text) noexcept;
+  void ClearProgress(const void *key) noexcept;
+  OperationEnvironment &GetProgressEnvironment(const void *key) noexcept;
+  void SetProgressText(const void *key, const char *text) noexcept;
+  void SetProgressRange(const void *key, unsigned range) noexcept;
+  void SetProgressPosition(const void *key, unsigned position) noexcept;
 
 protected:
   /** Caller must hold the lock. */
@@ -139,14 +177,17 @@ public:
 
 private:
   [[gnu::pure]]
-  unsigned CalculateWidth() const noexcept;
+  int FindProgressLocked(const void *key) const noexcept;
 
   [[gnu::pure]]
-  PixelRect GetRect(PixelSize size) const noexcept;
+  bool HasPills() const noexcept;
+  [[gnu::pure]]
+  const Font &GetFont() const noexcept;
 
   [[gnu::pure]]
   PixelRect GetRect() const noexcept;
 
+  void CollectStatusPills() noexcept;
   void UpdateTextAndLayout() noexcept;
   int GetEmptySlot() noexcept;
 

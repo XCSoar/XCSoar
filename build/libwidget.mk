@@ -1,6 +1,5 @@
 WIDGET_SOURCES = \
 	$(SRC)/Widget/Widget.cpp \
-	$(SRC)/Widget/ProgressWidget.cpp \
 	$(SRC)/Widget/ActionWidget.cpp \
 	$(SRC)/Widget/CallbackWidget.cpp \
 	$(SRC)/Widget/WindowWidget.cpp \

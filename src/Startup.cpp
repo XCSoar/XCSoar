@@ -101,7 +101,6 @@
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "Operation/SubOperationEnvironment.hpp"
-#include "Widget/ProgressWidget.hpp"
 #include "PageActions.hpp"
 #include "Weather/Features.hpp"
 #include "Weather/NOAAGlue.hpp"
@@ -285,9 +284,9 @@ MainWindow::LoadTerrain() noexcept
     terrain_loader = new AsyncTerrainOverviewLoader();
 
     terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
-    auto *progress = new ProgressWidget(*terrain_loader_env,
-                                        _("Loading Terrain File..."));
-    SetTopWidget(progress);
+    Message::ShowProgress(_("Loading Terrain File..."),
+                          terrain_loader_env.get(),
+                          terrain_loader_env.get());
 
     terrain_loader->Start(file_cache, path, *terrain_loader_env,
                           terrain_loader_notify);
@@ -313,7 +312,7 @@ try {
   auto new_terrain = loader->Wait();
   loader.reset();
 
-  SetTopWidget(nullptr);
+  Message::ClearProgress(terrain_loader_env.get());
   terrain_loader_env.reset();
 
   const ScopeSuspendAllThreads suspend;
@@ -334,7 +333,7 @@ try {
   RepositoryAutoUpdateTerrainIdle();
 #endif
 } catch (...) {
-  SetTopWidget(nullptr);
+  Message::ClearProgress(terrain_loader_env.get());
   terrain_loader_env.reset();
   LogError(std::current_exception(), "LoadTerrain failed");
 #ifdef HAVE_DOWNLOAD_MANAGER
