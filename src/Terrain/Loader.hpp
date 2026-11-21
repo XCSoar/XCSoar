@@ -49,6 +49,10 @@ public:
   void UpdateTiles(struct zzip_dir *dir, const char *path,
                    SignedRasterLocation p, unsigned radius);
 
+  void DecodeRequestedTiles(struct zzip_dir *dir, const char *path) {
+    LoadJPG2000(dir, path);
+  }
+
   /* callback methods for libjasper (via jas_rtc.cpp) */
 
   long SkipMarkerSegment(long file_offset) const;

@@ -248,7 +248,8 @@ TerrainLoader::LoadJPG2000(struct zzip_dir *dir, const char *path)
 {
   const auto in = OpenJasperZzipStream(dir, path);
   AtScopeExit(in) { jas_stream_close(in); };
-  env.SetProgressRange(jas_stream_length(in) / 65536);
+  if (scan_overview)
+    env.SetProgressRange(jas_stream_length(in) / 65536);
   ::LoadJPG2000(in, this);
 }
 

@@ -291,7 +291,7 @@ public:
   virtual ~GlueMapWindow() noexcept;
 
   void SetTopography(TopographyStore *_topography) noexcept;
-  void SetTerrain(RasterTerrain *_terrain) noexcept;
+  void SetTerrain(TerrainBase *_terrain) noexcept;
 
   void SetMapSettings(const MapSettings &new_value) noexcept;
   void SetComputerSettings(const ComputerSettings &new_value) noexcept;

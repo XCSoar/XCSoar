@@ -34,7 +34,7 @@
 #include "DataComponents.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Screen/Layout.hpp"

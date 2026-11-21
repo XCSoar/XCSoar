@@ -23,4 +23,12 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
               const GeoBounds &bounds,
               const Projection &projection);
 
+/**
+ * Draw a lat/lon rectangle as a projected mesh.  A 4-corner quad
+ * warps against airspace at far zoom.
+ */
+void
+DrawGeoMesh(const GeoBounds &bounds, const Projection &projection,
+            float u0, float v0, float u1, float v1);
+
 #endif

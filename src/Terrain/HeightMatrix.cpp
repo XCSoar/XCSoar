@@ -3,7 +3,9 @@
 
 #include "HeightMatrix.hpp"
 #include "RasterMap.hpp"
+#include "TerrainBase.hpp"
 
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
 
@@ -151,6 +153,83 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
     map.ScanLine(projection.ScreenToGeo({0, (int)y}),
                  projection.ScreenToGeo({(int)screen_size.width, (int)y}),
                  p, size.x, interpolate);
+  }
+}
+
+#endif
+
+#include "TerrainBase.hpp"
+
+#ifdef ENABLE_OPENGL
+
+unsigned
+HeightMatrix::TerrainQuantisation(const GeoBounds &bounds,
+                                  UnsignedPoint2D size) noexcept
+{
+  if (size.x == 0 || size.y == 0)
+    return 1;
+
+  const double meters_per_sample_x =
+    bounds.GetWidth().Degrees() * 111000.0 / size.x;
+  const double meters_per_sample_y =
+    bounds.GetHeight().Degrees() * 111000.0 / size.y;
+  const double meters_per_sample =
+    std::max(meters_per_sample_x, meters_per_sample_y);
+  return std::max(1u, unsigned(meters_per_sample / 30.0));
+}
+
+void
+HeightMatrix::FillFromTerrain(const TerrainBase &terrain,
+                              const GeoBounds &bounds,
+                              UnsignedPoint2D _size) noexcept
+{
+  if (_size.x == 0 || _size.y == 0)
+    return;
+
+  SetSize(_size);
+
+  const Angle delta_y = bounds.GetHeight() / _size.y;
+  const unsigned quantisation = TerrainQuantisation(bounds, _size);
+
+  terrain.PreCacheTiles(bounds, quantisation);
+
+  /* Inclusive west–east, same as Fill(), so ScrollMap geometry
+     applies to COG pan strips. */
+  Angle latitude = bounds.GetNorth();
+  auto p = data.data();
+  for (unsigned y = 0; y < _size.y; ++y, latitude -= delta_y) {
+    terrain.ScanTerrainLine(GeoPoint(bounds.GetWest(), latitude),
+                            GeoPoint(bounds.GetEast(), latitude),
+                            p, _size.x, quantisation);
+    p += _size.x;
+  }
+}
+
+#else
+
+void
+HeightMatrix::FillFromTerrain(const TerrainBase &terrain,
+                              const WindowProjection &projection,
+                              unsigned quantisation_pixels) noexcept
+{
+  if (quantisation_pixels < 1)
+    quantisation_pixels = 1;
+
+  const auto screen_size = projection.GetScreenSize();
+  if (screen_size.width == 0 || screen_size.height == 0)
+    return;
+
+  SetSize((UnsignedPoint2D)screen_size, quantisation_pixels);
+
+  terrain.PreCacheTiles(projection.GetScreenBounds(), quantisation_pixels);
+
+  auto p = data.data();
+  for (unsigned y = 0; y < screen_size.height; y += quantisation_pixels) {
+    const GeoPoint start = projection.ScreenToGeo({0, (int)y});
+    const GeoPoint end = projection.ScreenToGeo(
+      {(int)((size.x - 1) * quantisation_pixels), (int)y});
+    terrain.ScanTerrainLine(start, end, p, size.x, quantisation_pixels);
+    p += size.x;
   }
 }
 

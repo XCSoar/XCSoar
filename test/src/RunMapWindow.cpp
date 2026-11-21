@@ -21,7 +21,7 @@
 #include "Profile/MapProfile.hpp"
 #include "Repository/FileType.hpp"
 #include "Terrain/Loader.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Topography/TopographyGlue.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Waypoint/WaypointGlue.hpp"
@@ -51,7 +51,7 @@ static Waypoints way_points;
 static Airspaces airspace_database;
 
 static TopographyStore *topography;
-static RasterTerrain *terrain;
+static TerrainBase *terrain;
 
 class DrawThread {
 public:
@@ -103,7 +103,7 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   topography = new TopographyStore();
   LoadConfiguredTopography(*topography);
 
-  terrain = RasterTerrain::OpenTerrain(nullptr, operation).release();
+  terrain = TerrainBase::OpenTerrain(nullptr, operation).release();
 
   WaypointGlue::LoadWaypoints(way_points, terrain, operation);
   WaypointGlue::SetHome(way_points, poi_settings, team_code_settings, false);

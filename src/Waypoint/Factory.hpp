@@ -5,7 +5,7 @@
 
 #include "Engine/Waypoint/Waypoint.hpp"
 
-class RasterTerrain;
+class TerrainBase;
 class Waypoints;
 
 /**
@@ -17,12 +17,12 @@ class Waypoints;
 class WaypointFactory {
   WaypointOrigin origin;
   uint8_t file_num;
-  const RasterTerrain *terrain;
+  const TerrainBase *terrain;
 
 public:
   explicit WaypointFactory(WaypointOrigin _origin,
                            uint8_t _file_num=0,
-                           const RasterTerrain *_terrain=nullptr) noexcept
+                           const TerrainBase *_terrain=nullptr) noexcept
     :origin(_origin), file_num(_file_num), terrain(_terrain) {}
 
   [[gnu::pure]]
@@ -54,4 +54,4 @@ public:
  */
 void
 UpdateTerrainElevations(Waypoints &waypoints,
-                        const RasterTerrain &terrain) noexcept;
+                        const TerrainBase &terrain) noexcept;

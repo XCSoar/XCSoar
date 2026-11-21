@@ -403,6 +403,10 @@ static constexpr char hillshade_fragment_shader[] =
     void main() {
       vec2 b = unpack_la(texture2D(height_tex, texcoordvar));
       if (is_special(b)) {
+        /* Invalid (-32768 → hi=128 lo=0) is a missing sample, not
+           water.  Water stays ramp index 255. */
+        if (b.y == 128.0 && b.x < 0.5)
+          discard;
         gl_FragColor = ramp_lookup(255.0, 0.0);
         return;
       }

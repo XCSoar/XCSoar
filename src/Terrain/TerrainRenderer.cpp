@@ -2,9 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "Terrain/TerrainRenderer.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Ramp.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
 #include "ui/event/Idle.hpp"
@@ -340,7 +341,7 @@ static_assert(ARRAY_SIZE(terrain_ramps) == TerrainRendererSettings::NUM_RAMPS,
 //  mapscale/7.5 terrain units/pixel
 //
 // this is for TerrainInfo.StepSize = 0.0025;
-TerrainRenderer::TerrainRenderer(const RasterTerrain &_terrain)
+TerrainRenderer::TerrainRenderer(const TerrainBase &_terrain)
   :terrain(_terrain)
 {
   settings.SetDefaults();
@@ -361,6 +362,19 @@ IsLargeSizeDifference(const GeoBounds &a, const GeoBounds &b)
   return a.GetWidth().Native() > 2 * b.GetWidth().Native() ||
     a.GetHeight().Native() > 2 * b.GetHeight().Native();
 }
+
+/**
+ * Pinch-out grows the screen bounds.  Pan at the same scale does not.
+ */
+static bool
+IsZoomOut(const GeoBounds &old_b, const GeoBounds &new_b) noexcept
+{
+  if (!old_b.IsValid() || !new_b.IsValid())
+    return false;
+
+  return new_b.GetWidth().Native() > old_b.GetWidth().Native() * 1.05 ||
+    new_b.GetHeight().Native() > old_b.GetHeight().Native() * 1.05;
+}
 #endif
 
 bool
@@ -379,7 +393,8 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   const bool sun_ok = sunazimuth.CompareRoughly(last_sun_azimuth);
 #endif
 
-  const bool panning = !IsUserIdle(750);
+  const bool idle750 = IsUserIdle(750);
+  const bool panning = !idle750;
 
   const unsigned height_scale = 4;
   const double screen_pixel_size =
@@ -403,8 +418,17 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
      arrival would otherwise rescan the whole height matrix on the
      UI thread, and a pan hitch repeats until the finger lifts. */
 #ifdef ENABLE_OPENGL
+  const GeoBounds &old_bounds = raster_renderer.GetBounds();
+  const GeoBounds screen_bounds = map_projection.GetScreenBounds();
+  /* Ignore a new tile serial only while the last picture still
+     covers the screen (pan / zoom-in).  Zoom-out must rebuild or
+     the map stays white around a small quad. */
+  const bool view_covered = old_bounds.IsValid() &&
+    screen_bounds.IsValid() &&
+    old_bounds.IsInside(screen_bounds);
   const bool tiles_current =
-    terrain_serial == terrain.GetSerial() || panning;
+    terrain_serial == terrain.GetSerial() ||
+    (panning && view_covered);
 #else
   const bool tiles_current = terrain_serial == terrain.GetSerial();
 #endif
@@ -423,15 +447,32 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     return true;
 
 #ifdef ENABLE_OPENGL
-  const GeoBounds &old_bounds = raster_renderer.GetBounds();
-  GeoBounds new_bounds = map_projection.GetScreenBounds();
+  GeoBounds new_bounds = screen_bounds;
   assert(new_bounds.IsValid());
 
-  {
-    RasterTerrain::Lease map(terrain);
-    if (!new_bounds.IntersectWith(map->GetBounds()))
-      /* map is outside of visible screen area */
-      return false;
+  if (!terrain.IsDefined())
+    return false;
+
+  const auto terrain_bounds = terrain.GetBounds();
+  if (!terrain_bounds.IsValid())
+    return false;
+
+  if (!new_bounds.IntersectWith(terrain_bounds))
+    return false;
+
+  /* Finger down (pinch / pan): do not rebuild the height matrix
+     every motion.  Pinch uses SetFreeMapScale on each event; a
+     full ScanTerrain there drops frames.  Reuse while the last
+     picture still covers the screen (zoom-in, small pan).  Pinch-out
+     keeps the old geo quad until lift-off. */
+  if (panning) {
+    const bool too_zoomed_in =
+      last_projection_scale > 0 &&
+      map_projection.GetScale() > last_projection_scale * 3;
+    if (view_covered && !too_zoomed_in)
+      return true;
+    if (!view_covered && IsZoomOut(old_bounds, new_bounds))
+      return true;
   }
 
   /* While the finger is down, ScanMap slides the picture and reads
@@ -470,10 +511,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     last_color_ramp = color_ramp;
   }
 
-  {
-    RasterTerrain::Lease map(terrain);
-    raster_renderer.ScanMap(map, map_projection, !tiles_current);
-  }
+  raster_renderer.ScanTerrain(terrain, map_projection, !tiles_current);
 
   /* A pan only reads the strip that entered the view.  A tile that
      finishes loading during that pan still has to be scanned through
@@ -496,4 +534,11 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   last_projection_scale = map_projection.GetScale();
 
   return true;
+}
+
+void
+TerrainRenderer::Draw(Canvas &canvas,
+                      const WindowProjection &projection) const
+{
+  raster_renderer.Draw(canvas, projection);
 }

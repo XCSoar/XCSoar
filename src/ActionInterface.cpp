@@ -27,7 +27,8 @@
 #include "DataComponents.hpp"
 #include "Observation/Publish.hpp"
 #include "LogFile.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
+#include "Waypoint/Waypoints.hpp"
 #include "Session/SessionState.hpp"
 
 using namespace CommonInterface;
@@ -660,12 +661,38 @@ ActionInterface::SetStartupLocation() noexcept
       : 0;
     backend_components->device_blackboard->SetStartupLocation(poi.home_location,
                                                               alt);
-  } else if (data_components != nullptr &&
-             data_components->terrain != nullptr) {
+    return;
+  }
+
+  if (data_components != nullptr && data_components->waypoints != nullptr &&
+      !data_components->waypoints->IsEmpty()) {
+    GeoBounds bounds = GeoBounds::Invalid();
+    for (const auto &wp : *data_components->waypoints) {
+      if (wp->location.IsValid())
+        bounds.Extend(wp->location);
+    }
+    if (bounds.IsValid()) {
+      const GeoPoint loc = bounds.GetCenter();
+      LogString("Start at waypoint center");
+      backend_components->device_blackboard->SetStartupLocation(loc, 0);
+      return;
+    }
+  }
+
+  if (data_components != nullptr &&
+      data_components->terrain != nullptr &&
+      data_components->terrain->IsDefined()) {
     const auto &terrain = *data_components->terrain;
     const GeoPoint loc = terrain.GetTerrainCenter();
-    LogString("Start at terrain center");
-    backend_components->device_blackboard->SetStartupLocation(
-        loc, terrain.GetTerrainHeight(loc).GetValueOr0());
+    if (loc.IsValid()) {
+      LogString("Start at terrain center");
+      backend_components->device_blackboard->SetStartupLocation(
+          loc, terrain.GetTerrainHeight(loc).GetValueOr0());
+      return;
+    }
   }
+
+  LogString("Start at default location (0/0)");
+  backend_components->device_blackboard->SetStartupLocation(
+      GeoPoint(Angle::Zero(), Angle::Zero()), 0);
 }

@@ -10,16 +10,23 @@ TERRAIN_SOURCES = \
 	$(SRC)/Terrain/WorldFile.cpp \
 	$(SRC)/Terrain/Intersection.cpp \
 	$(SRC)/Terrain/ScanLine.cpp \
-	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/Thread.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Terrain/RasterRenderer.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
-	$(SRC)/Terrain/TerrainSettings.cpp
+	$(SRC)/Terrain/TerrainSettings.cpp \
+	$(SRC)/Terrain/CogRaster.cpp \
+	$(SRC)/Terrain/CogFromXcm.cpp \
+	$(SRC)/Terrain/TerrainBase.cpp
 
 TERRAIN_CXXFLAGS_INTERNAL = -Wno-shift-negative-value
 TERRAIN_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
 TERRAIN_DEPENDS = JASPER ZZIP GEO UTIL
+
+ifeq ($(TIFF),y)
+TERRAIN_CPPFLAGS_INTERNAL += $(LIBTIFF_CPPFLAGS)
+TERRAIN_DEPENDS += LIBTIFF
+endif
 
 $(eval $(call link-library,libterrain,TERRAIN))

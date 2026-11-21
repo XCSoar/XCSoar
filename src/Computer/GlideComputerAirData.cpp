@@ -4,7 +4,7 @@
 #include "GlideComputerAirData.hpp"
 #include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "ThermalBase.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Atmosphere/AirDensity.hpp"

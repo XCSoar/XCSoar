@@ -6,7 +6,7 @@
 #include "MainWindow.hpp"
 #include "Computer/Settings.hpp"
 #include "MapSettings.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Waypoint/WaypointDetailsReader.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
@@ -118,22 +118,14 @@ SettingsLeave(const UISettings &old_ui_settings)
     WaypointFileChanged = true;
   }
 
-  /* The map path is shared. Terrain and topography are separate
-     reloads. OnTerrainLoaded() installs terrain only. The retry
-     below loads terrain when the file appears, and leaves
-     topography alone. */
-  if (MapFileChanged)
-    main_window.LoadTerrain();
-
-  /* If the terrain wasn't changed via the settings UI but no terrain is
-     currently loaded (e.g. a previous automated load failed), attempt
-     to load the configured map file when it now exists. */
-  if (!MapFileChanged && data_components->terrain == nullptr) {
-    if (const auto path = Profile::GetPath(ProfileKeys::MapFile); path != nullptr) {
-      if (File::Exists(path))
-        main_window.LoadTerrain();
-    }
-  }
+  /* Terrain convert/load is async (top bar). Start it after
+     operation.Hide() so the settings splash does not steal it. */
+  const auto map_path = Profile::GetPath(ProfileKeys::MapFile);
+  const auto terrain_path = Profile::GetPath(ProfileKeys::TerrainFile);
+  const bool reload_terrain = MapFileChanged ||
+    (data_components->terrain == nullptr &&
+     ((map_path != nullptr && File::Exists(map_path)) ||
+      (terrain_path != nullptr && File::Exists(terrain_path))));
 
   auto &way_points = *data_components->waypoints;
 
@@ -272,6 +264,10 @@ SettingsLeave(const UISettings &old_ui_settings)
   AudioVarioGlue::Configure(CommonInterface::GetUISettings().sound.vario);
 
   operation.Hide();
+
+  if (reload_terrain)
+    main_window.LoadTerrain();
+
   InfoBoxManager::SetDirty();
   main_window.FlushRendererCaches();
   main_window.FullRedraw();
@@ -321,6 +317,7 @@ ApplyConfiguredDataFiles(std::span<const std::string> relative_paths)
       continue;
 
     map |= ConfiguredPathMatches(ProfileKeys::MapFile, updated);
+    map |= ConfiguredPathMatches(ProfileKeys::TerrainFile, updated);
     primary |= ConfiguredListMatches(ProfileKeys::WaypointFileList,
                                     waypoint_patterns, updated);
     watched |= ConfiguredListMatches(ProfileKeys::WatchedWaypointFileList,

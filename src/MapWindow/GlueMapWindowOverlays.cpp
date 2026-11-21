@@ -21,7 +21,7 @@
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "UIState.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 #include "Look/GestureLook.hpp"

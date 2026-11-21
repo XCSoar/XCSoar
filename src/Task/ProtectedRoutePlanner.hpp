@@ -11,7 +11,7 @@
 struct GlideSettings;
 struct RoutePlannerConfig;
 class GlidePolar;
-class RasterTerrain;
+class TerrainBase;
 class Airspaces;
 
 /**
@@ -62,7 +62,7 @@ public:
     return reach_terrain.IsEmpty();
   }
 
-  void SetTerrain(const RasterTerrain *terrain) noexcept;
+  void SetTerrain(const TerrainBase *terrain) noexcept;
 
   void SetPolars(const GlideSettings &settings,
                  const RoutePlannerConfig &config,

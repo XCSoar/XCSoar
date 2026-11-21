@@ -113,6 +113,8 @@ ProgressWidget::SetText(const char *_text) noexcept
 void
 ProgressWidget::SetProgressRange(unsigned range) noexcept
 {
+  if (!IsDefined())
+    return;
   auto &pb = (ProgressBar &)GetWindow();
   pb.SetRange(range);
 }
@@ -120,6 +122,8 @@ ProgressWidget::SetProgressRange(unsigned range) noexcept
 void
 ProgressWidget::SetProgressPosition(unsigned position) noexcept
 {
+  if (!IsDefined())
+    return;
   auto &pb = (ProgressBar &)GetWindow();
   pb.SetPosition(position);
 }

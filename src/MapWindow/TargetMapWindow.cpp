@@ -234,7 +234,7 @@ TargetMapWindow::OnPaint(Canvas &canvas) noexcept
 }
 
 void
-TargetMapWindow::SetTerrain(RasterTerrain *terrain) noexcept
+TargetMapWindow::SetTerrain(TerrainBase *terrain) noexcept
 {
   background.SetTerrain(terrain);
 }

@@ -26,7 +26,7 @@ struct MapLook;
 struct TrafficLook;
 class TopographyStore;
 class CachedTopographyRenderer;
-class RasterTerrain;
+class TerrainBase;
 class RaspStore;
 class RaspRenderer;
 class MapOverlay;
@@ -111,7 +111,7 @@ protected:
   TopographyStore *topography = nullptr;
   CachedTopographyRenderer *topography_renderer = nullptr;
 
-  RasterTerrain *terrain = nullptr;
+  TerrainBase *terrain = nullptr;
 
   std::shared_ptr<RaspStore> rasp_store;
 
@@ -261,7 +261,7 @@ public:
   }
 
   void SetTopography(TopographyStore *_topography) noexcept;
-  void SetTerrain(RasterTerrain *_terrain) noexcept;
+  void SetTerrain(TerrainBase *_terrain) noexcept;
 
   const std::shared_ptr<RaspStore> &GetRasp() const noexcept {
     return rasp_store;

@@ -47,7 +47,7 @@ GlueMapWindow::SetTopography(TopographyStore *_topography) noexcept
 }
 
 void
-GlueMapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
+GlueMapWindow::SetTerrain(TerrainBase *_terrain) noexcept
 {
   if (terrain_thread != nullptr) {
     terrain_thread->LockStop();
@@ -57,9 +57,15 @@ GlueMapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
 
   MapWindow::SetTerrain(_terrain);
 
-  if (_terrain != nullptr)
+  if (_terrain != nullptr) {
     terrain_thread =
       new TerrainThread(*_terrain, [this](){ InjectRedraw(); });
+
+    /* Start decoding tiles if the projection is already valid
+       (home location set before terrain loaded). */
+    if (visible_projection.IsValid())
+      terrain_thread->Trigger(visible_projection);
+  }
 }
 
 void

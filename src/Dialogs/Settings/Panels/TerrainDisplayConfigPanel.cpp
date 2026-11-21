@@ -47,7 +47,7 @@ class TerrainPreviewWindow : public PaintWindow {
   bool topography_enabled;
 
 public:
-  TerrainPreviewWindow(const RasterTerrain &terrain,
+  TerrainPreviewWindow(const TerrainBase &terrain,
                        const TopographyStore *topo_store,
                        const TopographyLook &topo_look,
                        bool _topography_enabled)

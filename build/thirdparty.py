@@ -48,6 +48,7 @@ if toolchain.is_darwin and not toolchain.is_target_ios:
     sdl2.configure_args.append("-DSDL_LOADSO=ON")
 
 geotiff_enabled = os.environ.get('GEOTIFF', 'n') == 'y'
+tiff_enabled = os.environ.get('TIFF', 'n') == 'y' or geotiff_enabled
 use_angle_env = os.environ.get('USE_ANGLE', 'auto')
 if use_angle_env == 'auto':
     use_angle = toolchain.is_darwin and not toolchain.is_target_ios
@@ -185,6 +186,8 @@ elif '-kobo-linux-' in host_triplet:
         libusb,
         simple_usbmodeswitch,
     ]
+    if tiff_enabled:
+        thirdparty_libs.append(libtiff)
 else:
     raise RuntimeError('Unrecognized target')
 

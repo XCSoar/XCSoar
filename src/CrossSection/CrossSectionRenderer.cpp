@@ -6,7 +6,7 @@
 #include "Renderer/GradientRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Look/CrossSectionLook.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "MapSettings.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Aircraft.hpp"
@@ -103,12 +103,11 @@ CrossSectionRenderer::UpdateTerrain(TerrainHeight *elevations) const
 
   const GeoPoint point_diff = vec.EndPoint(start) - start;
 
-  RasterTerrain::Lease map(*terrain);
   for (unsigned i = 0; i < NUM_SLICES; ++i) {
     const auto slice_distance_factor = double(i) / (NUM_SLICES - 1);
     const GeoPoint slice_point = start + point_diff * slice_distance_factor;
 
-    elevations[i] = map->GetHeight(slice_point);
+    elevations[i] = terrain->GetTerrainHeight(slice_point);
   }
 }
 

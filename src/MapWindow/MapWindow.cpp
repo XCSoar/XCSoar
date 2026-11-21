@@ -6,7 +6,7 @@
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Topography/TopographyStore.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Computer/GlideComputer.hpp"
 
@@ -187,7 +187,7 @@ MapWindow::SetTopography(TopographyStore *_topography) noexcept
 }
 
 void
-MapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
+MapWindow::SetTerrain(TerrainBase *_terrain) noexcept
 {
   terrain = _terrain;
   background.SetTerrain(_terrain);

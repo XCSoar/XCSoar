@@ -14,7 +14,7 @@
 
 #include <deque>
 
-class RasterTerrain;
+class TerrainBase;
 class AirspaceIntersectionVisitor;
 
 /**
@@ -111,7 +111,7 @@ public:
    *
    * @param terrain Terrain model for lookup
    */
-  void SetGroundLevels(const RasterTerrain &terrain) noexcept;
+  void SetGroundLevels(const TerrainBase &terrain) noexcept;
 
   /**
    * Set QNH pressure for all FL-referenced airspace altitudes.

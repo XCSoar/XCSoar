@@ -28,7 +28,7 @@ class MenuBar;
 class GlueMapWindow;
 class Widget;
 class WindowWidget;
-class RasterTerrain;
+class TerrainBase;
 class TopographyStore;
 class MapWindowProjection;
 class PopupMessage;
@@ -568,7 +568,7 @@ public:
    */
   void OnTaskReceived() noexcept;
 
-  void SetTerrain(RasterTerrain *terrain) noexcept;
+  void SetTerrain(TerrainBase *terrain) noexcept;
   void SetTopography(TopographyStore *topography) noexcept;
 
   const Look &GetLook() const noexcept {

@@ -90,7 +90,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
           const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
-          const RasterTerrain *terrain, const Airspaces *airspaces,
+          const TerrainBase *terrain, const Airspaces *airspaces,
           bool fai_sectors,
           int highlight_index)
 {
@@ -162,7 +162,7 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
           const OverlayLook &overlay_look,
-          const RasterTerrain *terrain, const Airspaces *airspaces,
+          const TerrainBase *terrain, const Airspaces *airspaces,
           bool fai_sectors,
           int highlight_index)
 {
@@ -192,7 +192,7 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const MapSettings &settings_map, const TaskLook &task_look,
                const AirspaceLook &airspace_look,
                const OverlayLook &overlay_look,
-               const RasterTerrain *terrain, const Airspaces *airspaces,
+               const TerrainBase *terrain, const Airspaces *airspaces,
                int highlight_index)
 {
 #ifdef ENABLE_OPENGL

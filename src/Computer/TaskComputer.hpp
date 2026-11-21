@@ -75,7 +75,7 @@ public:
 
   void ResetFlight(const bool full=true);
 
-  void SetTerrain(const RasterTerrain* _terrain);
+  void SetTerrain(const TerrainBase* _terrain);
 
   void SetContestIncremental(bool incremental) {
     contest.SetIncremental(incremental);
