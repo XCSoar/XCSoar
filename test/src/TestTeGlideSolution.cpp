@@ -31,6 +31,7 @@
 #include "time/FloatDuration.hxx"
 #include "time/Stamp.hpp"
 
+#include "FlyablePolar.hpp"
 #include "TestUtil.hpp"
 
 #include <cmath>
@@ -68,7 +69,7 @@ TestEquivalentConvertibleSameSolution()
 {
   GlideSettings settings;
   settings.SetDefaults();
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
   const double v_bg = polar.GetVBestLD();
 
   double nav1, tas1, nav2, tas2;
@@ -100,7 +101,7 @@ TestConvertibleNotBelowNavOnlyMargin()
 {
   GlideSettings settings;
   settings.SetDefaults();
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
   polar.SetMC(0);
   const double v_bg = polar.GetVBestLD();
 
@@ -178,7 +179,7 @@ TestOnSpeedMatchesGeometric()
 {
   GlideSettings settings;
   settings.SetDefaults();
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
   polar.SetMC(2.);
   const double v_stf = polar.GetVBestLD();
   ok1(v_stf > 0.);
@@ -226,7 +227,7 @@ TestToAircraftStateAndGlideHeight()
   DerivedInfo calculated{};
   calculated.wind_available.Clear();
   calculated.terrain_valid = false;
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
   calculated.glide_polar_safety = polar;
 
   MoreData info;
@@ -323,7 +324,7 @@ RunBasicComputer(MoreData &basic, BasicComputer &computer,
 static void
 TestBasicComputerConvertibleGlidePipeline()
 {
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
   polar.SetMC(0);
   const double v_bg = polar.GetVBestLD();
 

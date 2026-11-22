@@ -15,6 +15,7 @@
 #include "Math/Util.hpp"
 #include "time/FloatDuration.hxx"
 
+#include "FlyablePolar.hpp"
 #include "TestUtil.hpp"
 
 #include <cmath>
@@ -103,7 +104,7 @@ TestGlideResultAddDistances()
 {
   GlideSettings settings;
   settings.SetDefaults();
-  GlidePolar polar(0.);
+  GlidePolar polar = FlyablePolar(0);
 
   const SpeedVector wind = SpeedVector::Zero();
   GlideState gs1(GeoVector(4000., Angle::Zero()), 500., 2200., wind);
@@ -131,7 +132,7 @@ TestGlideResultInstantSpeedMcZero()
   ac.ground_speed = 40.;
   ac.track = Angle::Zero();
 
-  GlidePolar polar(0.);
+  GlidePolar polar = FlyablePolar(0);
   polar.SetMC(0.);
 
   const double v_a =
@@ -151,7 +152,7 @@ TestGlideResultInstantSpeedMcPositive()
   ac.track = Angle::Zero();
   ac.vario = 1.2;
 
-  GlidePolar polar(0.);
+  GlidePolar polar = FlyablePolar(0);
   polar.SetMC(2.);
   ok1(polar.GetMC() > 0.);
 
@@ -165,7 +166,7 @@ TestCalcDeferredCruiseBearing()
 {
   GlideSettings settings;
   settings.SetDefaults();
-  GlidePolar polar(0.);
+  GlidePolar polar = FlyablePolar(0);
   const SpeedVector wind = SpeedVector::Zero();
 
   GlideState gs(GeoVector(12000., Angle::Degrees(25.)), 400., 2000., wind);
@@ -183,7 +184,7 @@ TestCalcDeferredCruiseBearingWindAlongTrack()
      correction; cruise matches task bearing. */
   GlideSettings settings;
   settings.SetDefaults();
-  GlidePolar polar(0.);
+  GlidePolar polar = FlyablePolar(0);
   const GeoVector vec(9000., Angle::Degrees(0.));
   const SpeedVector w(vec.bearing, 6.);
 
