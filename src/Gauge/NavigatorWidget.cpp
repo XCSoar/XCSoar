@@ -239,7 +239,7 @@ NavigatorWindow::OnMouseDown(PixelPoint p) noexcept
 }
 
 bool
-NavigatorWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
+NavigatorWindow::OnMouseUp(PixelPoint p) noexcept
 {
   // Ignore single click event if double click detected
   if (ignore_single_click) {
@@ -255,6 +255,9 @@ NavigatorWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 
     const char *gesture = gestures.Finish();
     if (gesture && OnMouseGesture(gesture)) return true;
+
+    if (!GetClientRect().Contains(p))
+      return true;
 
     if (click_time > std::chrono::milliseconds(0) &&
         click_time <= std::chrono::milliseconds(200)) {
@@ -324,7 +327,6 @@ NavigatorWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   WindowStyle style;
   style.Hide();
-  style.Disable();
 
   navigator_window = std::make_unique<NavigatorWindow>(
       look.navigator, look.map.task, look.info_box, nav_type,
@@ -385,7 +387,9 @@ NavigatorWidget::GetMinimumSize() const noexcept
     break;
   }
 
-  return PixelSize{navHeight};
+  const unsigned height =
+    CommonInterface::main_window->GetClientRect().GetHeight();
+  return PixelSize{0u, height * navHeight / 100};
 }
 
 void
