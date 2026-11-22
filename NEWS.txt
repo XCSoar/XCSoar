@@ -115,6 +115,9 @@ Version 7.47 - not yet released
 * tracking
   - SkyLines: while offline, queue one fix every 25 seconds as
     intended, instead of keeping arbitrary fixes #3516
+  - XCSoar Cloud server: ignore a fix that arrives after a newer one
+    from the same pilot, and send the fix time with Cloud traffic
+    #3518
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)

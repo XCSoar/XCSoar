@@ -7,6 +7,7 @@
 #include "OGNClient.hpp"
 #include "Sender.hpp"
 #include "Serialiser.hpp"
+#include "TimeOfDay.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
 #include "util/ByteOrder.hxx"
@@ -71,6 +72,18 @@ MsUtcMidnight() noexcept
                     .count();
   constexpr auto day_ms = 24LL * 60 * 60 * 1000;
   return uint32_t(ms % day_ms);
+}
+
+/**
+ * Whether a fix with @p time_of_day_ms arrived after a newer fix from
+ * the same @p client, e.g. because UDP reordered the packets.
+ */
+[[gnu::pure]]
+static bool
+IsReorderedFix(const CloudClient *client, uint32_t time_of_day_ms) noexcept
+{
+  return client != nullptr && client->time_of_day_valid &&
+    IsLateFix(time_of_day_ms, client->time_of_day_ms);
 }
 
 /**
@@ -416,7 +429,7 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
     if (n >= MAX_TRAFFIC_TARGETS_PER_RESPONSE)
       break;
 
-    s.Add(traffic->id, 0, //TODO: time?
+    s.Add(traffic->id, traffic->time_of_day_ms,
           traffic->location, traffic->altitude,
           TrafficRecordExtensions::FromOgn(traffic->track_deg,
                                            traffic->track_valid,
@@ -472,14 +485,22 @@ CloudServer::OnFix(const Client &c,
                    const ::GeoPoint &location, int altitude,
                    unsigned track_deg, bool track_valid)
 {
-  (void)time_of_day; // TODO: use this parameter
+  const uint32_t time_of_day_ms = time_of_day.count();
+
+  bool use_fix = location.IsValid();
+  if (use_fix && IsReorderedFix(clients.Find(c.key), time_of_day_ms)) {
+    /* keep the newer position; the client is still alive */
+    cout << "OLD_FIX\t" << ToString(c.address) << '\t'
+         << std::hex << c.key << std::dec << endl;
+    use_fix = false;
+  }
 
   CloudClient *client;
-  if (location.IsValid()) {
+  if (use_fix) {
     bool was_empty = clients.empty();
 
     client = &clients.Make(c.address, c.key, location, altitude,
-                           track_deg, track_valid);
+                           track_deg, track_valid, time_of_day_ms);
 
     cout << "FIX\t"
          << client->address << '\t'
@@ -499,7 +520,7 @@ CloudServer::OnFix(const Client &c,
       clients.Refresh(*client, c.address);
   }
 
-  if (client == nullptr || !location.IsValid())
+  if (client == nullptr || !use_fix)
     return;
 
   /* Always push a full nearby snapshot to the client that sent the FIX. */

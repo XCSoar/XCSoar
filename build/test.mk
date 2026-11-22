@@ -123,6 +123,7 @@ TEST_NAMES = \
 	TestAirspaceParser \
 	TestAirspaceLabelPlacement \
 	TestOGNAprsParser \
+	TestCloudTimeOfDay \
 	TestAirspaceIntervalMath \
 	TestObservationStore \
 	TestAirspaceClearance \
@@ -550,6 +551,12 @@ TEST_OGN_APRS_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/TestOGNAprsParser.cpp
 TEST_OGN_APRS_PARSER_DEPENDS = GEO MATH UTIL UNITS
 $(eval $(call link-program,TestOGNAprsParser,TEST_OGN_APRS_PARSER))
+
+TEST_CLOUD_TIME_OF_DAY_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCloudTimeOfDay.cpp
+TEST_CLOUD_TIME_OF_DAY_DEPENDS = MATH
+$(eval $(call link-program,TestCloudTimeOfDay,TEST_CLOUD_TIME_OF_DAY))
 
 TEST_OBSERVATION_STORE_SOURCES = \
 	$(SRC)/Engine/Observation/Store.cpp \

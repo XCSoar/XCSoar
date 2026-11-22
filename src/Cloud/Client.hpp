@@ -76,6 +76,15 @@ struct CloudClient
    */
   int altitude;
 
+  /**
+   * Time of the last fix, as the client sent it: millisecond of day
+   * (UTC), may be bigger than one day if the flight has wrapped
+   * midnight.  Only valid if #time_of_day_valid is set; clients
+   * loaded from an old database have no time.
+   */
+  uint32_t time_of_day_ms = 0;
+  bool time_of_day_valid = false;
+
   /** Ground track in degrees (0..359) when track_valid. */
   unsigned track_deg = 0;
   bool track_valid = false;
@@ -231,7 +240,8 @@ public:
    */
   CloudClient &Make(SocketAddress address,
                     uint64_t key, const GeoPoint &location, int altitude,
-                    unsigned track_deg, bool track_valid);
+                    unsigned track_deg, bool track_valid,
+                    uint32_t time_of_day_ms);
 
   void Refresh(CloudClient &client,
                SocketAddress address);
@@ -239,7 +249,8 @@ public:
   void Refresh(CloudClient &client,
                SocketAddress address,
                const GeoPoint &location, int altitude,
-               unsigned track_deg, bool track_valid);
+               unsigned track_deg, bool track_valid,
+               uint32_t time_of_day_ms);
 
   void Insert(CloudClient &client);
 
