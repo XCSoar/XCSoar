@@ -250,7 +250,7 @@ VptScale(unsigned pt) noexcept
  * reference. Custom gauges (navigator, etc.) use this instead of
  * re-implementing 100/vdpi at each call site.
  */
-[[gnu::const]]
+[[gnu::pure]]
 static inline unsigned
 VptScaleFromDesignPixel(unsigned design_pixel) noexcept
 {
