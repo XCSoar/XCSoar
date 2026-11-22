@@ -33,6 +33,10 @@
 #include "time/Stamp.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Color.hpp"
+#include "ui/canvas/Features.hpp"
+#ifdef HAVE_TEXT_CACHE
+#include "ui/canvas/custom/Cache.hpp"
+#endif
 #include "util/StaticString.hxx"
 
 // standard
@@ -81,11 +85,52 @@ SetTimeUnknown(StaticString<8> &s) noexcept
 
 } // namespace
 
+NavigatorRenderer::~NavigatorRenderer() noexcept
+{
+  ClearFonts();
+}
+
+void
+NavigatorRenderer::ClearFonts() noexcept
+{
+#ifdef HAVE_TEXT_CACHE
+  TextCache::Flush();
+#endif
+  for (auto &entry : fonts) {
+    entry.font.Destroy();
+    entry.size = 0;
+  }
+}
+
+const Font &
+NavigatorRenderer::GetFont(unsigned size) noexcept
+{
+  size = std::max(1u, size);
+  for (const auto &entry : fonts)
+    if (entry.size == size)
+      return entry.font;
+
+  for (auto &entry : fonts)
+    if (entry.size == 0) {
+      try {
+        entry.font.Load(FontDescription(size));
+        entry.size = size;
+        return entry.font;
+      } catch (...) {
+        entry.font.Destroy();
+        break;
+      }
+    }
+
+  return UIGlobals::GetLook().info_box.value_font;
+}
+
 void
 NavigatorRenderer::Update(const Canvas &canvas) noexcept
 {
   if (canvas_width != canvas.GetWidth() ||
       canvas_height != canvas.GetHeight()) {
+    ClearFonts();
     canvas_width = canvas.GetWidth();
     canvas_height = canvas.GetHeight();
   }
@@ -133,57 +178,25 @@ NavigatorRenderer::GenerateStringsWaypointInfos(NavType nav_type,
 
   // waypoint_altitude_s (configurable choice: WP_AltReq WP_AltDiff
   // WP_AltArrival)
-  auto waypoint_altitude{.0};
   const auto &navigatorAltitudeType =
-      CommonInterface::GetUISettings().navigator.navigator_altitude_type;
+    CommonInterface::GetUISettings().navigator.navigator_altitude_type;
+  const auto &solution = tp == TaskType::ORDERED
+    ? calculated->ordered_task_stats.current_leg.solution_remaining
+    : calculated->task_stats.current_leg.solution_remaining;
 
-  if (tp == TaskType::ORDERED) {
-    switch (navigatorAltitudeType) {
-    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltReq:
-      waypoint_altitude = calculated->ordered_task_stats.current_leg
-                              .solution_remaining.GetRequiredAltitude();
-      break;
-    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltDiff:
-      waypoint_altitude = calculated->ordered_task_stats.current_leg
-                              .solution_remaining.altitude_difference;
-      break;
-    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltArrival:
-      waypoint_altitude = calculated->ordered_task_stats.current_leg
-                              .solution_remaining.GetArrivalAltitude();
-      break;
-    default:
-      waypoint_altitude = calculated->ordered_task_stats.current_leg
-                              .solution_remaining.GetRequiredAltitude();
-      break;
-    }
-  } else {
-    switch (navigatorAltitudeType) {
-    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltReq:
-      waypoint_altitude = calculated->task_stats.current_leg.solution_remaining
-                              .GetRequiredAltitude();
-      break;
-    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltDiff:
-      waypoint_altitude = calculated->task_stats.current_leg.solution_remaining
-                              .altitude_difference;
-      break;
-    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltArrival:
-      waypoint_altitude = calculated->task_stats.current_leg.solution_remaining
-                              .GetArrivalAltitude();
-      break;
-    default:
-      waypoint_altitude = calculated->task_stats.current_leg.solution_remaining
-                              .GetRequiredAltitude();
-      break;
-    }
-  }
-
-  if (navigatorAltitudeType !=
-      NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltDiff) {
-    FormatAltitude(waypoint_altitude_s.data(), waypoint_altitude,
-                   Units::GetUserAltitudeUnit(), false);
-  } else {
-    FormatRelativeAltitude(waypoint_altitude_s.data(), waypoint_altitude,
+  if (!solution.IsOk()) {
+    waypoint_altitude_s = "---";
+  } else if (navigatorAltitudeType ==
+             NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltDiff) {
+    FormatRelativeAltitude(waypoint_altitude_s.data(),
+                           solution.altitude_difference,
                            Units::GetUserAltitudeUnit(), false);
+  } else {
+    const double altitude = navigatorAltitudeType ==
+      NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltArrival
+      ? solution.GetArrivalAltitude() : solution.GetRequiredAltitude();
+    FormatAltitude(waypoint_altitude_s.data(), altitude,
+                   Units::GetUserAltitudeUnit(), false);
   }
 
   // waypoint_GR_s; // e_WP_GR glide ratio
@@ -284,15 +297,21 @@ void
 NavigatorRenderer::GenerateStringsCurrentFlightInfo(const TaskType tp) noexcept
 {
   // current_speed_s; // e_Speed_GPS
-  FormatUserSpeed(basic->ground_speed, current_speed_s.data(), false, 0);
+  if (basic->ground_speed_available)
+    FormatUserSpeed(basic->ground_speed, current_speed_s.data(), false, 0);
+  else
+    current_speed_s = "---";
 
   // current_altitude_s; // e_HeightGPS
-  FormatUserAltitude(basic->gps_altitude, current_altitude_s.data(), false);
+  if (basic->gps_altitude_available)
+    FormatUserAltitude(basic->gps_altitude, current_altitude_s.data(), false);
+  else
+    current_altitude_s = "---";
 
   // waypoint_average_speed_s; // e_SpeedTaskAvg
   if (tp == TaskType::ORDERED && has_started) {
-    FormatUserSpeed(calculated->task_stats.total.travelled.GetSpeed(),
-                    waypoint_average_speed_s.data(), false, 0);
+    FormatUserTaskSpeed(calculated->task_stats.total.travelled.GetSpeed(),
+                        waypoint_average_speed_s.data(), false, 0);
   } else {
     waypoint_average_speed_s.Format("%s", "---");
   }
@@ -328,12 +347,17 @@ NavigatorRenderer::GenerateStringsTimesInfo(const TaskType tp) noexcept
   else
     SetTimeUnknown(time_local_s);
 
+  const bool prediction_valid = (tp == TaskType::ORDERED
+    ? calculated->ordered_task_stats.total.solution_remaining.IsOk()
+    : calculated->task_stats.total.solution_remaining.IsOk());
   TimeStamp time_planned{};
-  if (tp == TaskType::ORDERED && has_started && basic->time_available) {
+  if (tp == TaskType::ORDERED && has_started && basic->time_available &&
+      prediction_valid) {
     time_planned = TimeStamp{
         FloatDuration{calculated->ordered_task_stats.total.time_planned}};
     SetLocalTimeHHMM(time_planned_s, time_planned, utc_no_offset);
-  } else if (tp != TaskType::ORDERED && basic->time_available) {
+  } else if (tp != TaskType::ORDERED && basic->time_available &&
+             prediction_valid) {
     time_planned =
         TimeStamp{FloatDuration{calculated->task_stats.total.time_planned}};
     SetLocalTimeHHMM(time_planned_s, time_planned, utc_no_offset);
@@ -342,11 +366,13 @@ NavigatorRenderer::GenerateStringsTimesInfo(const TaskType tp) noexcept
   }
 
   TimeStamp arrival_planned{};
-  if (tp == TaskType::ORDERED && has_started && basic->time_available) {
+  if (tp == TaskType::ORDERED && has_started && basic->time_available &&
+      prediction_valid) {
     arrival_planned = TimeStamp{
         FloatDuration{time_start.ToDuration() + time_planned.ToDuration()}};
     SetLocalTimeHHMM(arrival_planned_s, arrival_planned, utc_offset);
-  } else if (tp != TaskType::ORDERED && basic->time_available) {
+  } else if (tp != TaskType::ORDERED && basic->time_available &&
+             prediction_valid) {
     arrival_planned = TimeStamp{
         FloatDuration{basic->time.ToDuration() + time_planned.ToDuration()}};
     SetLocalTimeHHMM(arrival_planned_s, arrival_planned, utc_offset);
@@ -383,15 +409,14 @@ NavigatorRenderer::DrawWaypointInfoValueUnit(
     const char *text_for_width) noexcept
 {
   unit_height = static_cast<unsigned int>(font_height * 4 / 10);
-  font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(font_height)));
+  font = &GetFont(Layout::VptScaleFromDesignPixel(font_height));
+  canvas.Select(*font);
   size_text = canvas.CalcTextSize(text_for_width);
-  font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(unit_height)));
-  ascent_height = UnitSymbolRenderer::GetAscentHeight(font, unit);
+  font = &GetFont(Layout::VptScaleFromDesignPixel(unit_height));
+  ascent_height = UnitSymbolRenderer::GetAscentHeight(*font, unit);
   pp_pos_unit = pxpt_pos_infos_waypoint.At(
       size_text.width, size_text.height - static_cast<int>(ascent_height * 1.6));
-  canvas.Select(font);
+  canvas.Select(*font);
   UnitSymbolRenderer::Draw(canvas, pp_pos_unit, unit,
                            look_infobox.unit_fraction_pen);
 }
@@ -421,9 +446,8 @@ NavigatorRenderer::DrawWaypointInfos(Canvas &canvas,
     break;
   }
 
-  font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(font_height)));
-  canvas.Select(font);
+  font = &GetFont(Layout::VptScaleFromDesignPixel(font_height));
+  canvas.Select(*font);
 
   text_size_infos_waypoint =
       canvas.CalcTextSize(infos_waypoint_s.c_str()).width;
@@ -495,8 +519,8 @@ NavigatorRenderer::DrawCurrentFlightInfos(
                                    : font_height = canvas_height * 30 / 200;
   }
 
-  font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(font_height)));
+  font = &GetFont(Layout::VptScaleFromDesignPixel(font_height));
+  canvas.Select(*font);
   // grow artificially the current_speed_s string ('format tricks')
   StaticString<7> sz_tmp_current_speed_s;
   sz_tmp_current_speed_s.clear();
@@ -551,39 +575,37 @@ NavigatorRenderer::DrawCurrentFlightInfos(
     // Current speed ------------------------------------------------
     const PixelPoint pxpt_pos_current_speed{pos_x_speed_altitude,
                                             pos_y_current_speed};
-    canvas.Select(font);
+    canvas.Select(*font);
     DrawClippedTextFullCanvas(canvas, pxpt_pos_current_speed, canvas_width,
                               canvas_height, current_speed_s.c_str());
 
     // Draw speed units ---------------------------------------------
     unit = Units::GetUserSpeedUnit();
     unit_height = static_cast<unsigned int>(font_height * 38 / 100);
-    font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(unit_height)));
+    font = &GetFont(Layout::VptScaleFromDesignPixel(unit_height));
     size_text = canvas.CalcTextSize(current_speed_s.c_str());
     pp_pos_unit =
         pxpt_pos_current_speed.At(size_text.width, size_text.height / 10);
-    canvas.Select(font);
+    canvas.Select(*font);
     UnitSymbolRenderer::Draw(canvas, pp_pos_unit, unit,
                              look_infobox.unit_fraction_pen);
 
     // Current Altitude --------------------------------------------
-    font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(font_height)));
+    font = &GetFont(Layout::VptScaleFromDesignPixel(font_height));
     const PixelPoint pxpt_pos_altitude{pos_x_speed_altitude,
                                        pos_y_current_altitude};
-    canvas.Select(font);
+    canvas.Select(*font);
     DrawClippedTextFullCanvas(canvas, pxpt_pos_altitude, canvas_width,
                               canvas_height, current_altitude_s.c_str());
 
     // Draw Altitude unit -------------------------------------------
     unit = Units::GetUserAltitudeUnit();
     unit_height = static_cast<unsigned int>(font_height * 0.5);
-    font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(unit_height)));
+    font = &GetFont(Layout::VptScaleFromDesignPixel(unit_height));
     size_text = canvas.CalcTextSize(current_altitude_s.c_str());
     pp_pos_unit =
         pxpt_pos_altitude.At(size_text.width, size_text.height * 53 / 100);
+    canvas.Select(*font);
     UnitSymbolRenderer::Draw(canvas, pp_pos_unit, unit,
                              look_infobox.unit_fraction_pen);
   }
@@ -613,9 +635,8 @@ NavigatorRenderer::DrawWaypointName(Canvas &canvas,
     break;
   }
 
-  font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(font_height)));
-  canvas.Select(font);
+  font = &GetFont(Layout::VptScaleFromDesignPixel(font_height));
+  canvas.Select(*font);
 
   sz_waypoint_name = canvas.CalcTextSize(waypoint_name_s).width;
 
@@ -682,13 +703,14 @@ NavigatorRenderer::DrawTimesInfo(Canvas &canvas, const PixelRect &rc,
 {
   if (nav_type == NavType::NAVIGATOR_DETAILED) {
     if (canvas_width > canvas_height * 3.6) {
-      font.Load(FontDescription(
-          Layout::VptScaleFromDesignPixel(canvas_height * 32 / 200)));
+      font = &GetFont(
+        Layout::VptScaleFromDesignPixel(canvas_height * 32 / 200));
     } else {
-      font.Load(FontDescription(
-          Layout::VptScaleFromDesignPixel(canvas_height * 24 / 200)));
+      font = &GetFont(
+        Layout::VptScaleFromDesignPixel(canvas_height * 24 / 200));
     }
 
+    canvas.Select(*font);
     size_text = canvas.CalcTextSize(times_local_elapsed_s.c_str());
     const int pos_y_text_times{
         static_cast<int>(canvas_height * 183 / 200 - size_text.height)};
@@ -740,23 +762,23 @@ NavigatorRenderer::DrawAverageSpeed(Canvas &canvas,
     } else {
       font_height = canvas_height * 24 / 200;
     }
-    font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(font_height)));
+    font = &GetFont(Layout::VptScaleFromDesignPixel(font_height));
+    canvas.Select(*font);
     size_text = canvas.CalcTextSize(waypoint_average_speed_s.c_str());
     PixelPoint pxpt_pos_average_speed{
         static_cast<int>(canvas_width * 5 / 200 + 6),
         static_cast<int>(canvas_height * 8 / 100)};
-    canvas.Select(font);
+    canvas.Select(*font);
     DrawClippedTextFullCanvas(canvas, pxpt_pos_average_speed, canvas_width,
                               canvas_height, waypoint_average_speed_s.c_str());
 
     // Draw average speed unit --------------------------------------
     unit = Units::GetUserTaskSpeedUnit();
     unit_height = static_cast<unsigned int>(font_height * 0.5);
-    font.Load(FontDescription(
-      Layout::VptScaleFromDesignPixel(unit_height)));
+    font = &GetFont(Layout::VptScaleFromDesignPixel(unit_height));
     pp_pos_unit =
         pxpt_pos_average_speed.At(size_text.width, size_text.height / 10);
+    canvas.Select(*font);
     UnitSymbolRenderer::Draw(canvas, pp_pos_unit, unit,
                              look_infobox.unit_fraction_pen);
   }

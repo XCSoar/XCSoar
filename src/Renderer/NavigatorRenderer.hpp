@@ -14,6 +14,7 @@
 #include "ui/dim/Rect.hpp"
 #include "util/StaticString.hxx"
 
+#include <array>
 #include <cstdint>
 
 struct NavigatorLook;
@@ -65,7 +66,15 @@ class NavigatorRenderer {
   StaticString<20> times_arrival_planned_s;
 
   /* ---- draw state (fonts, positions, clip rects) -------------------- */
-  Font font;
+  struct CachedFont {
+    Font font;
+    unsigned size = 0;
+  };
+  std::array<CachedFont, 16> fonts;
+  const Font *font = nullptr;
+
+  const Font &GetFont(unsigned size) noexcept;
+  void ClearFonts() noexcept;
   unsigned int font_height{};
   PixelPoint pxpt_pos_infos_waypoint{};
   unsigned int text_size_infos_waypoint{};
@@ -117,6 +126,8 @@ class NavigatorRenderer {
                                       const TaskLook &look_task) noexcept;
 
 public:
+  ~NavigatorRenderer() noexcept;
+
   void Update(const Canvas &canvas) noexcept;
 
   void DrawFrame(Canvas &canvas, const PixelRect &rc,
