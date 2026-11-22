@@ -79,6 +79,7 @@ TEST_NAMES = \
 	test_task \
 	TestInputTransformMode TestTextInput \
 	TestOverwritingRingBuffer \
+	TestSkyLinesQueue \
 	TestDateTime TestISO8601 TestRoughTime TestRoughSpeed TestWrapClock \
 	TestPosixTimeZone \
 	TestPolylineDecoder \
@@ -326,6 +327,12 @@ TEST_OVERWRITING_RING_BUFFER_SOURCES = \
 	$(TEST_SRC_DIR)/TestOverwritingRingBuffer.cpp
 TEST_OVERWRITING_RING_BUFFER_DEPENDS = MATH
 $(eval $(call link-program,TestOverwritingRingBuffer,TEST_OVERWRITING_RING_BUFFER))
+
+TEST_SKYLINES_QUEUE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkyLinesQueue.cpp
+TEST_SKYLINES_QUEUE_DEPENDS = MATH
+$(eval $(call link-program,TestSkyLinesQueue,TEST_SKYLINES_QUEUE))
 
 TEST_IGC_PARSER_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \

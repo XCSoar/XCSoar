@@ -112,6 +112,9 @@ Version 7.47 - not yet released
     recorded time wraps at midnight instead of jumping to 15:00
   - fix a Volkslogger download whose security record gained an extra
     group when the flight data already ended on a three-byte boundary
+* tracking
+  - SkyLines: while offline, queue one fix every 25 seconds as
+    intended, instead of keeping arbitrary fixes #3516
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
