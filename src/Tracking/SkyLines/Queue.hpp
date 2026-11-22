@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Protocol.hpp"
+#include "util/ByteOrder.hxx"
 #include "util/OverwritingRingBuffer.hpp"
 
 #include <cstdint>
@@ -28,8 +29,10 @@ public:
   }
 
   void Push(const FixPacket &packet) {
-    if (!IsEmpty() && (packet.time > queue.last().time &&
-                       queue.last().time + MIN_PERIOD_MS < packet.time))
+    /* the times are big-endian; after a time warp to an earlier
+       time, the unsigned difference is huge and the fix is kept */
+    if (!IsEmpty() &&
+        FromBE32(packet.time) - FromBE32(queue.last().time) < MIN_PERIOD_MS)
       return;
 
     queue.push(packet);
