@@ -43,7 +43,8 @@ CloudClient &
 CloudClientContainer::Make(SocketAddress address,
                            uint64_t key,
                            const GeoPoint &location, int altitude,
-                           unsigned track_deg, bool track_valid)
+                           unsigned track_deg, bool track_valid,
+                           uint32_t time_of_day_ms)
 {
   KeySet::insert_commit_data hint;
   auto result = key_set.insert_check(key, key_set.hash_function(),
@@ -53,11 +54,14 @@ CloudClientContainer::Make(SocketAddress address,
                                                 location, altitude);
     client->track_deg = track_deg;
     client->track_valid = track_valid;
+    client->time_of_day_ms = time_of_day_ms;
+    client->time_of_day_valid = true;
     Insert(*client);
     return *client;
   } else {
     auto &client = *result.first;
-    Refresh(client, address, location, altitude, track_deg, track_valid);
+    Refresh(client, address, location, altitude, track_deg, track_valid,
+            time_of_day_ms);
     return client;
   }
 }
@@ -76,7 +80,8 @@ void
 CloudClientContainer::Refresh(CloudClient &client,
                               SocketAddress address,
                               const GeoPoint &location, int altitude,
-                              unsigned track_deg, bool track_valid)
+                              unsigned track_deg, bool track_valid,
+                              uint32_t time_of_day_ms)
 {
   Refresh(client, address);
 
@@ -90,6 +95,8 @@ CloudClientContainer::Refresh(CloudClient &client,
   client.altitude = altitude;
   client.track_deg = track_deg;
   client.track_valid = track_valid;
+  client.time_of_day_ms = time_of_day_ms;
+  client.time_of_day_valid = true;
   client.aircraft_type = 1;
 }
 
@@ -153,6 +160,12 @@ operator>>(Deserialiser &s, AllocatedSocketAddress &address)
   return s;
 }
 
+/**
+ * Bit in the byte after a saved client: its fix time is valid.
+ * Databases from before this bit have 0 there.
+ */
+static constexpr uint8_t SAVED_TIME_VALID = 0x1;
+
 void
 CloudClient::Save(Serialiser &s) const
 {
@@ -166,7 +179,7 @@ CloudClient::Save(Serialiser &s) const
   if (track_valid)
     flags |= SkyLinesTracking::FixPacket::FLAG_TRACK;
 
-  s.WriteT(SkyLinesTracking::MakeFix(key, flags, 0,
+  s.WriteT(SkyLinesTracking::MakeFix(key, flags, time_of_day_ms,
                                      location,
                                      Angle::Degrees(double(track_deg)),
                                      0, 0,
@@ -174,7 +187,7 @@ CloudClient::Save(Serialiser &s) const
 
   s << address;
 
-  s.Write8(0);
+  s.Write8(time_of_day_valid ? SAVED_TIME_VALID : 0);
 }
 
 CloudClient
@@ -191,13 +204,15 @@ CloudClient::Load(Deserialiser &s)
   AllocatedSocketAddress address;
   s >> address;
 
-  s.Read8();
+  const uint8_t saved_flags = s.Read8();
 
   CloudClient client(std::move(address), FromBE64(fix.header.key),
                      id,
                      SkyLinesTracking::ImportGeoPoint(fix.location),
                      (int16_t)FromBE16(fix.altitude));
   client.stamp = stamp;
+  client.time_of_day_ms = FromBE32(fix.time);
+  client.time_of_day_valid = (saved_flags & SAVED_TIME_VALID) != 0;
   if ((FromBE32(fix.flags) & SkyLinesTracking::FixPacket::FLAG_TRACK) != 0) {
     client.track_valid = true;
     client.track_deg = unsigned(FromBE16(fix.track));
