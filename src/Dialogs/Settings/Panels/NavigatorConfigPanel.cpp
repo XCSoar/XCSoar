@@ -108,29 +108,28 @@ NavigatorConfigPanel::Save(bool &_changed) noexcept
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
 
-  if ((changed |= SaveValueInteger(NavigatorWidgetHeight, ProfileKeys::NavigatorHeight,
-                                   ui_settings.navigator.navigator_height)))
-    CommonInterface::main_window->ReinitialiseLayout();
-  if ((changed |= SaveValueInteger(NavigatorWidgetLite1LHeight, ProfileKeys::NavigatorLite1LHeight,
-                                   ui_settings.navigator.navigator_lite_1_line_height)))
-    CommonInterface::main_window->ReinitialiseLayout();
-  if ((changed |= SaveValueInteger(NavigatorWidgetLite2LHeight, ProfileKeys::NavigatorLite2LHeight,
-                                   ui_settings.navigator.navigator_lite_2_lines_height)))
-    CommonInterface::main_window->ReinitialiseLayout();
-  if ((changed |= SaveValueInteger(NavigatorWidgetDetailedHeight, ProfileKeys::NavigatorDetailedHeight,
-                                   ui_settings.navigator.navigator_detailed_height)))
-    CommonInterface::main_window->ReinitialiseLayout();
-
-  if ((changed |= SaveValue(NavigatorWidgetReverseSwipeWaypoint,
-                            ProfileKeys::NavigatorReverseSwipeWaypointMovement,
-                            ui_settings.navigator.navigator_swipe)))
-    CommonInterface::main_window->ReinitialiseLayout();
-
-  if ((changed |= SaveValueEnum(NavigatorWidgetAltitude,
+  changed |= SaveValueInteger(NavigatorWidgetHeight,
+                              ProfileKeys::NavigatorHeight,
+                              ui_settings.navigator.navigator_height);
+  changed |= SaveValueInteger(NavigatorWidgetLite1LHeight,
+                              ProfileKeys::NavigatorLite1LHeight,
+                              ui_settings.navigator.navigator_lite_1_line_height);
+  changed |= SaveValueInteger(NavigatorWidgetLite2LHeight,
+                              ProfileKeys::NavigatorLite2LHeight,
+                              ui_settings.navigator.navigator_lite_2_lines_height);
+  changed |= SaveValueInteger(NavigatorWidgetDetailedHeight,
+                              ProfileKeys::NavigatorDetailedHeight,
+                              ui_settings.navigator.navigator_detailed_height);
+  changed |= SaveValue(NavigatorWidgetReverseSwipeWaypoint,
+                       ProfileKeys::NavigatorReverseSwipeWaypointMovement,
+                       ui_settings.navigator.navigator_swipe);
+  changed |= SaveValueEnum(NavigatorWidgetAltitude,
                            ProfileKeys::NavigatorAltitudeType,
-                           ui_settings.navigator.navigator_altitude_type)))
+                           ui_settings.navigator.navigator_altitude_type);
+
+  if (changed)
     CommonInterface::main_window->ReinitialiseLayout();
-    
+
   _changed |= changed;
 
   return true;
