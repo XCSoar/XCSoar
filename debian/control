@@ -28,6 +28,7 @@ Build-Depends: debhelper (>= 12~),
  bzip2,
  curl,
  quilt,
+ cmake,
  sox,
  gettext,
  python3-polib
