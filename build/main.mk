@@ -125,6 +125,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/MapOverlaysConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TrafficConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/DisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/NavigatorConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WindConfigPanel.cpp \
@@ -254,6 +255,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/Renderer/WarningRibbonRenderer.cpp \
+	$(SRC)/Renderer/NavigatorRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \
 	$(SRC)/Renderer/TransparentRendererCache.cpp \
@@ -333,6 +335,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/BigThermalAssistantWidget.cpp \
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
 	$(SRC)/Gauge/BigTrafficWidget.cpp \
+	$(SRC)/Gauge/NavigatorWidget.cpp \
+	$(SRC)/Gauge/NavigatorSettings.cpp \
 	$(SRC)/Gauge/GaugeFLARM.cpp \
 	$(SRC)/Gauge/GaugeThermalAssistant.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \

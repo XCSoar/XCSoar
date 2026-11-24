@@ -12,6 +12,7 @@
 #include "DataGlobals.hpp"
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "Gauge/NavigatorWidget.hpp"
 #include "Pan.hpp"
 #include "Input/InputEvents.hpp"
 #include "UIGlobals.hpp"
@@ -582,6 +583,7 @@ PageActions::Next()
 
   Update();
   RestoreMapZoom();
+  CommonInterface::main_window->ReinitialiseLayout();
 }
 
 unsigned
@@ -617,6 +619,7 @@ PageActions::Prev()
 
   Update();
   RestoreMapZoom();
+  CommonInterface::main_window->ReinitialiseLayout();
 }
 
 static void
@@ -670,11 +673,57 @@ LoadBottom(const PageLayout &layout)
     CommonInterface::main_window->SetBottomWidget(nullptr);
     break;
 
+  case PageLayout::Bottom::NAVIGATOR:
+    CommonInterface::main_window->SetBottomWidget(new NavigatorWidget(NavType::NAVIGATOR, false));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_LITE_ONE_LINE:
+    CommonInterface::main_window->SetBottomWidget(new NavigatorWidget(NavType::NAVIGATOR_LITE_ONE_LINE, false));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_LITE_TWO_LINES:
+    CommonInterface::main_window->SetBottomWidget(new NavigatorWidget(NavType::NAVIGATOR_LITE_TWO_LINES, false));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_DETAILED:
+    CommonInterface::main_window->SetBottomWidget(new NavigatorWidget(NavType::NAVIGATOR_DETAILED, false));
+    break;
+
   case PageLayout::Bottom::CUSTOM:
     /* don't touch */
     break;
 
   case PageLayout::Bottom::MAX:
+    gcc_unreachable();
+  }
+}
+
+static void
+LoadTop(PageLayout::Top top)
+{
+  switch (top) {
+  case PageLayout::Top::NOTHING:
+    CommonInterface::main_window->SetTopWidget(nullptr);
+    break;
+
+  case PageLayout::Top::NAVIGATOR:
+    CommonInterface::main_window->SetTopWidget(
+        new NavigatorWidget(NavType::NAVIGATOR, true));
+    break;
+  case PageLayout::Top::NAVIGATOR_LITE_ONE_LINE:
+    CommonInterface::main_window->SetTopWidget(
+        new NavigatorWidget(NavType::NAVIGATOR_LITE_ONE_LINE, true));
+    break;
+  case PageLayout::Top::NAVIGATOR_LITE_TWO_LINES:
+    CommonInterface::main_window->SetTopWidget(
+        new NavigatorWidget(NavType::NAVIGATOR_LITE_TWO_LINES, true));
+    break;
+  case PageLayout::Top::NAVIGATOR_DETAILED:
+    CommonInterface::main_window->SetTopWidget(
+        new NavigatorWidget(NavType::NAVIGATOR_DETAILED, true));
+    break;
+
+  case PageLayout::Top::CUSTOM:
+    /* don't touch */
+    break;
+  case PageLayout::Top::MAX:
     gcc_unreachable();
   }
 }
@@ -721,6 +770,7 @@ PageActions::LoadLayout(const PageLayout &layout)
   LoadMain(active.main);
   ApplyPageOverlay(active);
   LoadBottom(active);
+  LoadTop(active.top);
 
   if (!active.UsesWeatherOverlay() && InputEvents::IsMode("weather"))
     InputEvents::setMode(InputEvents::MODE_DEFAULT);
@@ -771,6 +821,24 @@ PageActions::RestoreBottom()
   /* Always apply the configured bottom.  A prior restore may have updated
      special_page.bottom without tearing down a SetCustomBottom widget. */
   LoadBottom(configured_page);
+}
+
+void
+PageActions::RestoreTop()
+{
+  PageLayout &special_page = CommonInterface::SetUIState().pages.special_page;
+  if (!special_page.IsDefined())
+    return;
+
+  const PageLayout &configured_page = GetConfiguredLayout();
+  if (special_page.top == configured_page.top)
+    return;
+
+  special_page.top = configured_page.top;
+  if (special_page == configured_page)
+    special_page.SetUndefined();
+
+  LoadTop(configured_page.top);
 }
 
 GlueMapWindow *
@@ -895,4 +963,16 @@ PageActions::AllowMapOverlayButtons() noexcept
      it; the map remains active and overlay buttons should stay. */
   return special_page.IsMapMain() &&
     special_page.bottom == PageLayout::Bottom::CUSTOM;
+}
+
+void
+PageActions::SetCustomTop(Widget *widget)
+{
+  assert(widget != nullptr);
+
+  PagesState &state = CommonInterface::SetUIState().pages;
+
+  state.special_page = GetCurrentLayout();
+  state.special_page.top = PageLayout::Top::CUSTOM;
+  CommonInterface::main_window->SetTopWidget(widget);
 }

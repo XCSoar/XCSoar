@@ -1711,7 +1711,8 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
     PixelRect rc = map->GetPosition();
     rc.bottom = rc.top;
     rc.top -= separator_height;
-    canvas.DrawFilledRectangle(rc, COLOR_BLACK);
+    canvas.DrawFilledRectangle(rc, look != nullptr && look->info_box.inverse
+                               ? COLOR_DARK_GRAY : COLOR_BLACK);
   }
 
   if (HaveBottomWidget() && map != nullptr) {

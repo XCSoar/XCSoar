@@ -55,6 +55,7 @@ private:
   enum Controls {
     MAIN,
     INFO_BOX_PANEL,
+    TOP,
     BOTTOM,
     OVERLAY,
     OVERLAY_DETAIL,
@@ -476,12 +477,29 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     ib.AddChoice(i, display_text, display_text, help_text);
   }
 
+  static constexpr StaticEnumChoice top_list[] = {
+    { PageLayout::Top::NOTHING, N_("Nothing") },
+    { PageLayout::Top::NAVIGATOR, N_("T.Navigator") },
+    { PageLayout::Top::NAVIGATOR_LITE_ONE_LINE, N_("T.Navigator lite 1 line") },
+    { PageLayout::Top::NAVIGATOR_LITE_TWO_LINES, N_("T.Navigator lite 2 lines") },
+    { PageLayout::Top::NAVIGATOR_DETAILED, N_("T.Navigator detailed") },
+    nullptr
+  };
+  AddEnum(_("Top area"),
+          _("Specifies what should be displayed above the main area."),
+          top_list,
+          (unsigned)PageLayout::Top::NOTHING, this);
+
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
     /* Always available: RASP does not require OpenGL, and the shared
        weather cursor bar works for RASP on memory canvas / Kobo. */
     { PageLayout::Bottom::WEATHER_CONTROLS, NC_("Setting", "Weather controls") },
+    { PageLayout::Bottom::NAVIGATOR, N_("B.Navigator") },
+    { PageLayout::Bottom::NAVIGATOR_LITE_ONE_LINE, N_("B.Navigator lite 1 line") },
+    { PageLayout::Bottom::NAVIGATOR_LITE_TWO_LINES, N_("B.Navigator lite 2 lines") },
+    { PageLayout::Bottom::NAVIGATOR_DETAILED, N_("B.Navigator detailed") },
     nullptr
   };
   AddEnum(_("Bottom area"),
@@ -529,6 +547,7 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
   value.Normalise();
 
   LoadValueEnum(MAIN, value.main);
+  LoadValueEnum(TOP, value.top);
   LoadValueEnum(BOTTOM, value.bottom);
   LoadValueEnum(OVERLAY, value.overlay);
 
@@ -679,6 +698,9 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
       }
 #endif
     }
+  } else if (&df == &GetDataField(TOP)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    value.top = (PageLayout::Top)dfe.GetValue();
   } else {
     gcc_unreachable();
   }

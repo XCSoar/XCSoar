@@ -38,6 +38,7 @@
 #include "Panels/GaugesConfigPanel.hpp"
 #include "Panels/MapOverlaysConfigPanel.hpp"
 #include "Panels/TrafficConfigPanel.hpp"
+#include "Panels/NavigatorConfigPanel.hpp"
 #include "Panels/VarioConfigPanel.hpp"
 #include "Panels/TaskRulesConfigPanel.hpp"
 #include "Panels/TaskDefaultsConfigPanel.hpp"
@@ -149,6 +150,7 @@ static constexpr TabMenuPage look_pages[] = {
   { N_("InfoBox Sets"), CreateInfoBoxesConfigPanel },
   { N_("Layout"), CreateLayoutConfigPanel },
   { N_("Pages"), CreatePagesConfigPanel },
+  { N_("Navigator"), CreateNavigatorConfigPanel },
   { N_("Vario"), CreateVarioConfigPanel },
   { nullptr, nullptr }
 };
