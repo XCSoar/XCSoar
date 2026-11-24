@@ -12,6 +12,7 @@
 
 struct ParsedMETAR
 {
+  /** Station id from the report. Not necessarily an ICAO code. */
   StaticString<5> icao_code;
 
   uint8_t day_of_month;
