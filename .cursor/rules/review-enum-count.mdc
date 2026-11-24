@@ -1,0 +1,31 @@
+---
+description: >-
+  When reviewing, reject a second copy of an enum's values or labels
+  that is not checked against that enum's COUNT.
+globs:
+  - "**/*.cpp"
+  - "**/*.hpp"
+  - "**/*.c"
+  - "**/*.h"
+alwaysApply: false
+---
+
+# Review: enum COUNT
+
+The coding standard (`.cursor/rules/xcsoar-project-rules.mdc`, Enums
+with Count Values) requires a `COUNT` sentinel and a `static_assert`
+on every table that copies the enum.
+
+## Reject
+
+- A new or copied table of an enum's values or display labels with no
+  `static_assert` against that enum's `COUNT`
+- An enum used from more than one file that has no `COUNT` sentinel
+
+```cpp
+// BAD: a second label list the compiler cannot check
+static const char *const names[] = { N_("A"), N_("B") };
+
+// GOOD
+static_assert(ARRAY_SIZE(names) == unsigned(MyEnum::COUNT));
+```
