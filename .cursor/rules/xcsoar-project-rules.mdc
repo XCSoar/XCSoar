@@ -1104,6 +1104,7 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - Require TAP tests for new parsers, formatters, protocol handling, and other UI-free logic
 - Size vs problem: a large patch for a small behaviour change is a design smell
 - Human-readable: `.cursor/rules/review-human-readable.mdc`
+- Enum `COUNT`: `.cursor/rules/review-enum-count.mdc`
 - Exponential / unbounded cost: `.cursor/rules/review-exponential.mdc`
 - Architecture (layers, threads, HTTP): `.cursor/rules/review-architecture.mdc`
 

@@ -45,7 +45,8 @@ User-facing behaviour: update `doc/manual/en/` (not `doc/*.rst`) and
   and follow `doc/architecture.rst`. See
   `.cursor/rules/review-human-readable.mdc`,
   `.cursor/rules/review-exponential.mdc`,
-  `.cursor/rules/review-architecture.mdc`.
+  `.cursor/rules/review-architecture.mdc`,
+  `.cursor/rules/review-enum-count.mdc`.
 - Do not create git commits unless the user explicitly asks.
 - Before submitting a PR, compile with `make everything` (not only the
   main binary). Details: `.cursor/rules/pr-compilation.mdc`.
@@ -81,7 +82,7 @@ Details: `.cursor/rules/xcsoar-testing.mdc`.
 | TAP tests | `.cursor/rules/xcsoar-testing.mdc` |
 | Architecture, i18n, build, platforms | `.cursor/rules/xcsoar-project-rules.mdc` |
 | Pull requests / compile-before-PR | `.cursor/rules/pr-compilation.mdc` |
-| Code review (readable, cost, layers) | `.cursor/rules/review-human-readable.mdc`, `.cursor/rules/review-exponential.mdc`, `.cursor/rules/review-architecture.mdc` |
+| Code review (readable, cost, layers) | `.cursor/rules/review-human-readable.mdc`, `.cursor/rules/review-exponential.mdc`, `.cursor/rules/review-architecture.mdc`, `.cursor/rules/review-enum-count.mdc` |
 | Code review (UI guidelines) | `.cursor/rules/review-ui-guidelines.mdc`, `doc/architecture.rst` (User interface guidelines) |
 | Layers, threads, blackboards, HTTP | `doc/architecture.rst` |
 | UI colour, EFB / NASA HF | `doc/architecture.rst` (User interface guidelines) |
