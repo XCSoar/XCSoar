@@ -1,0 +1,65 @@
+# Load Fastlane on a pull request. The Play jobs run only on master
+# and tags, so a Gemfile.lock bump never executes Fastlane there.
+# Same Ruby pin as those jobs. This one has no Play key.
+---
+name: Fastlane
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'fastlane/**'
+      - '.github/workflows/fastlane.yml'
+    branches:
+      - master
+      - 'v*.x'
+  push:
+    paths:
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'fastlane/**'
+      - '.github/workflows/fastlane.yml'
+    branches:
+      - master
+      - 'v*.x'
+
+permissions:
+  contents: read
+
+jobs:
+  load:
+    name: Load Fastlane
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Require one Ruby pin
+        run: |
+          # Renovate bumps every ruby-version input together. The load
+          # below uses the pin in this file, so the Play jobs must match.
+          pins=$(grep -h '^[[:space:]]*ruby-version:' \
+            .github/workflows/fastlane.yml \
+            .github/workflows/build-native.yml \
+            .github/workflows/promote-play-open-testing.yml \
+            .github/workflows/update-play-store-metadata.yml | sort -u)
+          echo "$pins"
+          test "$(printf '%s\n' "$pins" | grep -c .)" -eq 1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0.9'
+          bundler-cache: true
+
+      - name: Load Fastlane and the Play uploader
+        env:
+          FASTLANE_SKIP_UPDATE_CHECK: '1'
+          FASTLANE_DISABLE_ANIMATION: '1'
+        run: |
+          # supply is inside the fastlane gem. This is the require that
+          # failed when multi_json was missing from the bundle.
+          bundle exec ruby -e 'require "supply"'
+          bundle exec fastlane lanes
