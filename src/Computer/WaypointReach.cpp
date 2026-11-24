@@ -51,7 +51,8 @@ WaypointReach
 CalculateWaypointReachDirect(const Waypoint &waypoint, const MoreData &basic,
                              const SpeedVector &wind,
                              const MacCready &mac_cready,
-                             const TaskBehaviour &task_behaviour) noexcept
+                             const TaskBehaviour &task_behaviour,
+                             double speed_to_fly) noexcept
 {
   assert(basic.location_available);
   assert(basic.NavAltitudeAvailable());
@@ -64,7 +65,8 @@ CalculateWaypointReachDirect(const Waypoint &waypoint, const MoreData &basic,
   const auto elevation = waypoint.elevation +
     task_behaviour.safety_height_arrival;
   const GlideState state(GeoVector(basic.location, waypoint.location),
-                         elevation, basic.nav_altitude, wind);
+                         elevation,
+                         GlideEnergyHeight(basic, speed_to_fly), wind);
 
   const GlideResult result = mac_cready.SolveStraight(state);
   if (!result.IsOk())
@@ -94,8 +96,10 @@ PromoteBestGlide(const WaypointReachability reachability,
     return reachability;
 
   const double elevation = waypoint.elevation + safety_height_arrival;
+  const double speed_to_fly = glide_polar.GetVBestLD();
   const GlideState state(GeoVector(basic.location, waypoint.location),
-                         elevation, basic.nav_altitude, wind);
+                         elevation,
+                         GlideEnergyHeight(basic, speed_to_fly), wind);
   if (!MacCready::ArrivesAtBestGlide(glide_polar, glide, state))
     return reachability;
 
@@ -127,7 +131,10 @@ CalculateWaypointReach(const Waypoint &waypoint,
                                          calculated.GetWindOrZero(),
                                          MacCready(task_behaviour.glide,
                                                    glide_polar),
-                                         task_behaviour);
+                                         task_behaviour,
+                                         glide_polar.IsValid()
+                                           ? glide_polar.GetVBestLD()
+                                           : 0.);
 
   reach.reachability =
     PromoteBestGlide(reach.reachability, waypoint, basic,

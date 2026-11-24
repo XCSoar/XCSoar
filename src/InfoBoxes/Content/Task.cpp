@@ -5,6 +5,7 @@
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/Dialogs.h"
@@ -347,7 +348,8 @@ UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data) noexcept
   // pilots want this to be assuming terminal flight to this wp
 
   const auto &basic = CommonInterface::Basic();
-  const auto &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const auto &task_stats = calculated.task_stats;
   const auto next_solution = task_stats.current_leg.solution_remaining;
   if (!basic.NavAltitudeAvailable() ||
       !task_stats.task_valid || !next_solution.IsAchievable()) {
@@ -355,7 +357,12 @@ UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data) noexcept
     return;
   }
 
-  data.SetValueFromAltitude(next_solution.GetArrivalAltitude(basic.nav_altitude));
+  const auto &task_polar =
+    CommonInterface::GetComputerSettings().polar.glide_polar_task;
+  const double v_stf = task_polar.IsValid() ? task_polar.GetVBestLD() : 0.;
+
+  data.SetValueFromAltitude(
+    next_solution.GetArrivalAltitude(GlideEnergyHeight(basic, v_stf)));
 }
 
 

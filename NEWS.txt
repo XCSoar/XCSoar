@@ -1,5 +1,9 @@
 Version 7.47 - not yet released
 * glide computer
+  - task glide (MacCready): arrival height is navigation altitude plus
+    excess kinetic energy over the MacCready speed to fly when airspeed
+    is available.  On that speed the arrival is the altimeter height, so
+    auto MacCready is not driven down to best glide (#508)
   - remember water ballast, crew weight, and bugs when XCSoar is
     restarted during a flight. Startup asks before restoring and
     restores after 5 seconds; No keeps the logger crew template and

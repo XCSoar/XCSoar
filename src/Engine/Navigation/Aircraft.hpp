@@ -5,6 +5,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
+#include "Math/EnergyHeight.hpp"
 #include "time/FloatDuration.hxx"
 #include "time/Stamp.hpp"
 
@@ -68,10 +69,18 @@ struct AltitudeState
   /** Altitude over terrain */
   double altitude_agl;
 
+  /**
+   * Kept equal to #altitude so short-term prediction can advance both.
+   * MacCready height is #altitude plus excess kinetic energy over the
+   * solution speed; it is not stored here.
+   */
+  double total_energy_height;
+
   constexpr void Reset() noexcept {
     altitude = 0;
     working_band_fraction = 0;
     altitude_agl = 0;
+    total_energy_height = 0;
   }
 };
 
@@ -172,5 +181,23 @@ struct AircraftState:
     flying = false;
   }
 };
+
+/**
+ * Height for a MacCready solution that arrives at @p speed_to_fly.
+ * Navigation altitude plus \f$(v^2 - v_{stf}^2)/(2g)\f$ when both speeds
+ * are known; geometric #AircraftState::altitude otherwise.  On speed the
+ * result equals geometric altitude.
+ */
+[[gnu::pure]]
+inline double
+GlideHeightForMacCready(const AircraftState &ac,
+                        double speed_to_fly) noexcept
+{
+  if (ac.true_airspeed > 0. && speed_to_fly > 0.)
+    return GlideConvertibleEnergyHeight(ac.altitude, ac.true_airspeed,
+                                        speed_to_fly);
+
+  return ac.altitude;
+}
 
 static_assert(std::is_trivial<AircraftState>::value, "type is not trivial");

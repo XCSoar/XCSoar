@@ -19,6 +19,9 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   aircraft.altitude = info.NavAltitudeAvailable()
     ? info.nav_altitude
     : 0.;
+  /* Solvers add excess over their own speed-to-fly.  Do not bake a
+     polar in here: auto MacCready tries many speeds against one state. */
+  aircraft.total_energy_height = aircraft.altitude;
 
   aircraft.working_band_fraction = calculated.common_stats.height_fraction_working;
 

@@ -239,7 +239,8 @@ protected:
    * @return Gradient angle of remainder of task
    */
   [[gnu::pure]]
-  virtual double CalcGradient(const AircraftState &state_now) const noexcept = 0;
+  virtual double CalcGradient(const AircraftState &state_now,
+                              const GlidePolar &polar) const noexcept = 0;
 
   /**
    * Calculate task start time.

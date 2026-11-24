@@ -53,10 +53,15 @@ public:
   GlideState(const GeoVector &vector, const double htarget,
              double altitude, const SpeedVector wind);
 
+  /**
+   * @param speed_to_fly MacCready speed of the polar that will solve
+   * this state (m/s).  Zero skips the kinetic adjustment.
+   */
   [[gnu::pure]]
   static GlideState Remaining(const TaskPoint &tp,
                               const AircraftState &aircraft,
-                              double min_h);
+                              double min_h,
+                              double speed_to_fly);
 
   /**
    * Calculate internal quantities to reduce computation time

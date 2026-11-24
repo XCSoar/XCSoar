@@ -8,6 +8,7 @@
 #include "Util.hxx"
 #include "util/StringAPI.hxx"
 #include "Interface.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Util/Gradient.hpp"
@@ -116,14 +117,21 @@ l_task_index(lua_State *L)
       Lua::Push(L, next_solution.GetRequiredAltitude());
   } else if (StringIsEqual(name, "next_altitude_arrival")) {
       const auto &basic = CommonInterface::Basic();
-      const auto &task_stats = CommonInterface::Calculated().task_stats;
+      const auto &calculated = CommonInterface::Calculated();
+      const auto &task_stats = calculated.task_stats;
       const auto next_solution = task_stats.current_leg.solution_remaining;
       if (!basic.NavAltitudeAvailable() ||
           !task_stats.task_valid || !next_solution.IsAchievable()) {
         return 0;
       }
 
-      Lua::Push(L, next_solution.GetArrivalAltitude(basic.nav_altitude));
+      const auto &task_polar =
+        CommonInterface::GetComputerSettings().polar.glide_polar_task;
+      const double v_stf = task_polar.IsValid() ? task_polar.GetVBestLD() : 0.;
+
+      Lua::Push(L,
+                next_solution.GetArrivalAltitude(
+                  GlideEnergyHeight(basic, v_stf)));
   } else if (StringIsEqual(name, "next_gr")) {
       if (!CommonInterface::Calculated().task_stats.task_valid) 
         return 0;

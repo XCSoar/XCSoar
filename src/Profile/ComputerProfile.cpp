@@ -163,7 +163,7 @@ Profile::Load(const ProfileMap &map, ComputerSettings &settings)
   Load(map, settings.wave);
 
   map.GetEnum(ProfileKeys::AverEffTime, settings.average_eff_time);
-
+  map.GetEnum(ProfileKeys::EffAltitudeSource, settings.eff_altitude);
   map.Get(ProfileKeys::SetSystemTimeFromGPS, settings.set_system_time_from_gps);
 
   const bool has_utc_offset = LoadUTCOffset(map, settings.utc_offset);

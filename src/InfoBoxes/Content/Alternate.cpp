@@ -5,6 +5,7 @@
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Components.hpp"
 #include "Computer/WaypointReach.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
@@ -149,7 +150,8 @@ SolveManualAlternate(const Waypoint &waypoint) noexcept
   return TaskSolution::GlideSolutionRemaining(
     basic.location, waypoint.location,
     waypoint.elevation + settings.task.safety_height_arrival,
-    basic.nav_altitude, calculated.GetWindOrZero(),
+    GlideEnergyHeight(basic, calculated.glide_polar_safety.GetVBestLD()),
+    calculated.GetWindOrZero(),
     settings.task.glide, calculated.glide_polar_safety);
 }
 

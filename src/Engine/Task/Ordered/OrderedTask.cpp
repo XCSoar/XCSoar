@@ -27,6 +27,8 @@
 #include "Task/PathSolvers/TaskDijkstraMax.hpp"
 #include "Task/ObservationZones/ObservationZoneClient.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Navigation/Aircraft.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 
 /**
  * According to "FAI Sporting Code / Annex A to Section 3 - Gliding",
@@ -1138,7 +1140,8 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
 }
 
 double
-OrderedTask::CalcGradient(const AircraftState &state) const noexcept
+OrderedTask::CalcGradient(const AircraftState &state,
+                          const GlidePolar &polar) const noexcept
 {
   if (task_points.empty())
     return 0;
@@ -1152,8 +1155,10 @@ OrderedTask::CalcGradient(const AircraftState &state) const noexcept
   if (distance <= 0)
     return 0;
 
-  // Calculate gradient to the last turnpoint of the remaining task
-  return (state.altitude - task_points.back()->GetElevation()) / distance;
+  const double v_stf = polar.IsValid() ? polar.GetVBestLD() : 0.;
+  return (GlideHeightForMacCready(state, v_stf) -
+          task_points.back()->GetElevation()) /
+         distance;
 }
 
 static void

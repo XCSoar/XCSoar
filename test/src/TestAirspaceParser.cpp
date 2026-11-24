@@ -6,6 +6,7 @@
 #include "Engine/Airspace/AirspaceCircle.hpp"
 #include "Engine/Airspace/AirspacePolygon.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
+#include "TransponderCode.hpp"
 #include "Units/System.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
@@ -66,7 +67,7 @@ TestOpenAir()
     { "Class-RMZ-Test", RMZ },
   };
 
-  ok1(airspaces.GetSize() == 26);
+  ok1(airspaces.GetSize() == 27);
 
   for (const auto &as_ : airspaces.QueryAll()) {
     const AbstractAirspace &airspace = as_.GetAirspace();
@@ -111,6 +112,9 @@ TestOpenAir()
       ok1(equals(points[4].GetLocation(),
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30, true)));
+    } else if (StringIsEqual("Transponder-AX-Test", airspace.GetName())) {
+      const auto a = airspace.GetTransponderCode();
+      ok1(a.IsDefined() && a.GetCode() == TransponderCode(07000).GetCode());
     } else if (StringIsEqual("Radio-Test 1 (AR with MHz)", airspace.GetName())) {
       ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
     } else if (StringIsEqual("Radio-Test 2 (AF without MHz)", airspace.GetName())) {
@@ -396,7 +400,7 @@ TestActivationTime()
 
 int main()
 try {
-  plan_tests(174);
+  plan_tests(175);
 
   TestOpenAir();
   TestTNP();

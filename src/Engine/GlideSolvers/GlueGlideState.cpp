@@ -12,11 +12,13 @@
 GlideState
 GlideState::Remaining(const TaskPoint &tp,
                       const AircraftState &aircraft,
-                      const double min_h)
+                      const double min_h,
+                      const double speed_to_fly)
 {
   assert(aircraft.location.IsValid());
 
   return GlideState(tp.GetVectorRemaining(aircraft.location),
                     std::max(min_h, tp.GetElevation()),
-                    aircraft.altitude, aircraft.wind);
+                    GlideHeightForMacCready(aircraft, speed_to_fly),
+                    aircraft.wind);
 }

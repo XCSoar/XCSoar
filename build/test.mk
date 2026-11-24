@@ -103,16 +103,21 @@ TEST_NAMES = \
 	TestBasicComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
+	TestWaypointReader TestThermalBase \
 	TestSpeedVector \
 	TestFlarmNet TestFlarmMessaging TestFlarmBinaryProtocol \
 	TestFlarmSpokenAlert \
 	TestSpokenAirspaceAlert \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestMarkdownCheckbox TestPath TestPolars TestCSVLine TestGlidePolar \
+	TestGlideSolversExtras \
 	TestLXNAVPolarConversion \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestSlideGrid \
-	TestMacCready TestFinalGlide TestTerrainReach TestOrderedTask TestAATPoint TestTaskSave \
+	TestMacCready TestFinalGlide TestTerrainReach \
+	TestTeGlideSolution TestGlideRatioCalculator TestPathSolvers \
+	TestEngineAirspace \
+	TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
 	TestPlanes \
 	TestTaskPoint \
@@ -139,7 +144,7 @@ TEST_NAMES = \
 	TestDisplayDPI \
 	TestDisplayType \
 	TestInputConfig \
-	TestCRC16 TestCRC8 \
+	TestCRC16 TestCRC8 TestNMEAExtras \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
 	TestHexColorFormatter \
@@ -306,6 +311,23 @@ TEST_GDL90_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/TestGDL90Driver.cpp
 TEST_GDL90_DRIVER_DEPENDS = DRIVER NMEA FLARM GLIDE GEO TIME MATH UTIL UNITS
 $(eval $(call link-program,TestGDL90Driver,TEST_GDL90_DRIVER))
+
+TEST_NMEA_EXTRAS_SOURCES = \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/RadioFrequency.cpp \
+	$(SRC)/io/CSVLine.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Driver/FLARM/StaticParser.cpp \
+	$(SRC)/FLARM/Error.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/FLARM/Id.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeTraffic.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestNMEAExtras.cpp
+TEST_NMEA_EXTRAS_DEPENDS = LIBNMEA GEO MATH UTIL UNITS IO OS THREAD
+$(eval $(call link-program,TestNMEAExtras,TEST_NMEA_EXTRAS))
 
 TEST_LEASTSQUARES_SOURCES = \
 	$(SRC)/Math/LeastSquares.cpp \
@@ -719,6 +741,45 @@ TEST_TERRAIN_REACH_SOURCES = \
 	$(TEST_SRC_DIR)/TestTerrainReach.cpp
 TEST_TERRAIN_REACH_DEPENDS = TERRAIN OPERATION IO ZZIP OS ROUTE GLIDE GEO MATH UTIL
 $(eval $(call link-program,TestTerrainReach,TEST_TERRAIN_REACH))
+
+# ToAircraftState pulls libnmea; NMEAInfo/AirDensity and ExternalSettings/UTF8
+# are linked from those objects (not all of libnmea is single-unit friendly).
+TEST_TE_GLIDE_SOLUTION_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestTeGlideSolution.cpp \
+	$(SRC)/Computer/BasicComputer.cpp \
+	$(SRC)/Computer/FilteredVarioComputer.cpp \
+	$(SRC)/Computer/GroundSpeedComputer.cpp \
+	$(ENGINE_SRC_DIR)/Util/VarioOutputFilter.cpp \
+	$(SRC)/Engine/Util/AircraftStateFilter.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/util/StaticString.cxx
+TEST_TE_GLIDE_SOLUTION_OBJS = $(call SRC_TO_OBJ,$(TEST_TE_GLIDE_SOLUTION_SOURCES))
+TEST_TE_GLIDE_SOLUTION_DEPENDS = GLIDE GEO MATH UTIL LIBNMEA TIME UNITS
+$(eval $(call link-program,TestTeGlideSolution,TEST_TE_GLIDE_SOLUTION))
+
+TEST_GLIDE_RATIO_CALCULATOR_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGlideRatioCalculator.cpp \
+	$(SRC)/Computer/GlideRatioCalculator.cpp
+TEST_GLIDE_RATIO_CALCULATOR_OBJS = $(call SRC_TO_OBJ,$(TEST_GLIDE_RATIO_CALCULATOR_SOURCES))
+TEST_GLIDE_RATIO_CALCULATOR_DEPENDS = MATH UTIL
+$(eval $(call link-program,TestGlideRatioCalculator,TEST_GLIDE_RATIO_CALCULATOR))
+
+TEST_PATH_SOLVERS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestPathSolvers.cpp
+TEST_PATH_SOLVERS_OBJS = $(call SRC_TO_OBJ,$(TEST_PATH_SOLVERS_SOURCES))
+TEST_PATH_SOLVERS_DEPENDS = TASK GEO MATH UTIL
+$(eval $(call link-program,TestPathSolvers,TEST_PATH_SOLVERS))
+
+TEST_ENGINE_AIRSPACE_SOURCES = \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestEngineAirspace.cpp
+TEST_ENGINE_AIRSPACE_DEPENDS = AIRSPACE GEO MATH UTIL
+$(eval $(call link-program,TestEngineAirspace,TEST_ENGINE_AIRSPACE))
 
 TEST_ORDERED_TASK_SOURCES = \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
@@ -1230,6 +1291,18 @@ TEST_LXNAV_POLAR_CONVERSION_SOURCES = \
 	$(TEST_SRC_DIR)/TestLXNAVPolarConversion.cpp
 TEST_LXNAV_POLAR_CONVERSION_DEPENDS = MATH UTIL GLIDE
 $(eval $(call link-program,TestLXNAVPolarConversion,TEST_LXNAV_POLAR_CONVERSION))
+
+TEST_GLIDE_SOLVERS_EXTRAS_SOURCES = \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideState.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/InstantSpeed.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGlideSolversExtras.cpp
+TEST_GLIDE_SOLVERS_EXTRAS_DEPENDS = GEO MATH IO UNITS
+$(eval $(call link-program,TestGlideSolversExtras,TEST_GLIDE_SOLVERS_EXTRAS))
 
 TEST_FILE_UTIL_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -3559,7 +3632,7 @@ $(eval $(call link-program,TestWaylandScale,TEST_WAYLAND_SCALE))
 TEST_WEGLIDE_SCORING_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWeglideScoring.cpp
-TEST_WEGLIDE_SCORING_DEPENDS = MATH
+TEST_WEGLIDE_SCORING_DEPENDS = MATH CONTEST
 $(eval $(call link-program,TestWeglideScoring,TEST_WEGLIDE_SCORING))
 
 TEST_NETCOUPE_SCORING_SOURCES = \
