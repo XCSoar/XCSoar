@@ -32,7 +32,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '4.0.9'
-          bundler-cache: true
+
+      - name: Install Fastlane
+        run: gem install fastlane -v "$(tr -d '[:space:]' < .fastlane-version)" --no-document
 
       - name: Create Play Store key
         run: |
@@ -42,7 +44,7 @@ jobs:
           GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
 
       - name: Promote latest internal release to open testing
-        run: bundle exec fastlane promote_open_testing
+        run: fastlane promote_open_testing
 
       - name: Remove key
         if: always()
