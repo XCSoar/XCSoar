@@ -17,6 +17,13 @@
 #include <geotiff/geotiffio.h>
 #include <geotiff/geovalues.h>
 #include <geotiff/xtiffio.h>
+#elif __has_include(<libgeotiff/geotiff.h>)
+/* Fedora installs these headers under libgeotiff/. */
+#include <libgeotiff/geo_normalize.h>
+#include <libgeotiff/geotiff.h>
+#include <libgeotiff/geotiffio.h>
+#include <libgeotiff/geovalues.h>
+#include <libgeotiff/xtiffio.h>
 #else
 #error "libgeotiff headers not found"
 #endif
