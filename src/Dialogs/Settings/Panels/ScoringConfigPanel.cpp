@@ -36,6 +36,7 @@ public:
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+  bool Modified() noexcept override;
 
 private:
   /* methods from DataFieldListener */
@@ -150,6 +151,19 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   SetExpertRow(SHOW_95_PERCENT_RULE_HELPERS);
 
   ShowFAITriangleControls(map_settings.show_fai_triangle_areas);
+}
+
+bool
+ScoringConfigPanel::Modified() noexcept
+{
+  if (RowFormWidget::Modified())
+    return true;
+
+  /* Close rewrites an old contest id when this stamp is missing. */
+  unsigned contest_enum_layout = 0;
+  return Profile::Exists(ProfileKeys::OLCRules) &&
+    (!Profile::Get(ProfileKeys::ContestEnumLayout, contest_enum_layout) ||
+     contest_enum_layout < 2U);
 }
 
 bool

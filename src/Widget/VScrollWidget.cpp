@@ -124,6 +124,12 @@ VScrollWidget::Save(bool &changed) noexcept
 }
 
 bool
+VScrollWidget::Modified() noexcept
+{
+  return widget->Modified();
+}
+
+bool
 VScrollWidget::Click() noexcept
 {
   return widget->Click();

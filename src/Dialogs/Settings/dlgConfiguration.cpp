@@ -5,6 +5,7 @@
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/CreateWindowWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Message.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -462,6 +463,36 @@ ConfigPanel::GetExpertCheckbox() noexcept
   return extra.GetExpert();
 }
 
+static bool
+ExpertWouldSave() noexcept
+{
+  const bool expert = CommonInterface::GetUISettings().dialog.expert;
+  if (expert) {
+    bool profile_expert = false;
+    Profile::Get(ProfileKeys::UserLevel, profile_expert);
+    return !profile_expert;
+  }
+
+  return Profile::Exists(ProfileKeys::UserLevel);
+}
+
+static bool
+WouldSave() noexcept
+{
+  return pager->Modified() || ExpertWouldSave();
+}
+
+static void
+UpdateMenuButton() noexcept
+{
+  if (pager->GetCurrentIndex() != 0) {
+    pager->SetCloseButtonCaption(_("Back"));
+    return;
+  }
+
+  pager->SetCloseButtonCaption(WouldSave() ? _("Save") : _("Close"));
+}
+
 static void
 OnUserLevel(bool expert) noexcept
 {
@@ -472,6 +503,9 @@ OnUserLevel(bool expert) noexcept
 
   /* force layout update */
   pager->PagerWidget::Move(pager->GetPosition());
+
+  if (pager->GetCurrentIndex() == 0)
+    UpdateMenuButton();
 }
 
 /**
@@ -498,9 +532,7 @@ OnPageFlipped(WidgetDialog &dialog, TabMenuDisplay &menu)
     caption = _("Configuration");
   dialog.SetCaption(caption);
 
-  pager->SetCloseButtonCaption(pager->GetCurrentIndex() == 0
-                               ? _("Close")
-                               : _("Back"));
+  UpdateMenuButton();
 }
 
 void
@@ -566,17 +598,29 @@ void dlgConfigurationShowModal()
 
   dialog.FinishPreliminary(pager);
 
-  if (initial_page != nullptr) {
+  if (initial_page != nullptr)
     OnPageFlipped(dialog, menu);
-  }
 
-  /* Esc on a settings panel returns to the menu (same as Back);
-     on the menu itself, leave Esc to cancel the dialog. */
+  /* Esc on a settings panel returns to the menu (same as Back).
+     On the menu, Esc discards.  Ask only when Save would write. */
   dialog.SetKeyDownFunction([&dialog](unsigned key_code) {
-    if (key_code != KEY_ESCAPE || pager->GetCurrentIndex() == 0)
+    if (key_code != KEY_ESCAPE)
       return false;
 
-    OnCloseClicked(dialog);
+    if (pager->GetCurrentIndex() != 0) {
+      OnCloseClicked(dialog);
+      return true;
+    }
+
+    if (!WouldSave())
+      return false;
+
+    if (ShowMessageBox(_("Discard configuration changes? They will be lost."),
+                       _("Configuration"),
+                       MB_YESNO | MB_ICONQUESTION) != IDYES)
+      return true;
+
+    dialog.SetModalResult(mrCancel);
     return true;
   });
 

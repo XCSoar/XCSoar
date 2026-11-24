@@ -152,6 +152,12 @@ TwoWidgets::Save(bool &changed) noexcept
 }
 
 bool
+TwoWidgets::Modified() noexcept
+{
+  return first->Modified() || second->Modified();
+}
+
+bool
 TwoWidgets::Click() noexcept
 {
   return first->Click() || second->Click();

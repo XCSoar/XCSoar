@@ -19,6 +19,9 @@ Version 7.47 - not yet released
   - deactivate the current plane from the Planes dialog, which
     clears its polar #3270
 * ui
+  - label the Configuration menu button Save when that press would
+    write the profile, and ask before Escape discards those changes
+    #3532
   - add a ground-side shadow to the artificial horizon line so it
     stays visible on both sky and ground
   - draw the artificial-horizon aircraft reference as a yellow bar

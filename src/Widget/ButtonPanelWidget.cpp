@@ -97,6 +97,12 @@ ButtonPanelWidget::Save(bool &changed) noexcept
 }
 
 bool
+ButtonPanelWidget::Modified() noexcept
+{
+  return widget->Modified();
+}
+
+bool
 ButtonPanelWidget::Click() noexcept
 {
   return widget->Click();

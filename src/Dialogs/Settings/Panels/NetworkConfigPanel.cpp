@@ -411,6 +411,11 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+  bool Modified() noexcept override {
+    /* Wi-Fi rows are applied when edited.  Save() does not write
+       the profile, and refresh reloads the rows. */
+    return false;
+  }
 
 private:
   void OnRefresh() noexcept;

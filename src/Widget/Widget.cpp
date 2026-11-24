@@ -40,6 +40,12 @@ NullWidget::Save([[maybe_unused]] bool &changed) noexcept
 }
 
 bool
+Widget::Modified() noexcept
+{
+  return false;
+}
+
+bool
 NullWidget::Click() noexcept
 {
   return true;

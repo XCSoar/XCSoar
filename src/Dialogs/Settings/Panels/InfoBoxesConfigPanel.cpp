@@ -77,11 +77,12 @@ InfoBoxesConfigPanel::Prepare(ContainerWindow &parent,
 }
 
 bool
-InfoBoxesConfigPanel::Save([[maybe_unused]] bool &_changed) noexcept
+InfoBoxesConfigPanel::Save(bool &_changed) noexcept
 {
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
-  SaveValue(InfoBoxSettings::MAX_PANELS, ProfileKeys::UseFinalGlideDisplayMode,
-            settings.use_final_glide);
+  _changed |= SaveValue(InfoBoxSettings::MAX_PANELS,
+                        ProfileKeys::UseFinalGlideDisplayMode,
+                        settings.use_final_glide);
 
   return true;
 }

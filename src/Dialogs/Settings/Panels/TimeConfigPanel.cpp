@@ -92,6 +92,7 @@ public:
   void Hide() noexcept override;
   void Move(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+  bool Modified() noexcept override;
 
 private:
   /**
@@ -340,6 +341,34 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 }
 
 bool
+TimeConfigPanel::Modified() noexcept
+{
+  if (RowFormWidget::Modified())
+    return true;
+
+  /* Save() also writes a missing local-time key, and the manual
+     offset when it differs from the profile. */
+  if (!Profile::Exists(ProfileKeys::LocalTimeSource))
+    return true;
+
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  if (settings.local_time_source != LocalTimeSource::MANUAL_UTC_OFFSET &&
+      settings.GetCurrentUTCOffset() != settings.utc_offset)
+    return true;
+
+  if (settings.local_time_source == LocalTimeSource::MANUAL_UTC_OFFSET ||
+      manual_utc_offset_modified) {
+    int stored = 0;
+    const int seconds = manual_utc_offset.AsSeconds();
+    if (!Profile::Get(ProfileKeys::UTCOffsetSigned, stored) ||
+        stored != seconds)
+      return true;
+  }
+
+  return false;
+}
+
+bool
 TimeConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
@@ -353,6 +382,8 @@ TimeConfigPanel::Save(bool &_changed) noexcept
   /* the source is written even if it did not change: without this key, a
      stored UTC offset means "manual" to Profile::Load(), because that
      is what it meant in older versions */
+  if (!Profile::Exists(ProfileKeys::LocalTimeSource))
+    changed = true;
   Profile::SetEnum(ProfileKeys::LocalTimeSource, settings_computer.local_time_source);
 
   if (settings_computer.local_time_source == LocalTimeSource::MANUAL_UTC_OFFSET) {
@@ -378,9 +409,13 @@ TimeConfigPanel::Save(bool &_changed) noexcept
       manual_utc_offset_modified) {
     /* remember the manual offset even while another source is active, so
        the user does not have to enter it again */
-    Profile::Set(ProfileKeys::UTCOffsetSigned, manual_utc_offset.AsSeconds());
+    const int seconds = manual_utc_offset.AsSeconds();
+    int stored = 0;
+    if (!Profile::Get(ProfileKeys::UTCOffsetSigned, stored) ||
+        stored != seconds)
+      changed = true;
+    Profile::Set(ProfileKeys::UTCOffsetSigned, seconds);
     manual_utc_offset_modified = false;
-    changed = true;
   }
 
   changed |= SaveValue(SYSTEM_TIME_FROM_GPS, ProfileKeys::SetSystemTimeFromGPS,

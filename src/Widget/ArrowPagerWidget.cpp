@@ -170,6 +170,10 @@ ArrowPagerWidget::Show(const PixelRect &rc) noexcept
     extra->Show(layout.extra);
 
   UpdateButtons();
+
+  /* The first page is already current.  Listeners set the caption
+     and, for Configuration, the Save / Close label. */
+  OnPageFlipped();
 }
 
 void

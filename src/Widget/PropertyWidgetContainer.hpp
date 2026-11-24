@@ -46,6 +46,7 @@ public:
                const PixelRect &rc) noexcept override;
   void Unprepare() noexcept override;
   bool Save(bool &changed) noexcept override;
+  bool Modified() noexcept override;
   bool Click() noexcept override;
   void ReClick() noexcept override;
   void Show(const PixelRect &rc) noexcept override;

@@ -82,6 +82,12 @@ PropertyWidgetContainer::Save(bool &changed) noexcept
 }
 
 bool
+PropertyWidgetContainer::Modified() noexcept
+{
+  return GetContentWidget().Modified();
+}
+
+bool
 PropertyWidgetContainer::Click() noexcept
 {
   return GetContentWidget().Click();
