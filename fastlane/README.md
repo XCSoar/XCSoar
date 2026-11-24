@@ -38,10 +38,10 @@ CI uploads this metadata with:
 
 These workflows require the `GOOGLE_PLAY_JSON_KEY` GitHub secret.
 
-Ruby dependencies are pinned in the repo-root `Gemfile` / `Gemfile.lock`
-and installed via Bundler in CI (`bundle exec fastlane supply`).
+The Play jobs install the version in `.fastlane-version`
+(`gem install fastlane`). RubyGems fetches what that release requires.
 
-A pull request that changes `Gemfile`, `Gemfile.lock`, `fastlane/`, or
+A pull request that changes `.fastlane-version`, `fastlane/`, or
 `.github/workflows/fastlane.yml` runs that workflow. It loads Fastlane
 and the Play uploader on the Ruby pin in the workflow. It does not upload.
 

@@ -1030,7 +1030,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '4.0.9'
-          bundler-cache: true
+
+      - name: Install Fastlane
+        run: gem install fastlane -v "$(tr -d '[:space:]' < .fastlane-version)" --no-document
 
       - name: Create Play Store key
         run: |
@@ -1074,7 +1076,7 @@ jobs:
             echo "::warning::Native debug symbols not found at $SYMBOLS_ZIP (expected CI artifact layout); Play native stacks may stay obfuscated"
           fi
           # What's New: fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
-          bundle exec fastlane supply \
+          fastlane supply \
             --package_name org.xcsoar.play \
             --aab "$AAB_PATH" \
             ${MAPPING_PATH:+--mapping "$MAPPING_PATH"} \

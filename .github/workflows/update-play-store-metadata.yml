@@ -26,7 +26,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '4.0.9'
-          bundler-cache: true
+
+      - name: Install Fastlane
+        run: gem install fastlane -v "$(tr -d '[:space:]' < .fastlane-version)" --no-document
 
       - name: Create Play Store key
         run: |
@@ -37,7 +39,7 @@ jobs:
 
       - name: Upload metadata to Play Store
         run: |
-          bundle exec fastlane supply \
+          fastlane supply \
             --package_name org.xcsoar.play \
             --metadata_path fastlane/metadata/android \
             --json_key play-key.json \

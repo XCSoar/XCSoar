@@ -1,5 +1,5 @@
 # Load Fastlane on a pull request. The Play jobs run only on master
-# and tags, so a Gemfile.lock bump never executes Fastlane there.
+# and tags, so a version bump never executes Fastlane there.
 # Same Ruby pin as those jobs. This one has no Play key.
 ---
 name: Fastlane
@@ -8,8 +8,7 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - 'Gemfile'
-      - 'Gemfile.lock'
+      - '.fastlane-version'
       - 'fastlane/**'
       - '.github/workflows/fastlane.yml'
     branches:
@@ -17,8 +16,7 @@ on:
       - 'v*.x'
   push:
     paths:
-      - 'Gemfile'
-      - 'Gemfile.lock'
+      - '.fastlane-version'
       - 'fastlane/**'
       - '.github/workflows/fastlane.yml'
     branches:
@@ -52,14 +50,16 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '4.0.9'
-          bundler-cache: true
+
+      - name: Install Fastlane
+        run: gem install fastlane -v "$(tr -d '[:space:]' < .fastlane-version)" --no-document
 
       - name: Load Fastlane and the Play uploader
         env:
           FASTLANE_SKIP_UPDATE_CHECK: '1'
           FASTLANE_DISABLE_ANIMATION: '1'
         run: |
-          # supply is inside the fastlane gem. This is the require that
-          # failed when multi_json was missing from the bundle.
-          bundle exec ruby -e 'require "supply"'
-          bundle exec fastlane lanes
+          # supply is inside the fastlane gem. This failed when a
+          # dependency of that release was missing.
+          ruby -e 'require "supply"'
+          fastlane lanes

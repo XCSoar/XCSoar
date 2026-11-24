@@ -79,15 +79,12 @@
       "commitMessageExtra": ""
     },
     {
-      "description": "Fastlane is the only Ruby tool. Track that gem, and let its lockfile follow. No PRs for multi_json or other gems",
-      "matchManagers": ["bundler"],
-      "matchDepNames": ["!fastlane"],
-      "enabled": false
-    },
-    {
-      "description": "Automerge a Fastlane lockfile update once every check is green, including the Fastlane load job. GitHub's own auto-merge ignores that job, so Renovate merges the PR itself",
-      "matchManagers": ["bundler"],
+      "description": "Fastlane is the only Ruby program. .fastlane-version is the pin; gem install pulls its dependencies. Automerge once the Fastlane load job and the other checks are green",
+      "matchManagers": ["custom.regex"],
       "matchDepNames": ["fastlane"],
+      "commitMessagePrefix": ".fastlane-version:",
+      "commitMessageTopic": "fastlane",
+      "commitMessageExtra": "to {{{newVersion}}}",
       "automerge": true,
       "platformAutomerge": false,
       "automergeSchedule": ["at any time"]
@@ -176,6 +173,19 @@
     }
   ],
   "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Fastlane version pin. The Play jobs gem-install this and nothing else",
+      "managerFilePatterns": ["/^\\.fastlane-version$/"],
+      "matchStrings": [
+        "(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "rubygems",
+      "depNameTemplate": "fastlane",
+      "packageNameTemplate": "fastlane",
+      "autoReplaceStringTemplate": "{{{newValue}}}",
+      "versioningTemplate": "semver"
+    },
     {
       "customType": "regex",
       "description": "GitHub tarball pin in libs.py: repo, release tag, sha256. URLs are built from the tag. shortcut: netcdf-c releases ship no tarball, so a bump keeps the old sha256; replace it in that PR",
