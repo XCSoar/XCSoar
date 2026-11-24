@@ -810,7 +810,8 @@ DrawScales(Canvas &canvas, const HorizonLook &look, bool compact,
     canvas.Select(label_font);
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_WHITE);
-    char buffer[5];
+    // %+d of any int is at most 11 characters plus NUL.
+    char buffer[12];
     StringFormatUnsafe(buffer, "%+3d", k);
     const PixelSize ts = canvas.CalcTextSize(buffer);
     const int y = PitchY(height, pitch_deg, k);
