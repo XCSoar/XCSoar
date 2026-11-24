@@ -41,6 +41,10 @@ These workflows require the `GOOGLE_PLAY_JSON_KEY` GitHub secret.
 Ruby dependencies are pinned in the repo-root `Gemfile` / `Gemfile.lock`
 and installed via Bundler in CI (`bundle exec fastlane supply`).
 
+A pull request that changes `Gemfile`, `Gemfile.lock`, `fastlane/`, or
+`.github/workflows/fastlane.yml` runs that workflow. It loads Fastlane
+and the Play uploader on the Ruby pin in the workflow. It does not upload.
+
 ## F-Droid
 
 F-Droid reads graphics from this tree after the build:

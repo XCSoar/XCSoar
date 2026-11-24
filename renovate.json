@@ -79,6 +79,31 @@
       "commitMessageExtra": ""
     },
     {
+      "description": "Fastlane is the only Ruby tool. Track that gem, and let its lockfile follow. No PRs for multi_json or other gems",
+      "matchManagers": ["bundler"],
+      "matchDepNames": ["!fastlane"],
+      "enabled": false
+    },
+    {
+      "description": "Automerge a Fastlane lockfile update once every check is green, including the Fastlane load job. GitHub's own auto-merge ignores that job, so Renovate merges the PR itself",
+      "matchManagers": ["bundler"],
+      "matchDepNames": ["fastlane"],
+      "automerge": true,
+      "platformAutomerge": false,
+      "automergeSchedule": ["at any time"]
+    },
+    {
+      "description": "Ruby pin on ruby/setup-ruby. Own PR, not the GitHub Actions group. Automerge only after the Fastlane load job has run that pin",
+      "matchDatasources": ["ruby-version"],
+      "groupName": null,
+      "commitMessagePrefix": ".github/workflows:",
+      "commitMessageTopic": "Ruby",
+      "commitMessageExtra": "to {{{newVersion}}}",
+      "automerge": true,
+      "platformAutomerge": false,
+      "automergeSchedule": ["at any time"]
+    },
+    {
       "description": "Python doc dependencies (weekly)",
       "matchManagers": ["pip_requirements"],
       "groupName": "Python dependencies",
@@ -102,9 +127,10 @@
       "commitMessagePrefix": "build:"
     },
     {
-      "description": "Separate PRs for major version updates",
+      "description": "Separate PRs for major version updates. A green Fastlane load is not enough to automerge a major",
       "matchUpdateTypes": ["major"],
-      "groupName": null
+      "groupName": null,
+      "automerge": false
     },
     {
       "description": "Patch updates bypass minimum release age",
