@@ -23,6 +23,29 @@
 #include "util/StringFormat.hpp"
 #include "util/StringAPI.hxx"
 
+static void
+CarryRoundedSeconds(int &degrees, int &minutes, double &seconds) noexcept
+{
+  if (seconds >= 59.95) {
+    seconds = 0;
+    ++minutes;
+    if (minutes == 60) {
+      minutes = 0;
+      ++degrees;
+    }
+  }
+}
+
+static void
+CarryRoundedMinutes(int &degrees, double &minutes) noexcept
+{
+  // The nearest double to 59.9995 is still below the rounding boundary.
+  if (minutes > 59.9995) {
+    minutes = 0;
+    ++degrees;
+  }
+}
+
 bool
 FormatLongitude(Angle longitude, char *buffer, size_t size,
                 CoordinateFormat format)
@@ -65,6 +88,7 @@ FormatLongitude(Angle longitude, char *buffer, size_t size,
     mm = (int)(mlong);
     // Calculate seconds
     mlong = (mlong - mm) * 60.0;
+    CarryRoundedSeconds(dd, mm, mlong);
     // Save the string to the buffer
     StringFormat(buffer, size, "%03d" DEG "%02d'%04.1f\" %c",
                  dd, mm, mlong, sign);
@@ -75,6 +99,7 @@ FormatLongitude(Angle longitude, char *buffer, size_t size,
     dd = (int)mlong;
     // Calculate minutes
     mlong = (mlong - dd) * 60.0;
+    CarryRoundedMinutes(dd, mlong);
     // Save the string to the buffer
     StringFormat(buffer, size, "%03d" DEG "%06.3f' %c",
                  dd, mlong, sign);
@@ -134,6 +159,7 @@ FormatLatitude(Angle latitude, char *buffer, size_t size,
     mm = (int)(mlat);
     // Calculate seconds
     mlat = (mlat - mm) * 60.0;
+    CarryRoundedSeconds(dd, mm, mlat);
     // Save the string to the buffer
     StringFormat(buffer, size, "%02d" DEG "%02d'%04.1f\" %c",
                  dd, mm, mlat, sign);
@@ -144,6 +170,7 @@ FormatLatitude(Angle latitude, char *buffer, size_t size,
     dd = (int)mlat;
     // Calculate minutes
     mlat = (mlat - dd) * 60.0;
+    CarryRoundedMinutes(dd, mlat);
     // Save the string to the buffer
     StringFormat(buffer, size, "%02d" DEG "%06.3f' %c",
                  dd, mlat, sign);
