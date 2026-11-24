@@ -2,9 +2,12 @@
 // Copyright The XCSoar Project
 
 #include "Formatter/GeoPointFormatter.hpp"
+#include "Math/Constants.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 #include "TestUtil.hpp"
+
+#include <cmath>
 
 static bool
 StringIsEqualWildcard(const char *string1, const char *string2,
@@ -24,7 +27,7 @@ StringIsEqualWildcard(const char *string1, const char *string2,
 
 int main()
 {
-  plan_tests(14);
+  plan_tests(14 + 6);
 
   char buffer[256];
   GeoPoint location1(Angle::Degrees(8.466322),
@@ -32,6 +35,16 @@ int main()
 
   GeoPoint location2(Angle::Degrees(-70.011667),
                      Angle::Degrees(-32.653333));
+
+  const auto ten_point_one = Angle::Degrees(10.1);
+  const GeoPoint minute_boundary(ten_point_one, ten_point_one);
+
+  // Approach 10.1 degrees from below in the formatter's degree conversion.
+  const auto below_minute =
+    Angle::Radians(std::nextafter(10.1 / RAD_TO_DEG, 0.0));
+  const GeoPoint minute_carry(below_minute, below_minute);
+  const GeoPoint degree_carry(Angle::Degrees(10.999999),
+                              Angle::Degrees(-10.999999));
 
   // Test DD.ddddd
   FormatGeoPoint(location1, buffer, ARRAY_SIZE(buffer),
@@ -52,6 +65,18 @@ int main()
                  CoordinateFormat::DDMM_MMM);
   ok1(StringIsEqual(buffer, "32°39.200' S 070°00.700' W"));
 
+  FormatGeoPoint(minute_boundary, buffer, ARRAY_SIZE(buffer),
+                 CoordinateFormat::DDMM_MMM);
+  ok1(StringIsEqual(buffer, "10°06.000' N 010°06.000' E"));
+
+  FormatGeoPoint(minute_carry, buffer, ARRAY_SIZE(buffer),
+                 CoordinateFormat::DDMM_MMM);
+  ok1(StringIsEqual(buffer, "10°06.000' N 010°06.000' E"));
+
+  FormatGeoPoint(degree_carry, buffer, ARRAY_SIZE(buffer),
+                 CoordinateFormat::DDMM_MMM);
+  ok1(StringIsEqual(buffer, "11°00.000' S 011°00.000' E"));
+
 
   // Test DDMMSS
   FormatGeoPoint(location1, buffer, ARRAY_SIZE(buffer),
@@ -71,6 +96,18 @@ int main()
   FormatGeoPoint(location2, buffer, ARRAY_SIZE(buffer),
                  CoordinateFormat::DDMMSS_S);
   ok1(StringIsEqual(buffer, "32°39'12.0\" S 070°00'42.0\" W"));
+
+  FormatGeoPoint(minute_boundary, buffer, ARRAY_SIZE(buffer),
+                 CoordinateFormat::DDMMSS_S);
+  ok1(StringIsEqual(buffer, "10°06'00.0\" N 010°06'00.0\" E"));
+
+  FormatGeoPoint(minute_carry, buffer, ARRAY_SIZE(buffer),
+                 CoordinateFormat::DDMMSS_S);
+  ok1(StringIsEqual(buffer, "10°06'00.0\" N 010°06'00.0\" E"));
+
+  FormatGeoPoint(degree_carry, buffer, ARRAY_SIZE(buffer),
+                 CoordinateFormat::DDMMSS_S);
+  ok1(StringIsEqual(buffer, "11°00'00.0\" S 011°00'00.0\" E"));
 
   // Test UTM
   FormatGeoPoint(location1, buffer, ARRAY_SIZE(buffer),
