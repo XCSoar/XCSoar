@@ -62,20 +62,20 @@ public:
   }
 };
 
-/** Detects a token with exactly 4 letters */
+/**
+ * METAR station id: exactly 4 letters or digits.
+ * Not necessarily an ICAO location indicator (those are letters only).
+ * Same shape as NOAAStore::IsValidCode().
+ */
 static bool
-DetectICAOCodeToken(const char *token)
+DetectStationIdToken(const char *token)
 {
   if (strlen(token) != 4)
     return false;
 
-  for (unsigned i = 0; i < 4; i++) {
-    if ((token[i] >= 'A' && token[i] <= 'Z') ||
-        (token[i] >= 'a' && token[i] <= 'z')) {
-      // okay
-    } else
+  for (unsigned i = 0; i < 4; ++i)
+    if (!IsAlphaNumericASCII(token[i]))
       return false;
-  }
 
   return true;
 }
@@ -380,9 +380,11 @@ METARParser::ParseLine(const METAR::ContentString &content, ParsedMETAR &parsed)
   METARLine line(content.c_str());
   const char *token;
 
-  // Parse four-letter ICAO code
+  /* Station id. Stop here so a digit in the id does not consume
+     the time group, and so a later word such as AUTO is not taken
+     as the station. */
   while ((token = line.Next()) != NULL) {
-    if (DetectICAOCodeToken(token)) {
+    if (DetectStationIdToken(token)) {
       parsed.icao_code = token;
       break;
     }

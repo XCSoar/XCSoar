@@ -10,7 +10,7 @@
 int
 main()
 {
-  plan_tests(49);
+  plan_tests(49 + 16);
 
   METAR metar;
 
@@ -86,6 +86,32 @@ main()
     ok1(parsed.cavok);
     ok1(parsed.location_available);
     ok1(equals(parsed.location, 51.3, 6.766666666666667));
+  }
+
+  {
+    ParsedMETAR parsed;
+    /* FAA id with a digit. Not an ICAO code. AUTO must not win. */
+    metar.content = "KF95 241415Z AUTO 02010KT 10SM CLR 17/15 A3013 RMK AO2";
+    metar.decoded = "";
+    if (!ok1(METARParser::Parse(metar, parsed)))
+      return exit_status();
+
+    ok1(parsed.icao_code == "KF95");
+    ok1(parsed.day_of_month == 24);
+    ok1(parsed.hour == 14);
+    ok1(parsed.minute == 15);
+    ok1(parsed.wind_available);
+    ok1(equals(parsed.wind.norm, Units::ToSysUnit(10, Unit::KNOTS)));
+    ok1(equals(parsed.wind.bearing, 20));
+    ok1(parsed.qnh_available);
+    ok1(equals(parsed.qnh.GetHectoPascal(),
+               Units::ToSysUnit(30.13, Unit::INCH_MERCURY)));
+    ok1(parsed.temperatures_available);
+    ok1(equals(parsed.temperature, Units::ToSysUnit(17, Unit::DEGREES_CELCIUS)));
+    ok1(equals(parsed.dew_point, Units::ToSysUnit(15, Unit::DEGREES_CELCIUS)));
+    ok1(!parsed.visibility_available);
+    ok1(!parsed.cavok);
+    ok1(!parsed.location_available);
   }
 
   return exit_status();
