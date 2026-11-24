@@ -32,12 +32,21 @@
       "commitMessagePrefix": "build/python/build/libs.py:"
     },
     {
-      "description": "Boost headers in libboost.mk (monthly). The checksum is not updated",
+      "description": "Boost headers in libboost.mk and the OBS asset URL (monthly). The makefile checksum is not updated",
       "matchManagers": ["custom.regex"],
-      "matchFileNames": ["build/libboost.mk"],
+      "matchDepNames": ["boostorg/boost"],
       "schedule": ["* 0-5 1 * *"],
+      "groupName": "boostorg/boost",
       "commitMessagePrefix": "build/libboost.mk:",
       "commitMessageTopic": "Boost"
+    },
+    {
+      "description": "ZXing pin and the OBS asset stay on one bump",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["zxing-cpp/zxing-cpp"],
+      "schedule": ["* 0-5 1 * *"],
+      "groupName": "zxing-cpp/zxing-cpp",
+      "commitMessagePrefix": "build/python/build/libs.py:"
     },
     {
       "description": "curl tags are curl-8_14_1",
@@ -210,6 +219,32 @@
       "packageNameTemplate": "boostorg/boost",
       "extractVersionTemplate": "^boost-(?<version>\\d+\\.\\d+\\.\\d+)$",
       "autoReplaceStringTemplate": "BOOST_VERSION = {{{newValue}}}",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "OBS Boost asset in xcsoar.spec. Same version as BOOST_VERSION. No checksum here: archives.boost.io is not a GitHub release asset, and download.py checks BOOST_SHA256",
+      "managerFilePatterns": ["/^xcsoar\\.spec$/"],
+      "matchStrings": [
+        "Source0:\\s+https://archives\\.boost\\.io/release/(?<currentValue>\\d+\\.\\d+\\.\\d+)/source/boost_\\d+_\\d+_\\d+\\.tar\\.bz2"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "boostorg/boost",
+      "packageNameTemplate": "boostorg/boost",
+      "extractVersionTemplate": "^boost-(?<version>\\d+\\.\\d+\\.\\d+)$",
+      "autoReplaceStringTemplate": "Source0:        https://archives.boost.io/release/{{{newValue}}}/source/boost_{{{newMajor}}}_{{{newMinor}}}_{{{newPatch}}}.tar.bz2",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "OBS ZXing asset in xcsoar.spec. Same release asset as zxing_cpp in libs.py, so the tag and the digest move together",
+      "managerFilePatterns": ["/^xcsoar\\.spec$/"],
+      "matchStrings": [
+        "#!RemoteAsset: (?<currentDigest>[a-f0-9]{64})\\nSource1:\\s+https://github.com/(?<depName>zxing-cpp/zxing-cpp)/releases/download/(?<currentValue>v\\d+\\.\\d+\\.\\d+)/zxing-cpp-\\d+\\.\\d+\\.\\d+\\.tar\\.gz"
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "packageNameTemplate": "{{{depName}}}",
+      "autoReplaceStringTemplate": "#!RemoteAsset: {{{newDigest}}}\nSource1:        https://github.com/{{{depName}}}/releases/download/{{{newValue}}}/zxing-cpp-{{{newMajor}}}.{{{newMinor}}}.{{{newPatch}}}.tar.gz",
       "versioningTemplate": "semver"
     }
   ]
