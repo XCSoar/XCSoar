@@ -2,25 +2,19 @@ LUA = y
 
 ifeq ($(LUA),y)
 
-ifeq ($(USE_THIRDPARTY_LIBS),y)
-ifeq ($(call THIRDPARTY_PACKAGE_SELECTED,lua),y)
+ifeq ($(USE_THIRDPARTY_LIBS):$(call THIRDPARTY_PACKAGE_SELECTED,lua),y:y)
 LIBLUA_LDLIBS = -llua
 LIBLUA_CPPFLAGS =
 else
-# Homebrew provides pkg-config module "lua"; Debian/Ubuntu use "lua5.4".
+# Fedora and Homebrew provide lua.pc. Debian and openSUSE use lua5.4.pc.
 ifeq ($(TARGET_IS_DARWIN),y)
-$(eval $(call pkg-config-library,LIBLUA,lua))
+LIBLUA_PC := lua
+else ifeq ($(shell $(PKG_CONFIG) --atleast-version=5.4 lua && echo y),y)
+LIBLUA_PC := $(if $(shell $(PKG_CONFIG) --exists lua5.4 && echo y),lua5.4,lua)
 else
-$(eval $(call pkg-config-library,LIBLUA,lua5.4))
+LIBLUA_PC := lua5.4
 endif
-endif
-else
-# Homebrew provides pkg-config module "lua"; Debian/Ubuntu use "lua5.4".
-ifeq ($(TARGET_IS_DARWIN),y)
-$(eval $(call pkg-config-library,LIBLUA,lua))
-else
-$(eval $(call pkg-config-library,LIBLUA,lua5.4))
-endif
+$(eval $(call pkg-config-library,LIBLUA,$(LIBLUA_PC)))
 endif
 
 LUA_SOURCES = \
