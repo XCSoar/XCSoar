@@ -12987,3 +12987,6 @@ msgstr ""
 
 msgid "[DEL]"
 msgstr "[ENTF]"
+
+msgid "Discard configuration changes? They will be lost."
+msgstr "Konfigurationsänderungen verwerfen? Sie gehen verloren."

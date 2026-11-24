@@ -13026,3 +13026,6 @@ msgstr ""
 
 msgid "[DEL]"
 msgstr "[CANC]"
+
+msgid "Discard configuration changes? They will be lost."
+msgstr "Annullare le modifiche alla configurazione? Andranno perse."

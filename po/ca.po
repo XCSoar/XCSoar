@@ -12955,3 +12955,6 @@ msgstr ""
 
 msgid "[DEL]"
 msgstr ""
+
+msgid "Discard configuration changes? They will be lost."
+msgstr ""
