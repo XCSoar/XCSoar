@@ -310,9 +310,8 @@ CirclingWind::Result CirclingWind::CalcWind(double quality_metric,
   // initialize to a large number
   double min_fit_metric = INITIAL_MIN_FIT_METRIC;
 
-  /* this is a "safety net", absolutely not necessary,
-   * since the number of iterations is fix at compile time
-   */
+  /* Stop a search that does not shrink.  The step width halves from
+     a known start, so a normal circle finishes inside this cap. */
   int max_iterations = 10;
   // find best fit to cosine curve
   do {
@@ -335,7 +334,8 @@ CirclingWind::Result CirclingWind::CalcWind(double quality_metric,
     // hone in on the interesting part
     search_steps = 3;
     search_step_width = search_step_width / 2.0;
-  } while (search_step_width > Angle::Degrees(2));
+  } while (max_iterations > 0 &&
+           search_step_width > Angle::Degrees(2));
   wind_bearing = search_midpoint.AsBearing();
 
   /* If we knew the latency of the GPS receiver we would correct wind_bearing
