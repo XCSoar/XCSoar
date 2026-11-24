@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "WaypointReaderSeeYou.hpp"
+#include "SeeYouStyle.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "util/DecimalParser.hxx"
@@ -99,13 +100,6 @@ ParseDistance(std::string_view src, double &dest)
 static bool
 ParseStyle(std::string_view src, Waypoint::Type &type)
 {
-  // 1 - Normal
-  // 2 - AirfieldGrass
-  // 3 - Outlanding
-  // 4 - GliderSite
-  // 5 - AirfieldSolid ...
-
-  // Parse string
   unsigned style;
 
   if (auto value = ParseInteger<unsigned>(src))
@@ -113,65 +107,12 @@ ParseStyle(std::string_view src, Waypoint::Type &type)
   else
     return false;
 
-  // Update flags
-  switch (style) {
-  case 3:
-    type = Waypoint::Type::OUTLANDING;
-    break;
-  case 2:
-  case 4:
-  case 5:
-    type = Waypoint::Type::AIRFIELD;
-    break;
-  case 6:
-    type = Waypoint::Type::MOUNTAIN_PASS;
-    break;
-  case 7:
-    type = Waypoint::Type::MOUNTAIN_TOP;
-    break;
-  case 8:
-    type = Waypoint::Type::OBSTACLE;
-    break;
-  case 9:
-    type = Waypoint::Type::VOR;
-    break;
-  case 10:
-    type = Waypoint::Type::NDB;
-   break;
-  case 11:
-    type = Waypoint::Type::TOWER;
-    break;
-  case 12:
-    type = Waypoint::Type::DAM;
-    break;
-  case 13:
-    type = Waypoint::Type::TUNNEL;
-    break;
-  case 14:
-    type = Waypoint::Type::BRIDGE;
-    break;
-  case 15:
-    type = Waypoint::Type::POWERPLANT;
-    break;
-  case 16:
-    type = Waypoint::Type::CASTLE;
-    break;
-  case 17:
-    type = Waypoint::Type::INTERSECTION;
-    break;
-  case 18:
-    type = Waypoint::Type::MARKER;
-    break;
-  case 19:
-    type = Waypoint::Type::REPORTING_POINT;
-    break;
-  case 20:
-    type = Waypoint::Type::PGTAKEOFF;
-    break;
-  case 21:
-    type = Waypoint::Type::PGLANDING;
-    break;
-  }
+  for (const auto &entry : see_you_styles)
+    if (entry.style == style) {
+      type = entry.type;
+      break;
+    }
+
   return true;
 }
 

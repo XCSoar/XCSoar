@@ -340,6 +340,31 @@ TestCupWriter(const wp_vector &org_wp)
 }
 
 static void
+TestCupStyles()
+{
+  const GeoPoint loc(Angle::Zero(), Angle::Zero());
+
+  Waypoint home(loc);
+  home.name = "Home";
+  home.type = Waypoint::Type::AIRFIELD;
+  home.flags.home = true;
+
+  Waypoint field(loc);
+  field.name = "Field";
+  field.type = Waypoint::Type::AIRFIELD;
+
+  Waypoint thermal(loc);
+  thermal.name = "Thermal";
+  thermal.type = Waypoint::Type::THERMAL_HOTSPOT;
+
+  const auto s = WriteCupToString({home, field, thermal});
+  ok1(s == R"cup("Home","",,0000.000N,00000.000E,,4,,,,,"","",""
+"Field","",,0000.000N,00000.000E,,2,,,,,"","",""
+"Thermal","",,0000.000N,00000.000E,,,,,,,"","",""
+)cup"sv);
+}
+
+static void
 TestCupRoundTrip(const wp_vector &org_wp)
 {
   // Write waypoints to CUP string (with header for 2022 format detection)
@@ -590,7 +615,7 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(507 + 4 + 8 + 8);
+  plan_tests(507 + 4 + 8 + 8 + 1);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
@@ -604,6 +629,7 @@ int main()
   TestCompeGPS(org_wp);
   TestCompeGPS_UTM(org_wp);
   TestCupWriter(org_wp);
+  TestCupStyles();
   TestCupRoundTrip(org_wp);
 
   return exit_status();
