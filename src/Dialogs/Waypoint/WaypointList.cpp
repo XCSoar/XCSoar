@@ -19,6 +19,7 @@
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"
 #include "Waypoint/WaypointFilter.hpp"
+#include "WaypointTypeName.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
@@ -81,9 +82,10 @@ struct TypeFilterChoice {
 
 static constexpr TypeFilterChoice type_filter_choices[] = {
   {TypeFilter::ALL, "*"},
-  {TypeFilter::AIRPORT, "Airport"},
-  {TypeFilter::LANDABLE, "Landable"},
-  {TypeFilter::TURNPOINT, "Turnpoint"},
+  /* Labels come from the waypoint type table. */
+  {TypeFilter::AIRPORT, nullptr},
+  {TypeFilter::LANDABLE, nullptr},
+  {TypeFilter::TURNPOINT, nullptr},
   {TypeFilter::START, "Start"},
   {TypeFilter::FINISH, "Finish"},
   {TypeFilter::FAI_TRIANGLE_LEFT, "Left FAI Triangle"},
@@ -91,37 +93,80 @@ static constexpr TypeFilterChoice type_filter_choices[] = {
   {TypeFilter::USER, "Custom"},
   {TypeFilter::MAP, "Map file"},
   {TypeFilter::LAST_USED, "Recently Used"},
-
-  /* Specific Waypoint::Type filters.  Labels match the strings
-     returned by GetWaypointTypeName() in WaypointInfoWidget so
-     the dropdown matches the "Type" row in the details dialog
-     and reuses existing po entries. */
-  {TypeFilter::MOUNTAIN_TOP, "Mountain Top"},
-  {TypeFilter::MOUNTAIN_PASS, "Mountain Pass"},
-  {TypeFilter::BRIDGE, "Bridge"},
-  {TypeFilter::TUNNEL, "Tunnel"},
-  {TypeFilter::TOWER, "Tower"},
-  {TypeFilter::POWERPLANT, "Power Plant"},
-  {TypeFilter::OBSTACLE, "Transmitter Mast"},
-  {TypeFilter::THERMAL_HOTSPOT, "Thermal hotspot"},
-  {TypeFilter::MARKER, "Marker"},
-  {TypeFilter::VOR, "VOR"},
-  {TypeFilter::NDB, "NDB"},
-  {TypeFilter::DAM, "Dam"},
-  {TypeFilter::CASTLE, "Castle"},
-  {TypeFilter::INTERSECTION, "Intersection"},
-  {TypeFilter::REPORTING_POINT, "Control Point"},
-  {TypeFilter::PG_TAKEOFF, "PG Take Off"},
-  {TypeFilter::PG_LANDING, "PG Landing Zone"},
 };
 
-/* The dropdown table must list every TypeFilter value except
-   FILE (which is only ever set via the dynamic per-file
-   entries inserted in CreateTypeDataField).  Compile-time
-   guard so adding a new TypeFilter value prompts the developer
-   to add a corresponding label here. */
-static_assert(ARRAY_SIZE(type_filter_choices) == unsigned(TypeFilter::COUNT) - 1,
-              "type_filter_choices must cover every TypeFilter value except FILE");
+/* Waypoint types not covered by Airport, Landable, or Turnpoint.
+   The label comes from GetWaypointTypeName(). */
+struct SpecificTypeFilter {
+  TypeFilter id;
+  Waypoint::Type type;
+};
+
+static constexpr SpecificTypeFilter specific_type_filters[] = {
+  {TypeFilter::MOUNTAIN_TOP, Waypoint::Type::MOUNTAIN_TOP},
+  {TypeFilter::MOUNTAIN_PASS, Waypoint::Type::MOUNTAIN_PASS},
+  {TypeFilter::BRIDGE, Waypoint::Type::BRIDGE},
+  {TypeFilter::TUNNEL, Waypoint::Type::TUNNEL},
+  {TypeFilter::TOWER, Waypoint::Type::TOWER},
+  {TypeFilter::POWERPLANT, Waypoint::Type::POWERPLANT},
+  {TypeFilter::OBSTACLE, Waypoint::Type::OBSTACLE},
+  {TypeFilter::THERMAL_HOTSPOT, Waypoint::Type::THERMAL_HOTSPOT},
+  {TypeFilter::MARKER, Waypoint::Type::MARKER},
+  {TypeFilter::VOR, Waypoint::Type::VOR},
+  {TypeFilter::NDB, Waypoint::Type::NDB},
+  {TypeFilter::DAM, Waypoint::Type::DAM},
+  {TypeFilter::CASTLE, Waypoint::Type::CASTLE},
+  {TypeFilter::INTERSECTION, Waypoint::Type::INTERSECTION},
+  {TypeFilter::REPORTING_POINT, Waypoint::Type::REPORTING_POINT},
+  {TypeFilter::PG_TAKEOFF, Waypoint::Type::PGTAKEOFF},
+  {TypeFilter::PG_LANDING, Waypoint::Type::PGLANDING},
+};
+
+static constexpr Waypoint::Type category_waypoint_types[] = {
+  Waypoint::Type::NORMAL,
+  Waypoint::Type::AIRFIELD,
+  Waypoint::Type::OUTLANDING,
+};
+
+/* Airport, Landable, and Turnpoint share the waypoint type names.
+   The other rows are search categories and keep their own text. */
+static const char *
+TypeFilterChoiceLabel(TypeFilter id) noexcept
+{
+  switch (id) {
+  case TypeFilter::AIRPORT:
+    return GetWaypointTypeName(Waypoint::Type::AIRFIELD);
+  case TypeFilter::LANDABLE:
+    return GetWaypointTypeName(Waypoint::Type::OUTLANDING);
+  case TypeFilter::TURNPOINT:
+    return GetWaypointTypeName(Waypoint::Type::NORMAL);
+  default:
+    return nullptr;
+  }
+}
+
+static constexpr bool
+EveryWaypointTypeHasFilter() noexcept
+{
+  bool seen[unsigned(Waypoint::Type::COUNT)]{};
+  for (const auto type : category_waypoint_types)
+    seen[unsigned(type)] = true;
+  for (const auto &entry : specific_type_filters)
+    seen[unsigned(entry.type)] = true;
+  for (const bool present : seen)
+    if (!present)
+      return false;
+  return true;
+}
+
+static_assert(EveryWaypointTypeHasFilter(),
+              "every waypoint type needs a search filter");
+
+/* FILE is added per loaded file, not from these tables. */
+static_assert(ARRAY_SIZE(type_filter_choices) +
+              ARRAY_SIZE(specific_type_filters) ==
+              unsigned(TypeFilter::COUNT) - 1,
+              "type filters must cover every TypeFilter except FILE");
 
 struct WaypointListDialogState
 {
@@ -545,8 +590,13 @@ CreateTypeDataField(DataFieldListener *listener,
                       unsigned(c.id));
       continue;
     }
-    df->addEnumText(c.label, unsigned(c.id));
+    const char *shared = TypeFilterChoiceLabel(c.id);
+    df->addEnumText(shared != nullptr ? shared : c.label,
+                    unsigned(c.id));
   }
+
+  for (const auto &s : specific_type_filters)
+    df->addEnumText(GetWaypointTypeName(s.type), unsigned(s.id));
 
   // Dynamically add file entries based on loaded waypoint files.
   // IDs >= _DYNAMIC_FILE_ID_START encode the file index.

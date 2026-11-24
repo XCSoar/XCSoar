@@ -10,6 +10,7 @@
 #include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "WaypointTypeName.hpp"
 #include "FormatSettings.hpp"
 #include "Language/Language.hpp"
 
@@ -46,29 +47,6 @@ private:
   }
 };
 
-static constexpr StaticEnumChoice waypoint_types[] = {
-  { Waypoint::Type::NORMAL, N_("Turnpoint") },
-  { Waypoint::Type::AIRFIELD, N_("Airport") },
-  { Waypoint::Type::OUTLANDING, N_("Landable") },
-  { Waypoint::Type::MOUNTAIN_PASS, N_("Mountain Pass") },
-  { Waypoint::Type::MOUNTAIN_TOP, N_("Mountain Top") },
-  { Waypoint::Type::OBSTACLE, N_("Transmitter Mast") },
-  { Waypoint::Type::TOWER, N_("Tower") },
-  { Waypoint::Type::TUNNEL, N_("Tunnel") },
-  { Waypoint::Type::BRIDGE, N_("Bridge") },
-  { Waypoint::Type::POWERPLANT, N_("Power Plant") },
-  { Waypoint::Type::VOR, N_("VOR") },
-  { Waypoint::Type::NDB, N_("NDB") },
-  { Waypoint::Type::DAM, N_("Dam") },
-  { Waypoint::Type::CASTLE, N_("Castle") },
-  { Waypoint::Type::INTERSECTION, N_("Intersection") },
-  { Waypoint::Type::MARKER, N_("Marker") },
-  { Waypoint::Type::REPORTING_POINT, N_("Control Point") },
-  { Waypoint::Type::PGTAKEOFF, N_("PG Take Off") },
-  { Waypoint::Type::PGLANDING, N_("PG Landing Zone") },
-  nullptr
-};
-
 void
 WaypointEditWidget::Prepare(ContainerWindow &, const PixelRect &) noexcept
 {
@@ -83,7 +61,15 @@ WaypointEditWidget::Prepare(ContainerWindow &, const PixelRect &) noexcept
            "%.0f %s", "%.0f",
            0, 30000, 5, false,
            UnitGroup::ALTITUDE, value.GetElevationOrZero(), this);
-  AddEnum(_("Type"), nullptr, waypoint_types, (unsigned)value.type, this);
+  /* One entry per Waypoint::Type, so a new type shows up here.
+     AddChoice does not translate; AddChoices would. */
+  WndProperty *edit = AddEnum(_("Type"), nullptr, this);
+  auto *df = (DataFieldEnum *)edit->GetDataField();
+  for (unsigned i = 0; i < unsigned(Waypoint::Type::COUNT); ++i)
+    df->AddChoice(i, gettext(WaypointTypeLabel(Waypoint::Type(i))));
+  df->SetValue((unsigned)value.type);
+  /* SetDataField() cached the text while the list was still empty. */
+  edit->RefreshDisplay();
 }
 
 bool

@@ -2,11 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "CupWriter.hpp"
+#include "SeeYouStyle.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "io/BufferedOutputStream.hxx"
 #include "Engine/Waypoint/Runway.hpp"
-
-using std::string_view_literals::operator""sv;
 
 /**
  * Write a quoted CSV field, escaping any embedded double quotes
@@ -43,76 +42,23 @@ WriteAltitude(BufferedOutputStream &writer, double altitude)
   writer.Fmt("{}M", (int)altitude);
 }
 
+/**
+ * CUP style to write. 0 means omit the field.
+ * A home airfield is style 4; other airfields use the first table
+ * row (2). Styles 4 and 5 are only read aliases.
+ */
 [[gnu::pure]]
-static std::string_view
-GetSeeYouFlags(const Waypoint &wp) noexcept
+static unsigned
+GetSeeYouStyle(const Waypoint &wp) noexcept
 {
-  switch (wp.type) {
-  case Waypoint::Type::NORMAL:
-    return "1"sv;
+  if (wp.type == Waypoint::Type::AIRFIELD && wp.flags.home)
+    return 4;
 
-  case Waypoint::Type::OUTLANDING:
-    return "3"sv;
+  for (const auto &entry : see_you_styles)
+    if (entry.type == wp.type)
+      return entry.style;
 
-  case Waypoint::Type::AIRFIELD:
-    return wp.flags.home
-      ? "4"sv
-      // 2 or 5 no rule for this!
-      : "2"sv;
-
-  case Waypoint::Type::MOUNTAIN_PASS:
-    return "6"sv;
-
-  case Waypoint::Type::MOUNTAIN_TOP:
-    return "7"sv;
-
-  case Waypoint::Type::OBSTACLE:
-    return "8"sv;
-
-  case Waypoint::Type::VOR:
-    return "9"sv;
-
-  case Waypoint::Type::NDB:
-    return "10"sv;
-
-  case Waypoint::Type::TOWER:
-    return "11"sv;
-
-  case Waypoint::Type::DAM:
-    return "12"sv;
-
-  case Waypoint::Type::TUNNEL:
-    return "13"sv;
-
-  case Waypoint::Type::BRIDGE:
-    return "14"sv;
-
-  case Waypoint::Type::POWERPLANT:
-    return "15"sv;
-
-  case Waypoint::Type::CASTLE:
-    return "16"sv;
-
-  case Waypoint::Type::INTERSECTION:
-    return "17"sv;
-
-  case Waypoint::Type::MARKER:
-    return "18"sv;
-
-  case Waypoint::Type::REPORTING_POINT:
-    return "19"sv;
-
-  case Waypoint::Type::PGTAKEOFF:
-    return "20"sv;
-
-  case Waypoint::Type::PGLANDING:
-    return "21"sv;
-
-  case Waypoint::Type::THERMAL_HOTSPOT:
-    break;
-  }
-
-  return {};
+  return 0;
 }
 
 void
@@ -143,7 +89,8 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
   writer.Write(',');
 
   // Write Style
-  writer.Write(GetSeeYouFlags(wp));
+  if (const unsigned style = GetSeeYouStyle(wp))
+    writer.Fmt("{}", style);
   writer.Write(',');
 
   // Write Runway Direction

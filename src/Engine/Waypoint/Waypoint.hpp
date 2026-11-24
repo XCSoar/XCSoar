@@ -45,7 +45,10 @@ struct Waypoint {
     INTERSECTION,
     REPORTING_POINT,
     PGTAKEOFF,
-    PGLANDING
+    PGLANDING,
+
+    /** Sentinel. Not a waypoint type. */
+    COUNT
   };
 
   /**

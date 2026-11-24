@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "WaypointInfoWidget.hpp"
+#include "WaypointTypeName.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
@@ -41,53 +42,47 @@ FormatGlideResult(char *buffer, size_t size,
   return nullptr;
 }
 
-static const char *
+/* Same order as Waypoint::Type. */
+static constexpr const char *const waypoint_type_names[] = {
+  N_("Turnpoint"),
+  N_("Airport"),
+  N_("Landable"),
+  N_("Mountain Top"),
+  N_("Mountain Pass"),
+  N_("Bridge"),
+  N_("Tunnel"),
+  N_("Tower"),
+  N_("Power Plant"),
+  N_("Transmitter Mast"),
+  N_("Thermal hotspot"),
+  N_("Marker"),
+  N_("VOR"),
+  N_("NDB"),
+  N_("Dam"),
+  N_("Castle"),
+  N_("Intersection"),
+  N_("Control Point"),
+  N_("PG Take Off"),
+  N_("PG Landing Zone"),
+};
+
+static_assert(ARRAY_SIZE(waypoint_type_names) ==
+              unsigned(Waypoint::Type::COUNT),
+              "waypoint type names must match Waypoint::Type");
+
+const char *
+WaypointTypeLabel(Waypoint::Type type) noexcept
+{
+  const unsigned i = unsigned(type);
+  if (i >= unsigned(Waypoint::Type::COUNT))
+    return N_("Unknown");
+  return waypoint_type_names[i];
+}
+
+const char *
 GetWaypointTypeName(Waypoint::Type type) noexcept
 {
-  switch (type) {
-  case Waypoint::Type::NORMAL:
-    return _("Turnpoint");
-  case Waypoint::Type::AIRFIELD:
-    return _("Airport");
-  case Waypoint::Type::OUTLANDING:
-    return _("Landable");
-  case Waypoint::Type::MOUNTAIN_PASS:
-    return _("Mountain Pass");
-  case Waypoint::Type::MOUNTAIN_TOP:
-    return _("Mountain Top");
-  case Waypoint::Type::OBSTACLE:
-    return _("Transmitter Mast");
-  case Waypoint::Type::TOWER:
-    return _("Tower");
-  case Waypoint::Type::TUNNEL:
-    return _("Tunnel");
-  case Waypoint::Type::BRIDGE:
-    return _("Bridge");
-  case Waypoint::Type::POWERPLANT:
-    return _("Power Plant");
-  case Waypoint::Type::VOR:
-    return _("VOR");
-  case Waypoint::Type::NDB:
-    return _("NDB");
-  case Waypoint::Type::DAM:
-    return _("Dam");
-  case Waypoint::Type::CASTLE:
-    return _("Castle");
-  case Waypoint::Type::INTERSECTION:
-    return _("Intersection");
-  case Waypoint::Type::MARKER:
-    return _("Marker");
-  case Waypoint::Type::REPORTING_POINT:
-    return _("Control Point");
-  case Waypoint::Type::PGTAKEOFF:
-    return _("PG Take Off");
-  case Waypoint::Type::PGLANDING:
-    return _("PG Landing Zone");
-  case Waypoint::Type::THERMAL_HOTSPOT:
-    return _("Thermal hotspot");
-  }
-
-  return _("Unknown");
+  return gettext(WaypointTypeLabel(type));
 }
 
 void

@@ -134,6 +134,9 @@ Version 7.47 - not yet released
     it is unplugged; drivers for devices that may stay silent, such as
     radios, are left out #3346
 * dialogs
+  - list thermal hotspots in the waypoint type editor. A CUP file
+    has no style for them, so saving the file stores them as
+    turnpoints #3529
   - enter password punctuation with the on-screen #+= key or HighScore
     controls, and type directly in HighScore with an attached keyboard
   - mark the on-screen space key with the space symbol
