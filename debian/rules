@@ -10,6 +10,8 @@ OPTIONS += TARGET=$(TARGET)
 ifeq ($(DEB_HOST_ARCH),armhf)
   # The OBS guest can report armv8l despite building armhf binaries.
   OPTIONS += EXTRA_LDLIBS=-latomic
+  # Raspbian's librsvg can stall on Gaussian blur in the splash logos.
+  OPTIONS += USE_RESVG_FOR_SPLASH=y
 endif
 
 # allow Debian builds in the same repository as normal builds
