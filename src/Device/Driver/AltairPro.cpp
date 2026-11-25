@@ -226,9 +226,7 @@ AltairProDevice::PutTurnPoint(const char *propertyName,
   char Name[DECELWPNAMESIZE];
   char Buffer[DECELWPSIZE*2];
 
-  int DegLat, DegLon;
-  double MinLat, MinLon;
-  char NoS, EoW;
+  auto location = GeoPoint::Zero();
 
   if (waypoint != nullptr){
     if (waypoint->name.c_str())
@@ -236,43 +234,24 @@ AltairProDevice::PutTurnPoint(const char *propertyName,
     else
       throw std::runtime_error("Invalid string");
 
-    double tmp = (double)waypoint->location.latitude.Degrees();
-
-    if(tmp < 0){
-      NoS = 'S';
-      tmp *= -1;
-    } else NoS = 'N';
-
-    DegLat = (int)tmp;
-    MinLat = tmp - DegLat;
-    MinLat *= 60;
-    MinLat *= 1000;
-
-    tmp = (double)waypoint->location.longitude.Degrees();
-
-    if (tmp < 0){
-      EoW = 'W';
-      tmp *= -1;
-    } else EoW = 'E';
-
-    DegLon = (int)tmp;
-    MinLon = tmp  - DegLon;
-    MinLon *= 60;
-    MinLon *= 1000;
-
+    location = waypoint->location;
   } else {
-
     Name[0] = '\0';
-    DegLat = 0;
-    MinLat = 0;
-    DegLon = 0;
-    MinLon = 0;
-    NoS = 'N';
-    EoW = 'E';
   }
 
-  StringFormatUnsafe(Buffer, "%02d%05.0f%c%03d%05.0f%c%s",
-                     DegLat, MinLat, NoS, DegLon, MinLon, EoW, Name);
+  const auto lat = location.latitude.ToDMM();
+  const auto lon = location.longitude.ToDMM();
+  StringFormatUnsafe(Buffer,
+                     "%02u%02u%03u%c%03u%02u%03u%c%s",
+                     lat.degrees,
+                     lat.minutes,
+                     lat.decimal_minutes,
+                     lat.positive ? 'N' : 'S',
+                     lon.degrees,
+                     lon.minutes,
+                     lon.decimal_minutes,
+                     lon.positive ? 'E' : 'W',
+                     Name);
 
   PropertySetGet(propertyName, Buffer,
                  std::span{Buffer}, env);
