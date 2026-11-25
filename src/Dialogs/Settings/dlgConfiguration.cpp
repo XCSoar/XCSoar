@@ -16,6 +16,8 @@
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/Keys.hpp"
+#include "Form/DataField/Base.hpp"
 #include "util/Macros.hpp"
 #include "util/ScopeExit.hxx"
 #include "Panels/ConfigPanel.hpp"
@@ -463,6 +465,11 @@ ConfigPanel::GetExpertCheckbox() noexcept
   return extra.GetExpert();
 }
 
+/** A field in this dialog was edited.  Undoing it leaves this set. */
+static bool settings_edited;
+
+static void UpdateMenuButton() noexcept;
+
 static bool
 ExpertWouldSave() noexcept
 {
@@ -476,10 +483,54 @@ ExpertWouldSave() noexcept
   return Profile::Exists(ProfileKeys::UserLevel);
 }
 
+/** Close rewrites an old contest id when this stamp is missing. */
+static bool
+ContestStampWouldSave() noexcept
+{
+  unsigned layout = 0;
+  return Profile::Exists(ProfileKeys::OLCRules) &&
+    (!Profile::Get(ProfileKeys::ContestEnumLayout, layout) ||
+     layout < 2U);
+}
+
+/** Close writes a missing local-time key, and an offset that drifted. */
+static bool
+TimeKeysWouldSave() noexcept
+{
+  if (!Profile::Exists(ProfileKeys::LocalTimeSource))
+    return true;
+
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  if (settings.local_time_source != LocalTimeSource::MANUAL_UTC_OFFSET &&
+      settings.GetCurrentUTCOffset() != settings.utc_offset)
+    return true;
+
+  if (settings.local_time_source == LocalTimeSource::MANUAL_UTC_OFFSET) {
+    int stored = 0;
+    if (!Profile::Get(ProfileKeys::UTCOffsetSigned, stored) ||
+        stored != settings.utc_offset.AsSeconds())
+      return true;
+  }
+
+  return false;
+}
+
 static bool
 WouldSave() noexcept
 {
-  return pager->Modified() || ExpertWouldSave();
+  return settings_edited || ExpertWouldSave() ||
+    ContestStampWouldSave() || TimeKeysWouldSave();
+}
+
+void
+ConfigPanel::NoteEdit() noexcept
+{
+  if (settings_edited)
+    return;
+
+  settings_edited = true;
+  if (pager != nullptr)
+    UpdateMenuButton();
 }
 
 static void
@@ -562,8 +613,15 @@ void dlgConfigurationShowModal()
      buttons. Left set, the pointer dangles and a later standalone
      panel crashes in BorrowExtraButton(). */
   AtScopeExit() {
+    DataField::SetEditHook(nullptr);
+    DataField::SetEditHookArmed(false);
+    settings_edited = false;
     pager = nullptr;
   };
+
+  settings_edited = false;
+  DataField::SetEditHook(ConfigPanel::NoteEdit);
+  DataField::SetEditHookArmed(true);
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Configuration"));

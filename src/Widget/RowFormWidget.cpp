@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "RowFormWidget.hpp"
+#include "Form/DataField/Base.hpp"
 #include "Form/Panel.hpp"
 #include "Form/Button.hpp"
 #include "Form/HLine.hpp"
@@ -499,55 +500,25 @@ RowFormWidget::Initialise(ContainerWindow &parent,
 }
 
 void
+RowFormWidget::SetNotifiesEdit(bool notify) noexcept
+{
+  for (auto &row : rows) {
+    if (row.type != Row::Type::EDIT)
+      continue;
+
+    DataField *field = row.GetControl().GetDataField();
+    if (field != nullptr)
+      field->SetNotifiesEdit(notify);
+  }
+}
+
+void
 RowFormWidget::Unprepare() noexcept
 {
   for (auto &i : rows)
     i.Unprepare();
 
   WindowWidget::Unprepare();
-}
-
-void
-RowFormWidget::CaptureValues() noexcept
-{
-  captured_values.clear();
-  for (auto &row : rows) {
-    CapturedValue captured;
-    if (row.type == Row::Type::EDIT) {
-      const WndProperty &control = row.GetControl();
-      const DataField *field = control.GetDataField();
-      if (field != nullptr && !control.IsReadOnly()) {
-        const char *text = field->GetAsString();
-        captured.compare = true;
-        if (text != nullptr)
-          captured.text = text;
-      }
-    }
-    captured_values.push_back(std::move(captured));
-  }
-  values_captured = true;
-}
-
-bool
-RowFormWidget::Modified() noexcept
-{
-  if (!values_captured)
-    CaptureValues();
-
-  for (unsigned i = 0; i < rows.size(); ++i) {
-    if (rows[i].type == Row::Type::WIDGET && rows[i].prepared &&
-        rows[i].GetWidget().Modified())
-      return true;
-
-    if (i >= captured_values.size() || !captured_values[i].compare)
-      continue;
-
-    const char *text = rows[i].GetControl().GetDataField()->GetAsString();
-    if (captured_values[i].text != (text != nullptr ? text : ""))
-      return true;
-  }
-
-  return false;
 }
 
 void
@@ -563,11 +534,6 @@ RowFormWidget::Show(const PixelRect &rc) noexcept
   UpdateLayout();
 
   panel.Show();
-
-  /* The first show is the baseline.  A later show must not replace
-     it, or an edit made before leaving the page disappears. */
-  if (!values_captured)
-    CaptureValues();
 }
 
 void

@@ -23,6 +23,9 @@ DataField::Modified() noexcept
 
   if (listener != nullptr)
     listener->OnModified(*this);
+
+  if (notifies_edit && edit_hook != nullptr)
+    edit_hook();
 }
 
 void

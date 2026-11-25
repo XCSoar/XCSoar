@@ -21,7 +21,6 @@
 #include <functional>
 #include <initializer_list>
 #include <memory>
-#include <string>
 #include <type_traits>
 
 struct DialogLook;
@@ -269,22 +268,12 @@ class RowFormWidget : public WindowWidget {
 
   boost::container::static_vector<Row, 32u> rows;
 
-  struct CapturedValue {
-    bool compare = false;
-    std::string text;
-  };
-
-  /** Display strings from the first time the page was shown. */
-  bool values_captured = false;
-  boost::container::static_vector<CapturedValue, 32u> captured_values;
-
-  void CaptureValues() noexcept;
-
 public:
   RowFormWidget(const DialogLook &look, bool vertical=false) noexcept;
   ~RowFormWidget() noexcept override;
 
-  bool Modified() noexcept override;
+  /** Live rows, such as Wi-Fi, opt out of the configuration edit hook. */
+  void SetNotifiesEdit(bool notify) noexcept;
 
 protected:
   const DialogLook &GetLook() const noexcept {

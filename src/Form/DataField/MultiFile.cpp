@@ -45,6 +45,22 @@ MultiFileDataField::Restore()
   }
 }
 
+void
+MultiFileDataField::NotifyIfChanged() noexcept
+{
+  if (current_selection.size() != original_selection.size()) {
+    Modified();
+    return;
+  }
+
+  for (std::size_t i = 0; i < current_selection.size(); ++i) {
+    if (current_selection[i] != original_selection[i]) {
+      Modified();
+      return;
+    }
+  }
+}
+
 std::vector<Path>
 MultiFileDataField::GetPathFiles() const
 {

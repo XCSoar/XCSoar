@@ -3,14 +3,19 @@
 
 #include "Dialogs/WidgetDialog.hpp"
 #include "Look/DialogLook.hpp"
+#include "Form/DataField/Base.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Widget/Widget.hpp"
 #include "Language/Language.hpp"
 #include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "util/ScopeExit.hxx"
 
 using namespace UI;
+
+/** Nested dialogs must not arm fields that belong to the outer one. */
+static unsigned widget_dialog_depth;
 
 [[gnu::const]]
 static WindowStyle
@@ -178,6 +183,17 @@ WidgetDialog::AutoSize(const PixelRect &parent_rc)
 int
 WidgetDialog::ShowModal()
 {
+  const bool nested = widget_dialog_depth++ > 0;
+  const bool saved_arm = nested && DataField::IsEditHookArmed();
+  if (saved_arm)
+    DataField::SetEditHookArmed(false);
+
+  AtScopeExit(&) {
+    if (saved_arm)
+      DataField::SetEditHookArmed(true);
+    --widget_dialog_depth;
+  };
+
   if (auto_size)
     AutoSize();
   else

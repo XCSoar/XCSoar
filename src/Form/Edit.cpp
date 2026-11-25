@@ -455,6 +455,10 @@ WndProperty::SetDataField(DataField *Value) noexcept
   delete data_field;
   data_field = Value;
 
+  /* Read-only rows are captions.  A nested dialog is not armed. */
+  if (Value != nullptr && !IsReadOnly() && DataField::IsEditHookArmed())
+    Value->SetNotifiesEdit(true);
+
   UpdateLayout();
 
   RefreshDisplay();

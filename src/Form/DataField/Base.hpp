@@ -44,6 +44,12 @@ private:
 
   DataFieldListener *listener; // deprecated
 
+  /** Calls the edit hook from Modified(). */
+  bool notifies_edit = false;
+
+  static inline void (*edit_hook)() noexcept = nullptr;
+  static inline bool edit_hook_armed = false;
+
   // all Types dataField support combolist except DataFieldString.
   const bool supports_combolist;
 
@@ -69,6 +75,27 @@ public:
     assert(_listener != nullptr);
 
     listener = _listener;
+  }
+
+  /**
+   * Configuration sets this while it is open.  Modified() calls it
+   * for fields created while the hook is armed.
+   */
+  static void SetEditHook(void (*hook)() noexcept) noexcept {
+    edit_hook = hook;
+  }
+
+  static void SetEditHookArmed(bool armed) noexcept {
+    edit_hook_armed = armed;
+  }
+
+  [[gnu::pure]]
+  static bool IsEditHookArmed() noexcept {
+    return edit_hook_armed;
+  }
+
+  void SetNotifiesEdit(bool notify) noexcept {
+    notifies_edit = notify;
   }
 
   Type GetType() const noexcept {

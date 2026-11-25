@@ -69,6 +69,9 @@ public:
   // Restore the original_selection
   void Restore();
 
+  /** Calls the edit hook when the selection differs from the original. */
+  void NotifyIfChanged() noexcept;
+
   void UpdateDisplayString();
 
   /**

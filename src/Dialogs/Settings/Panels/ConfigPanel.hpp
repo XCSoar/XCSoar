@@ -27,4 +27,7 @@ BorrowExtraButton(unsigned i, const char *caption,
 void ReturnExtraButton(unsigned i);
 
 CheckBoxControl &GetExpertCheckbox() noexcept;
+
+/** A setting in this dialog was edited.  The menu button may say Save. */
+void NoteEdit() noexcept;
 };

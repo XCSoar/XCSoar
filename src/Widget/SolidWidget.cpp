@@ -65,12 +65,6 @@ SolidWidget::Save(bool &changed) noexcept
 }
 
 bool
-SolidWidget::Modified() noexcept
-{
-  return widget->Modified();
-}
-
-bool
 SolidWidget::Click() noexcept
 {
   return widget->Click();

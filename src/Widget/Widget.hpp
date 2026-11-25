@@ -76,12 +76,6 @@ public:
   virtual bool Save(bool &changed) noexcept = 0;
 
   /**
-   * True when Save() would record a change.  Does not write the
-   * profile or apply settings.  The default is false.
-   */
-  virtual bool Modified() noexcept;
-
-  /**
    * The user has clicked on the activation area (within the
    * container) of this Widget, which will show the widget.  The
    * Widget may now decide to do something else instead.

@@ -78,11 +78,6 @@ public:
 
   void SetValue(const PageLayout &_value);
 
-  /* Cursor movement reloads this form.  The list stores the edit. */
-  bool Modified() noexcept override {
-    return false;
-  }
-
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
@@ -143,6 +138,7 @@ public:
         page = PageLayout::Default();
         GetList().SetLength(n + 1);
         GetList().SetCursorIndex(n);
+        ConfigPanel::NoteEdit();
       }
     });
 
@@ -159,6 +155,7 @@ public:
           GetList().SetCursorIndex(cursor - 1);
         else
           editor->SetValue(settings.pages[cursor]);
+        ConfigPanel::NoteEdit();
       }
     });
 
@@ -167,6 +164,7 @@ public:
       if (cursor > 0) {
         std::swap(settings.pages[cursor], settings.pages[cursor - 1]);
         GetList().SetCursorIndex(cursor - 1);
+        ConfigPanel::NoteEdit();
       }
     });
 
@@ -176,6 +174,7 @@ public:
       if (cursor + 1 < n) {
         std::swap(settings.pages[cursor], settings.pages[cursor + 1]);
         GetList().SetCursorIndex(cursor + 1);
+        ConfigPanel::NoteEdit();
       }
     });
   }
@@ -205,7 +204,6 @@ public:
   void Hide() noexcept override;
   void Move(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
-  bool Modified() noexcept override;
   bool KeyPress(unsigned key_code) noexcept override;
 
   /* virtual methods from class ListItemRenderer */
@@ -900,35 +898,6 @@ PageListWidget::Move(const PixelRect &rc) noexcept
 {
   SyncChromeButtons();
   ListWidget::Move(rc);
-}
-
-bool
-PageListWidget::Modified() noexcept
-{
-  const PageSettings &live = CommonInterface::GetUISettings().pages;
-  const unsigned n = IsDefined() ? GetList().GetLength() : settings.n_pages;
-
-  /* Save() appends pages added outside this dialog.  That append
-     matches the live pages and does not write the profile. */
-  if (live.n_pages > synced_live_pages && n == synced_live_pages) {
-    for (unsigned i = 0; i < n; ++i)
-      if (settings.pages[i] != live.pages[i])
-        return true;
-    return false;
-  }
-
-  if (n != live.n_pages)
-    return true;
-
-  for (unsigned i = 0; i < n; ++i)
-    if (settings.pages[i] != live.pages[i])
-      return true;
-
-  for (unsigned i = n; i < PageSettings::MAX_PAGES; ++i)
-    if (live.pages[i] != PageLayout::Undefined())
-      return true;
-
-  return false;
 }
 
 bool

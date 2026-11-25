@@ -262,19 +262,6 @@ PagerWidget::Save(bool &changed) noexcept
 }
 
 bool
-PagerWidget::Modified() noexcept
-{
-  if (!initialised || !prepared)
-    return false;
-
-  for (auto &i : children)
-    if (i.prepared && i.widget->Modified())
-      return true;
-
-  return false;
-}
-
-bool
 PagerWidget::Click() noexcept
 {
   return children.empty() || children[current].widget->Click();

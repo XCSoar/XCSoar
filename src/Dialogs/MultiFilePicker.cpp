@@ -104,6 +104,7 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
       df.UnSet(path);
     for (const auto &path : selected)
       df.AddValue(path);
+    df.NotifyIfChanged();
     return true;
   }
 

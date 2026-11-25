@@ -92,7 +92,6 @@ public:
   void Hide() noexcept override;
   void Move(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
-  bool Modified() noexcept override;
 
 private:
   /**
@@ -338,34 +337,6 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
                "out of battery power or otherwise loses time."),
              settings_computer.set_system_time_from_gps);
   SetExpertRow(SYSTEM_TIME_FROM_GPS);
-}
-
-bool
-TimeConfigPanel::Modified() noexcept
-{
-  if (RowFormWidget::Modified())
-    return true;
-
-  /* Save() also writes a missing local-time key, and the manual
-     offset when it differs from the profile. */
-  if (!Profile::Exists(ProfileKeys::LocalTimeSource))
-    return true;
-
-  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  if (settings.local_time_source != LocalTimeSource::MANUAL_UTC_OFFSET &&
-      settings.GetCurrentUTCOffset() != settings.utc_offset)
-    return true;
-
-  if (settings.local_time_source == LocalTimeSource::MANUAL_UTC_OFFSET ||
-      manual_utc_offset_modified) {
-    int stored = 0;
-    const int seconds = manual_utc_offset.AsSeconds();
-    if (!Profile::Get(ProfileKeys::UTCOffsetSigned, stored) ||
-        stored != seconds)
-      return true;
-  }
-
-  return false;
 }
 
 bool
