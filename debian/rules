@@ -1,7 +1,8 @@
 #!/usr/bin/make -f
 # -*- mode: makefile; coding: utf-8 -*-
 
-OPTIONS =
+# Use the distribution linker for release builds as well.
+OPTIONS = ICF=n
 
 TARGET = UNIX
 OPTIONS += TARGET=$(TARGET)
