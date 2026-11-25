@@ -19,6 +19,10 @@
 #include <fmt/format.h>
 #include <locale.h>
 #include <string_view>
+
+#ifdef __linux__
+#include <unistd.h>
+#endif
 #endif
 
 #ifdef ANDROID
@@ -274,7 +278,26 @@ InitNativeGettext(const char *locale) noexcept
 
   // always use a dot as decimal point in printf/scanf()
   setlocale(LC_NUMERIC, "C");
-  bindtextdomain(domain, "/usr/share/locale");
+  const char *locale_dir = "/usr/share/locale";
+#ifdef __linux__
+  /* APPDIR can be inherited from another AppImage; use it only if this
+     executable runs from it */
+  AllocatedPath appimage_locale_dir;
+  if (const char *appdir = getenv("APPDIR"); appdir != nullptr &&
+      appdir[0] == '/') {
+    char exe[4096];
+    const ssize_t length = readlink("/proc/self/exe", exe, sizeof(exe) - 1);
+    if (length > 0) {
+      exe[length] = '\0';
+      if (Path(exe).RelativeTo(Path(appdir)) != nullptr) {
+        appimage_locale_dir = AllocatedPath::Build(Path(appdir),
+                                                   "usr/share/locale");
+        locale_dir = appimage_locale_dir.c_str();
+      }
+    }
+  }
+#endif
+  bindtextdomain(domain, locale_dir);
   textdomain(domain);
 
   /* trigger gettext's locale fallback initialization eagerly */

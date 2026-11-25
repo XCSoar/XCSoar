@@ -3,6 +3,10 @@ ifeq ($(TARGET),UNIX)
 DESTDIR =
 prefix = $(DESTDIR)/usr
 
+.PHONY: appimage
+appimage: $(XCSOAR_BIN)
+	$(Q)MAKE="$(MAKE_COMMAND)" bash $(topdir)/unix/package-appimage.sh "$<"
+
 install-mo: mo
 	install -d -m 0755 $(patsubst %,$(prefix)/share/locale/%/LC_MESSAGES,$(LINGUAS))
 	for i in $(LINGUAS); do \
