@@ -162,9 +162,12 @@ public:
     move_up_button = buttons.AddSymbol("^", [this](){
       const unsigned cursor = GetList().GetCursorIndex();
       if (cursor > 0) {
+        const bool differs =
+          settings.pages[cursor] != settings.pages[cursor - 1];
         std::swap(settings.pages[cursor], settings.pages[cursor - 1]);
         GetList().SetCursorIndex(cursor - 1);
-        ConfigPanel::NoteEdit();
+        if (differs)
+          ConfigPanel::NoteEdit();
       }
     });
 
@@ -172,9 +175,12 @@ public:
       const unsigned n = GetList().GetLength();
       const unsigned cursor = GetList().GetCursorIndex();
       if (cursor + 1 < n) {
+        const bool differs =
+          settings.pages[cursor] != settings.pages[cursor + 1];
         std::swap(settings.pages[cursor], settings.pages[cursor + 1]);
         GetList().SetCursorIndex(cursor + 1);
-        ConfigPanel::NoteEdit();
+        if (differs)
+          ConfigPanel::NoteEdit();
       }
     });
   }

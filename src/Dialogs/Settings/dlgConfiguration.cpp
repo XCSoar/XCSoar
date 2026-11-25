@@ -501,6 +501,12 @@ TimeKeysWouldSave() noexcept
     return true;
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+
+#ifdef KOBO
+  /* Prepare() rewrites AUTOMATIC to TIME_ZONE.  Save() then writes. */
+  if (settings.local_time_source == LocalTimeSource::AUTOMATIC)
+    return true;
+#endif
   if (settings.local_time_source != LocalTimeSource::MANUAL_UTC_OFFSET &&
       settings.GetCurrentUTCOffset() != settings.utc_offset)
     return true;
@@ -623,6 +629,9 @@ void dlgConfigurationShowModal()
   DataField::SetEditHook(ConfigPanel::NoteEdit);
   DataField::SetEditHookArmed(true);
 
+  const bool expert_at_open =
+    CommonInterface::GetUISettings().dialog.expert;
+
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Configuration"));
 
@@ -683,6 +692,10 @@ void dlgConfigurationShowModal()
   });
 
   const int result = dialog.ShowModal();
+
+  /* Discard leaves the Expert checkbox as it was when the dialog opened. */
+  if (result != mrOK)
+    CommonInterface::SetUISettings().dialog.expert = expert_at_open;
 
   /* save page number for next time this dialog is opened */
   current_page = menu.GetCursor();
