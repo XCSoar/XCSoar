@@ -14,6 +14,12 @@ ifeq ($(DEB_HOST_ARCH),armhf)
   OPTIONS += USE_RESVG_FOR_SPLASH=y
 endif
 
+ifneq (,$(filter appimage,$(DEB_BUILD_PROFILES)))
+  # The AppImage reuses the objects of this build, so build the desktop
+  # variant on a Pi or Cubieboard as well, as "make appimage" does.
+  OPTIONS += HOST_IS_PI=n HOST_IS_CUBIE=n
+endif
+
 # allow Debian builds in the same repository as normal builds
 TARGET_OUTPUT_DIR = output/DEBIAN-$(TARGET)
 OPTIONS += TARGET_OUTPUT_DIR=$(TARGET_OUTPUT_DIR)
@@ -43,6 +49,19 @@ endif
 .PHONY: override_dh_auto_build
 override_dh_auto_build:
 	$(MAKE) $(OPTIONS) all mo
+ifneq (,$(filter appimage,$(DEB_BUILD_PROFILES)))
+	# Package the binary built above. OBS signs the digests of the
+	# AppImages in ../OTHER and publishes them; its AppImage repository
+	# sets the build profile. Embed its key only in images it signs.
+	if [ -d ../OTHER ]; then \
+	  export APPIMAGE_SIGNING_KEY=$(CURDIR)/unix/appimage-signing-key.asc; \
+	fi; \
+	$(MAKE) $(OPTIONS) appimage && \
+	if [ -d ../OTHER ]; then \
+	  install -m 0755 output/appimage/XCSoar-*.AppImage ../OTHER/ && \
+	  install -m 0644 output/appimage/XCSoar-*.AppImage.digest ../OTHER/; \
+	fi
+endif
 
 .PHONY: override_dh_auto_test
 override_dh_auto_test:

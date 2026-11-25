@@ -72,6 +72,22 @@ APPIMAGE_EXTRACT_AND_RUN=1 LDAI_RUNTIME_FILE="$stage/$runtime" \
   --exclude-library 'libEGL.so.*' --exclude-library 'libGLESv2.so.*' \
   --exclude-library 'libGLdispatch.so.*' --output appimage
 
+# For a signer that embeds the signature later (OBS), prepare the image
+# the way appimagetool --sign does: write the SHA-256 hex digest to sign
+# while .sha256_sig and .sig_key are still zero, then embed the signer's
+# public key in .sig_key. Validators zero both sections for the digest.
+if [ -n "${APPIMAGE_SIGNING_KEY:-}" ]; then
+  sha256sum "$stage/$image" | cut -d' ' -f1 > "$stage/$image.digest"
+  read -r offset size < <(readelf -SW "$stage/$image" |
+    sed 's/^ *\[ *[0-9]*\]//' | awk '$1 == ".sig_key" { print $4, $5 }')
+  if [ "$(stat -c %s "$APPIMAGE_SIGNING_KEY")" -gt $((16#$size)) ]; then
+    echo "The signing key does not fit into .sig_key." >&2
+    exit 1
+  fi
+  dd if="$APPIMAGE_SIGNING_KEY" of="$stage/$image" bs=1 \
+    seek=$((16#$offset)) conv=notrunc status=none
+fi
+
 # Verify the runtime can extract the package before exposing it as an artifact.
 (
   cd "$stage"
@@ -79,4 +95,7 @@ APPIMAGE_EXTRACT_AND_RUN=1 LDAI_RUNTIME_FILE="$stage/$runtime" \
   test -x squashfs-root/usr/bin/xcsoar
 )
 mv -- "$stage/$image" "$build_dir/$image"
+if [ -f "$stage/$image.digest" ]; then
+  mv -- "$stage/$image.digest" "$build_dir/$image.digest"
+fi
 echo "$build_dir/$image"

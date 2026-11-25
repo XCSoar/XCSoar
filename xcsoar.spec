@@ -8,6 +8,19 @@
 Source0:        https://archives.boost.io/release/1.92.0/source/boost_1_92_0.tar.bz2
 #!RemoteAsset: c3c02c29c0b519de7bd4e25b376e606e87f0761befd1282815642a2246613d14
 Source1:        https://github.com/zxing-cpp/zxing-cpp/releases/download/v3.1.1/zxing-cpp-3.1.1.tar.gz
+# Package-level assets: the Debian AppImage build (debian/rules) uses these.
+#!RemoteAsset
+Source2:        https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20251107-1/linuxdeploy-x86_64.AppImage
+#!RemoteAsset
+Source3:        https://github.com/AppImage/type2-runtime/releases/download/20251108/runtime-x86_64
+#!RemoteAsset
+Source4:        https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20251107-1/linuxdeploy-aarch64.AppImage
+#!RemoteAsset
+Source5:        https://github.com/AppImage/type2-runtime/releases/download/20251108/runtime-aarch64
+#!RemoteAsset
+Source6:        https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20251107-1/linuxdeploy-armhf.AppImage
+#!RemoteAsset
+Source7:        https://github.com/AppImage/type2-runtime/releases/download/20251108/runtime-armhf
 
 Name:           xcsoar
 Version:        7.47
