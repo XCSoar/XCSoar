@@ -7,6 +7,11 @@ OPTIONS = ICF=n
 TARGET = UNIX
 OPTIONS += TARGET=$(TARGET)
 
+ifeq ($(DEB_HOST_ARCH),armhf)
+  # The OBS guest can report armv8l despite building armhf binaries.
+  OPTIONS += EXTRA_LDLIBS=-latomic
+endif
+
 # allow Debian builds in the same repository as normal builds
 TARGET_OUTPUT_DIR = output/DEBIAN-$(TARGET)
 OPTIONS += TARGET_OUTPUT_DIR=$(TARGET_OUTPUT_DIR)
