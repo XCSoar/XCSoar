@@ -10,6 +10,7 @@
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Driver/CAI302.hpp"
+#include "Device/Driver/CAI302/Protocol.hpp"
 #include "Device/Driver/CProbe.hpp"
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver/Condor3Spectate.hpp"
@@ -30,6 +31,7 @@
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Driver/LX/LXNavDeclare.hpp"
+#include "Device/Driver/LX/LXNAVVario.hpp"
 #include "Device/Driver/LX/NanoFileTransfer.hpp"
 #include "Device/Driver/LX/NanoLogger.hpp"
 #include "Device/Driver/LX_Eos.hpp"
@@ -743,7 +745,8 @@ TestFLARMRangeParser()
  * A #DumpPort that also answers: Read() hands out a prepared reply,
  * and a read past its end times out like a silent device.
  */
-class ReplyPort final : public DumpPort {
+class ReplyPort : public DumpPort {
+protected:
   std::string reply;
 
 public:
@@ -767,6 +770,101 @@ static std::string
 MakeSentence(std::string_view body)
 {
   return fmt::format("${}*{:02X}\r\n", body, NMEAChecksum(body));
+}
+
+class DeclarationReplyPort final : public ReplyPort {
+public:
+  DeclarationReplyPort() : ReplyPort("") {}
+
+  std::size_t Write(std::span<const std::byte> src) override {
+    const auto before = GetLines().size();
+    const auto written = DumpPort::Write(src);
+    if (GetLines().size() == before)
+      return written;
+
+    const std::string_view line = GetLines().back();
+    if (line.starts_with("$PFLAC,S,")) {
+      std::string body{line.substr(1, line.find('*') - 1)};
+      body[6] = 'A';
+      reply += MakeSentence(body);
+    } else if (line.starts_with("$PDVSC,S,")) {
+      const auto property = line.substr(9, line.find(',', 9) - 9);
+      reply += MakeSentence(fmt::format("PDVSC,A,{},2026-01-01", property));
+    }
+    return written;
+  }
+};
+
+static void
+TestDeviceCoordinates()
+{
+  const struct {
+    GeoPoint location;
+    const char *altair_property;
+    const char *flarm;
+    const char *altair;
+    const char *cai302;
+    const char *lx_lat;
+    const char *lx_lon;
+    const char *lx_target;
+  } cases[] = {
+    {{Angle::Degrees(10.062623), Angle::Degrees(47.123461)}, "DeclStart",
+     "4707408N,01003757E", "4707408N01003757E", "4707.4077N,01003.7574E",
+     "4707.408N", "01003.757E", "4707.41,N,01003.76,E"},
+    {{Angle::Degrees(-10.062623), Angle::Degrees(-47.123461)},
+     "DeclTurnPoint1",
+     "4707408S,01003757W", "4707408S01003757W", "4707.4077S,01003.7574W",
+     "4707.408S", "01003.757W", "4707.41,S,01003.76,W"},
+    {{Angle::Degrees(10.9999999), Angle::Degrees(47.9999999)},
+     "DeclTurnPoint2",
+     "4800000N,01100000E", "4800000N01100000E", "4800.0000N,01100.0000E",
+     "4800.000N", "01100.000E", "4800.00,N,01100.00,E"},
+    {{Angle::Degrees(-10.9999999), Angle::Degrees(-47.9999999)},
+     "DeclFinish",
+     "4800000S,01100000W", "4800000S01100000W", "4800.0000S,01100.0000W",
+     "4800.000S", "01100.000W", "4800.00,S,01100.00,W"},
+  };
+
+  LoggerSettings logger_settings{};
+  Plane plane{};
+  Declaration declaration(logger_settings, plane, nullptr);
+  for (const auto &test : cases) {
+    Waypoint wp(test.location);
+    wp.name = wp.shortname = "WP";
+    declaration.Append(wp);
+  }
+
+  NullOperationEnvironment env;
+  DeclarationReplyPort flarm_port, altair_port;
+  std::unique_ptr<Device> flarm{flarm_driver.CreateOnPort(dummy_config,
+                                                       flarm_port)};
+  std::unique_ptr<Device> altair{altair_pro_driver.CreateOnPort(dummy_config,
+                                                             altair_port)};
+  ok1(flarm->Declare(declaration, nullptr, env));
+  ok1(altair->Declare(declaration, nullptr, env));
+
+  for (const auto &test : cases) {
+    const auto flarm_command = fmt::format("$PFLAC,S,ADDWP,{},WP*",
+                                           test.flarm);
+    ok1(flarm_port.FindContaining(flarm_command) != nullptr);
+    const auto altair_command = fmt::format("$PDVSC,S,{},{}WP*",
+                                           test.altair_property, test.altair);
+    ok1(altair_port.FindContaining(altair_command) != nullptr);
+
+    ReplyPort cai302_port{"dn>"};
+    CAI302::DeclareTP(cai302_port, 0, test.location, 123, "WP", env);
+    cai302_port.Port::Write('\n'); // Complete the CR-terminated command.
+    ok1(cai302_port.FindContaining(fmt::format("D,128,{},WP,123",
+                                               test.cai302)) != nullptr);
+
+    ok1(LXNavDeclare::FormatLat(test.location) == test.lx_lat);
+    ok1(LXNavDeclare::FormatLon(test.location) == test.lx_lon);
+
+    DumpPort lx_port;
+    LXNAVVario::SetTarget(lx_port, env, "WP", test.location, 123);
+    ok1(lx_port.FindContaining(fmt::format("$PLXVTARG,WP,{},123.0*",
+                                            test.lx_target)) != nullptr);
+  }
 }
 
 static void
@@ -4934,6 +5032,7 @@ int main()
              + 12 /* LXEmptyMassBeforePolar */
              + 14 /* LXMaxTakeoffMassBeforePolar */
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
+             + 26 /* DeviceCoordinates */
              + 6 /* FlarmMinimumRange */
              + 23 /* NanoDownloadFlight */
              + 9 /* LXNanoLogbook */
@@ -4948,6 +5047,7 @@ int main()
   TestFlarmMinimumRange();
   TestFLARMRangeParser();
   TestFLARMRangeRequest();
+  TestDeviceCoordinates();
   TestNanoDownloadFlight();
   TestNanoDownloadFlightRecordLength();
   TestAltairRU();

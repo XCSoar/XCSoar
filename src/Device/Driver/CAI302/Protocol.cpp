@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <string.h>
 #include <stdio.h>
 
@@ -414,31 +415,23 @@ CAI302::UploadNavpoint(Port &port, unsigned i, Navpoint &data,
 static void
 FormatGeoPoint(char *buffer, const GeoPoint &location)
 {
-  int DegLat, DegLon;
-  double tmp, MinLat, MinLon;
-  char NoS, EoW;
+  constexpr unsigned units_per_minute = 10000;
+  constexpr unsigned units_per_degree = 60 * units_per_minute;
+  const unsigned lat =
+    std::lround(location.latitude.AbsoluteDegrees() * units_per_degree);
+  const unsigned lon =
+    std::lround(location.longitude.AbsoluteDegrees() * units_per_degree);
 
-  tmp = (double)location.latitude.Degrees();
-  NoS = 'N';
-  if (tmp < 0) {
-    NoS = 'S';
-    tmp = -tmp;
-  }
-  DegLat = (int)tmp;
-  MinLat = (tmp - DegLat) * 60;
-
-  tmp = (double)location.longitude.Degrees();
-  EoW = 'E';
-  if (tmp < 0) {
-    EoW = 'W';
-    tmp = -tmp;
-  }
-  DegLon = (int)tmp;
-  MinLon = (tmp - DegLon) * 60;
-
-  sprintf(buffer, "%02d%07.4f%c,%03d%07.4f%c",
-          DegLat, MinLat, NoS,
-          DegLon, MinLon, EoW);
+  sprintf(buffer,
+          "%02u%02u.%04u%c,%03u%02u.%04u%c",
+          lat / units_per_degree,
+          lat / units_per_minute % 60,
+          lat % units_per_minute,
+          location.latitude < Angle::Zero() ? 'S' : 'N',
+          lon / units_per_degree,
+          lon / units_per_minute % 60,
+          lon % units_per_minute,
+          location.longitude < Angle::Zero() ? 'W' : 'E');
 }
 
 void

@@ -10,7 +10,6 @@
 
 #include <fmt/format.h>
 #include <cassert>
-#include <cmath>
 #include <string>
 
 namespace LXNavDeclare {
@@ -62,11 +61,13 @@ GetOZStyle(bool is_start, bool is_finish) noexcept
 inline std::string
 FormatLat(const GeoPoint &location)
 {
-  const double abs_lat = std::abs(location.latitude.Degrees());
-  const int deg = static_cast<int>(abs_lat);
-  const double min = (abs_lat - deg) * 60.0;
+  const auto lat = location.latitude.ToDMM();
   const char suffix = location.latitude.IsNegative() ? 'S' : 'N';
-  return fmt::format("{:02d}{:06.3f}{}", deg, min, suffix);
+  return fmt::format("{:02d}{:02d}.{:03d}{}",
+                     lat.degrees,
+                     lat.minutes,
+                     lat.decimal_minutes,
+                     suffix);
 }
 
 /**
@@ -75,11 +76,13 @@ FormatLat(const GeoPoint &location)
 inline std::string
 FormatLon(const GeoPoint &location)
 {
-  const double abs_lon = std::abs(location.longitude.Degrees());
-  const int deg = static_cast<int>(abs_lon);
-  const double min = (abs_lon - deg) * 60.0;
+  const auto lon = location.longitude.ToDMM();
   const char suffix = location.longitude.IsNegative() ? 'W' : 'E';
-  return fmt::format("{:03d}{:06.3f}{}", deg, min, suffix);
+  return fmt::format("{:03d}{:02d}.{:03d}{}",
+                     lon.degrees,
+                     lon.minutes,
+                     lon.decimal_minutes,
+                     suffix);
 }
 
 /**

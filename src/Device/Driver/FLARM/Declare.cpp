@@ -62,29 +62,9 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
   env.SetProgressPosition(5);
 
   for (unsigned i = 0; i < size; ++i) {
-    int DegLat, DegLon;
-    double tmp, MinLat, MinLon;
-    char NoS, EoW;
-
-    tmp = declaration.GetLocation(i).latitude.Degrees();
-    if (tmp < 0) {
-      NoS = 'S';
-      tmp = -tmp;
-    } else {
-      NoS = 'N';
-    }
-    DegLat = (int)tmp;
-    MinLat = (tmp - DegLat) * 60 * 1000;
-
-    tmp = declaration.GetLocation(i).longitude.Degrees();
-    if (tmp < 0) {
-      EoW = 'W';
-      tmp = -tmp;
-    } else {
-      EoW = 'E';
-    }
-    DegLon = (int)tmp;
-    MinLon = (tmp - DegLon) * 60 * 1000;
+    const auto &location = declaration.GetLocation(i);
+    const auto lat = location.latitude.ToDMM();
+    const auto lon = location.longitude.ToDMM();
 
     /*
      * FLARM task declaration is limited to 192 bytes
@@ -108,9 +88,15 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
      */
 
     StaticString<90> buffer;
-    buffer.Format("%02d%05.0f%c,%03d%05.0f%c,",
-                  DegLat, (double)MinLat, NoS,
-                  DegLon, (double)MinLon, EoW);
+    buffer.Format("%02u%02u%03u%c,%03u%02u%03u%c,",
+                  lat.degrees,
+                  lat.minutes,
+                  lat.decimal_minutes,
+                  lat.positive ? 'N' : 'S',
+                  lon.degrees,
+                  lon.minutes,
+                  lon.decimal_minutes,
+                  lon.positive ? 'E' : 'W');
 
     if (IsPowerFlarm()) {
       // Appends full name strings (up to 58 characters) for PowerFLARM units

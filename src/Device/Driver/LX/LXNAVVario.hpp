@@ -220,23 +220,30 @@ namespace LXNAVVario {
       return;
     }
 
+    constexpr unsigned units_per_minute = 100;
+    constexpr unsigned units_per_degree = 60 * units_per_minute;
+
     /* Latitude: DDMM.MM,N/S */
-    const double abs_lat = std::abs(location.latitude.Degrees());
-    const int lat_deg = static_cast<int>(abs_lat);
-    const double lat_min = (abs_lat - lat_deg) * 60.0;
+    const unsigned lat =
+      std::lround(location.latitude.AbsoluteDegrees() * units_per_degree);
     const char lat_sign = location.latitude.IsNegative() ? 'S' : 'N';
 
     /* Longitude: DDDMM.MM,E/W */
-    const double abs_lon = std::abs(location.longitude.Degrees());
-    const int lon_deg = static_cast<int>(abs_lon);
-    const double lon_min = (abs_lon - lon_deg) * 60.0;
+    const unsigned lon =
+      std::lround(location.longitude.AbsoluteDegrees() * units_per_degree);
     const char lon_sign = location.longitude.IsNegative() ? 'W' : 'E';
 
     const auto buffer = fmt::format(
-      "PLXVTARG,{},{:02d}{:05.2f},{},{:03d}{:05.2f},{},{:.1f}",
+      "PLXVTARG,{},{:02d}{:02d}.{:02d},{},{:03d}{:02d}.{:02d},{},{:.1f}",
       name,
-      lat_deg, lat_min, lat_sign,
-      lon_deg, lon_min, lon_sign,
+      lat / units_per_degree,
+      lat / units_per_minute % 60,
+      lat % units_per_minute,
+      lat_sign,
+      lon / units_per_degree,
+      lon / units_per_minute % 60,
+      lon % units_per_minute,
+      lon_sign,
       elevation);
     PortWriteNMEA(port, buffer.c_str(), env);
   }
