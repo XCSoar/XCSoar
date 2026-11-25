@@ -59,6 +59,8 @@ Version 7.47 - not yet released
     the same as on a touch screen #3021
   - fix the progress dialog staying on the light splash colours
     when Dark mode is on
+  - fix latitude and longitude displays that showed 60 seconds or
+    minutes after rounding
   - fix a long pause after the quick guide while a fine terrain
     file loads the tiles under the map
   - fix shaded terrain drifting off airspace when the map is zoomed
