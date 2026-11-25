@@ -43,6 +43,19 @@ endif
 .PHONY: override_dh_auto_build
 override_dh_auto_build:
 	$(MAKE) $(OPTIONS) all mo
+ifneq (,$(filter appimage,$(DEB_BUILD_PROFILES)))
+	# Package the binary built above. OBS signs the digests of the
+	# AppImages in ../OTHER and publishes them; its AppImage repository
+	# sets the build profile. Embed its key only in images it signs.
+	if [ -d ../OTHER ]; then \
+	  export APPIMAGE_SIGNING_KEY=$(CURDIR)/unix/appimage-signing-key.asc; \
+	fi; \
+	$(MAKE) $(OPTIONS) appimage && \
+	if [ -d ../OTHER ]; then \
+	  install -m 0755 output/appimage/XCSoar-*.AppImage ../OTHER/ && \
+	  install -m 0644 output/appimage/XCSoar-*.AppImage.digest ../OTHER/; \
+	fi
+endif
 
 .PHONY: override_dh_auto_test
 override_dh_auto_test:

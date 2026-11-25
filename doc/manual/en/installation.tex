@@ -239,6 +239,28 @@ The version is visible in Windows file properties of
 
 \subsection*{On Unix/Linux}
 
+XCSoar AppImages are available for 64-bit Intel and AMD PCs
+(\texttt{x86\_64}), 64-bit ARM (\texttt{aarch64}), and 32-bit ARM
+(\texttt{armhf}, Raspberry Pi 2 or newer with a 32-bit system). They run
+on Debian 13 or newer, Raspberry Pi OS based on Debian 13 or newer, or
+another distribution of the same age or newer.
+Mark the downloaded \texttt{.AppImage} file executable in the file manager or
+with \verb|chmod +x XCSoar-*.AppImage|, then open that file to run XCSoar.
+It uses the usual XCSoar data directory. To update, download a new
+AppImage and run it in place of the old one.
+
+The AppImage needs a desktop session with X11 or XWayland,
+OpenGL ES drivers, and a supported system font such
+as DejaVu Sans. If FUSE is unavailable, run the file from a terminal
+with the \verb|--appimage-extract-and-run| option.
+
+The AppImages are signed by the XCSoar build service. Tools that check
+AppImage signatures, such as \verb|validate| from AppImageUpdate, show
+the fingerprint of the signing key. It must be
+\verb|7F75A0977B6A0763FEDDAA0B2BEE75C8B33447C8|. A signature with any
+other key means the file does not come from XCSoar.
+
+For a system installation on Debian, use the Debian package.
 The file downloaded is \verb|xcsoar_XXX.deb|, where \verb|XXX| includes
 the version number and platform, e.g. \verb|xcsoar_6.0.4_i386.deb|.
 This is a Debian package and can be installed using

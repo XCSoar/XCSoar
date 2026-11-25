@@ -191,7 +191,21 @@ Packaging verifies the checksums of the downloaded tool and runtime
 and can run without FUSE.
 
 The image needs at least the C library of the build host, so build
-on the oldest distribution it should support.
+on the oldest distribution it should support. The OBS ``AppImage``
+repository builds on Debian 13 for x86_64, aarch64 and armv7l. Its
+project configuration sets the Debian build profile ``appimage``
+(``%deb_build_profiles``), and ``debian/rules`` then packages the
+binary of the Debian build. OBS fetches the packaging tools as assets
+of ``xcsoar.spec``, then signs and publishes the AppImages. Locally,
+the same build is ``dpkg-buildpackage -b -Pappimage``.
+
+OBS embeds its signature but not its public key. As
+``appimagetool --sign`` does, the packaging embeds the key from
+``unix/appimage-signing-key.asc`` (the armored block of
+``osc signkey home:xcsoar``) in each image OBS signs. Local builds stay
+unsigned. When the OBS project key changes, update that file and the
+fingerprint in the user manual; extending its expiry keeps the
+fingerprint.
 
 Experimental Wayland build
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
