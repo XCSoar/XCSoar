@@ -274,7 +274,17 @@ InitNativeGettext(const char *locale) noexcept
 
   // always use a dot as decimal point in printf/scanf()
   setlocale(LC_NUMERIC, "C");
-  bindtextdomain(domain, "/usr/share/locale");
+  const char *locale_dir = "/usr/share/locale";
+#ifdef __linux__
+  AllocatedPath appimage_locale_dir;
+  if (const char *appdir = getenv("APPDIR"); appdir != nullptr &&
+      appdir[0] == '/') {
+    appimage_locale_dir = AllocatedPath::Build(Path(appdir),
+                                               "usr/share/locale");
+    locale_dir = appimage_locale_dir.c_str();
+  }
+#endif
+  bindtextdomain(domain, locale_dir);
   textdomain(domain);
 
   /* trigger gettext's locale fallback initialization eagerly */

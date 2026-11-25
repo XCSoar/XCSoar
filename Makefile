@@ -88,10 +88,28 @@ include $(topdir)/build/make.mk
 include $(topdir)/build/thunk.mk
 include $(topdir)/build/bool.mk
 include $(topdir)/build/string.mk
-include $(topdir)/build/dirs.mk
 include $(topdir)/build/verbose.mk
 include $(topdir)/build/util.mk
 include $(topdir)/build/detect.mk
+
+ifneq ($(filter appimage,$(MAKECMDGOALS)),)
+  ifeq ($(filter $(UNAME_S):$(UNAME_M),Linux:x86_64 Linux:aarch64 \
+                  Linux:armv7l Linux:armv8l),)
+    $(error AppImage packaging requires native x86_64, aarch64 or armhf Linux)
+  endif
+  TARGET ?= UNIX
+  ifneq ($(TARGET),UNIX)
+    $(error The appimage goal requires TARGET=UNIX)
+  endif
+  # Use the desktop variant on boards that normally default to KMS.
+  override HOST_IS_PI := n
+  override HOST_IS_CUBIE := n
+  DEBUG ?= n
+  ICF ?= n
+  TARGET_DIR ?= appimage/build
+endif
+
+include $(topdir)/build/dirs.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/thirdparty.mk
 include $(topdir)/build/languages.mk

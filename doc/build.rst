@@ -173,6 +173,26 @@ You may specify one of the following targets with ``TARGET=x``:
 ``OPT``    alias for UNIX with optimisation and no debugging
 ========== =================================================
 
+Building a Linux AppImage
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Build on a native x86_64, aarch64 or armhf Linux host. For example, on Debian 13::
+
+  sudo bash ide/provisioning/install-debian-packages.sh UPDATE BASE LINUX
+  sudo apt-get install curl desktop-file-utils libx11-dev
+  make -j"$(nproc)" TARGET=UNIX appimage
+
+The target defaults to an optimized X11 and OpenGL ES desktop build
+and writes ``output/appimage/XCSoar-<version>-<arch>.AppImage``. Pass
+normal Make options such as ``V=2`` or ``USE_CCACHE=y`` on the
+command line. When changing compiler options, use a fresh
+``TARGET_DIR`` to avoid reusing objects built with different settings.
+Packaging verifies the checksums of the downloaded tool and runtime
+and can run without FUSE.
+
+The image needs at least the C library of the build host, so build
+on the oldest distribution it should support.
+
 Experimental Wayland build
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
