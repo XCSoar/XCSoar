@@ -185,7 +185,8 @@ ifeq ($(HAVE_WIN32),n)
 TEST_NAMES += \
 	TestDataLayoutMigration \
 	TestLocalPathResolve \
-	TestFileOutputStream
+	TestFileOutputStream \
+	TestDeviceFile
 endif
 
 ifeq ($(HAVE_WIN32),y)
@@ -1310,6 +1311,19 @@ TEST_DATA_LAYOUT_MIGRATION_SOURCES = \
 	$(TEST_SRC_DIR)/TestDataLayoutMigration.cpp
 TEST_DATA_LAYOUT_MIGRATION_DEPENDS = PROFILE IO OS UTIL
 $(eval $(call link-program,TestDataLayoutMigration,TEST_DATA_LAYOUT_MIGRATION))
+
+TEST_DEVICE_FILE_SOURCES = \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/DeviceFile.cpp \
+	$(SRC)/system/FileUtil.cpp \
+	$(SRC)/system/Path.cpp \
+	$(SRC)/io/FileOutputStream.cxx \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestDeviceFile.cpp
+TEST_DEVICE_FILE_DEPENDS = PROFILE IO OS UTIL
+$(eval $(call link-program,TestDeviceFile,TEST_DEVICE_FILE))
 
 TEST_LOCAL_PATH_RESOLVE_SOURCES = \
 	$(SRC)/DataFileLayout.cpp \
