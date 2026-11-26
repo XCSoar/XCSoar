@@ -1143,6 +1143,7 @@ will be referenced as `Custom' set and will also be stored in your profile.
 
 This page configures the physical screen: technology, resolution,
 orientation, brightness, and (where drawn by XCSoar) the mouse cursor.
+It also sets how smoothly XCSoar draws lines and edges on it.
 
 \begin{description}
 \item[Display type*]  Select the display technology. E-ink modes disable
@@ -1156,6 +1157,27 @@ orientation, brightness, and (where drawn by XCSoar) the mouse cursor.
 \item[Display resolution*]  Used to adapt line widths, font size, landable
   size and more. Leave this on automatic unless the type is clearly
   the wrong size.
+\item[Anti-aliasing*]  Smooth the jagged edges of lines, outlines and
+  symbols with multi-sample anti-aliasing: {\bf Off}, {\bf 2x},
+  {\bf 4x}, {\bf 8x} or {\bf 16x}. Higher levels look smoother but
+  take more drawing time and memory, so the map may react more slowly
+  on a slow device. Default is {\bf Off}. A change takes effect after
+  restarting XCSoar.
+
+  XCSoar draws the map and the InfoBoxes separately from the gauges,
+  dialogues and buttons, and the device may not offer the same levels
+  for both. Each falls back on its own to the highest level it can
+  provide below the one selected. The list shows what you get: a
+  level both can provide is shown plainly, one that only one of them
+  can provide also names the other one's fallback, e.g.\
+  ``8x (Map), 4x (Gauges)'', and ``not available'' means that neither
+  can provide it.
+  On Windows, macOS and iOS XCSoar cannot find out in advance which
+  levels the gauges can use, so the list only checks the map; if the
+  gauges cannot use the selected level, they may be drawn without
+  anti-aliasing instead.
+  On devices that draw without OpenGL, such as the Kobo, every level
+  except {\bf Off} is shown as not available.
 \item[Display orientation]  Rotate the display on devices that support it.
 \item[Screen brightness]  Adjust the screen brightness, where the platform
   allows it.
