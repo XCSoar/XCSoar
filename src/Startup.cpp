@@ -88,6 +88,7 @@
 #include "Waypoint/Factory.hpp"
 #include "Storage/StorageManager.hpp"
 #include "DataLayoutMigration.hpp"
+#include "DeviceFile.hpp"
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -510,21 +511,38 @@ Startup(UI::Display &display)
   main_window->PublishSafeAreaInsets();
 #endif
 
-#ifdef SIMULATOR_AVAILABLE
-  // prompt for simulator if not set by command line argument "-simulator" or "-fly"
-  if (!sim_set_in_cmd_line_flag) {
-    SimulatorPromptResult result = dlgSimulatorPromptShowModal();
-    switch (result) {
-    case SPR_QUIT:
-      startup_cancelled_by_user = true;
-      return false;
+  /* load device.xcd before any profile; it is shared by all profiles */
+  DeviceFile::Load();
 
-    case SPR_FLY:
+#ifdef SIMULATOR_AVAILABLE
+  /* choose fly or simulator mode; the command line arguments
+     "-simulator" and "-fly" win over device.xcd, and the
+     prompt is shown only if neither has decided */
+  if (!sim_set_in_cmd_line_flag) {
+    switch (DeviceFile::GetStartupMode()) {
+    case DeviceFile::StartupMode::FLY:
       global_simulator_flag = false;
       break;
 
-    case SPR_SIMULATOR:
+    case DeviceFile::StartupMode::SIMULATOR:
       global_simulator_flag = true;
+      break;
+
+    case DeviceFile::StartupMode::ASK:
+      switch (dlgSimulatorPromptShowModal()) {
+      case SPR_QUIT:
+        startup_cancelled_by_user = true;
+        return false;
+
+      case SPR_FLY:
+        global_simulator_flag = false;
+        break;
+
+      case SPR_SIMULATOR:
+        global_simulator_flag = true;
+        break;
+      }
+
       break;
     }
   }
