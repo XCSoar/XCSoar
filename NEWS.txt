@@ -18,6 +18,11 @@ Version 7.47 - not yet released
     there is still no polar 30 seconds after the start #3270
   - deactivate the current plane from the Planes dialog, which
     clears its polar #3270
+* audio
+  - speak the average climb of the last 30 seconds every 30 seconds
+    while circling ("one point five"), in the vertical speed unit;
+    never over a FLARM or airspace warning. English only, off by
+    default (Config → Setup → Audio, "Spoken climb rate")
 * ui
   - add a ground-side shadow to the artificial horizon line so it
     stays visible on both sky and ground

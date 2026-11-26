@@ -30,6 +30,7 @@ enum ControlIndex {
   MASTER_VOLUME_SPACER,
 #endif
   ENABLED,
+  SPOKEN_CLIMB_RATE,
   VOLUME,
   SWITCHING_MODE,
   DEAD_BAND_ENABLED,
@@ -114,20 +115,28 @@ AudioConfigPanel::Prepare(ContainerWindow &parent,
              _("The overall audio output volume."),
              "%d %%", "%d",
              0, VolumeController::GetMaxValue(), 1, sound.master_volume);
-#endif
 
-  if (!AudioVarioGlue::HaveAudioVario())
-    return;
-
-#ifdef HAVE_VOLUME_CONTROLLER
   AddSpacer();
 #endif
 
+  const bool have_audio_vario = AudioVarioGlue::HaveAudioVario();
   const auto &settings = CommonInterface::GetUISettings().sound.vario;
 
-  AddBoolean(_("Audio Vario"),
-             _("Emulate the sound of an electronic vario."),
-             settings.enabled, this);
+  if (have_audio_vario)
+    AddBoolean(_("Audio Vario"),
+               _("Emulate the sound of an electronic vario."),
+               settings.enabled, this);
+  else
+    /* the spoken climb rate does not need the audio vario */
+    AddDummy();
+
+  AddBoolean(_("Spoken climb rate"),
+             _("While circling, speak the average climb of the last 30 "
+               "seconds every 30 seconds: \"one point five\"."),
+             CommonInterface::GetUISettings().sound.spoken_climb_rate);
+
+  if (!have_audio_vario)
+    return;
 
   AddInteger(_("Vario Volume"),
              _("The audio vario sound volume."), "%u %%", "%u",
@@ -199,6 +208,11 @@ AudioConfigPanel::Save(bool &changed) noexcept
   changed |= SaveValueInteger(MASTER_VOLUME, ProfileKeys::MasterAudioVolume,
                               sound.master_volume);
 #endif
+
+  auto &spoken_climb_rate =
+    CommonInterface::SetUISettings().sound.spoken_climb_rate;
+  changed |= SaveValue(SPOKEN_CLIMB_RATE, ProfileKeys::SpokenClimbRate,
+                       spoken_climb_rate);
 
   if (!AudioVarioGlue::HaveAudioVario())
     return true;

@@ -366,6 +366,10 @@ SOUNDS = fail insert remove beep_bweep beep_clear beep_drip
 SOUNDS += traffic_low traffic_important traffic_urgent above below level
 SOUNDS += airspace_near airspace_above airspace_inside
 SOUNDS += $(addprefix oclock_,1 2 3 4 5 6 7 8 9 10 11 12)
+SOUNDS += $(addprefix number_,0 1 2 3 4 5 6 7 8 9)
+SOUNDS += point minus hundred thousand
+SOUNDS += $(addsuffix _end,$(addprefix number_,0 1 2 3 4 5 6 7 8 9))
+SOUNDS += thousand_end
 SOUND_FILES = $(patsubst %,$(RAW_DIR)/%.ogg,$(SOUNDS))
 
 # Vorbis -q 5: nominal quality (~160 kb/s class); was 1 for smallest APK

@@ -182,6 +182,42 @@ public final class SoundUtil {
           R.raw.airspace_above);
       SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_AIRSPACE_INSIDE",
           R.raw.airspace_inside);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_0", R.raw.number_0);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_1", R.raw.number_1);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_2", R.raw.number_2);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_3", R.raw.number_3);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_4", R.raw.number_4);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_5", R.raw.number_5);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_6", R.raw.number_6);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_7", R.raw.number_7);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_8", R.raw.number_8);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_9", R.raw.number_9);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_POINT", R.raw.point);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_MINUS", R.raw.minus);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_HUNDRED", R.raw.hundred);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_THOUSAND", R.raw.thousand);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_0_END",
+          R.raw.number_0_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_1_END",
+          R.raw.number_1_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_2_END",
+          R.raw.number_2_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_3_END",
+          R.raw.number_3_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_4_END",
+          R.raw.number_4_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_5_END",
+          R.raw.number_5_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_6_END",
+          R.raw.number_6_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_7_END",
+          R.raw.number_7_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_8_END",
+          R.raw.number_8_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_NUMBER_9_END",
+          R.raw.number_9_end);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_THOUSAND_END",
+          R.raw.thousand_end);
     }
 
     private static final Map<String, Integer> POOL_SAMPLE_ID_BY_TOKEN =

@@ -16,6 +16,9 @@ struct SoundSettings {
 
   uint8_t master_volume;
 
+  /** Speak the 30 s average climb every 30 s while circling */
+  bool spoken_climb_rate;
+
   VarioSoundSettings vario;
 
   void SetDefaults();
