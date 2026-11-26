@@ -789,7 +789,7 @@ MainWindow::InitialiseConfigured()
   map->SetUIState(CommonInterface::GetUIState());
   map->Create(*this, map_rect);
 
-  popup = new PopupMessage(*this, look->dialog, ui_settings);
+  popup = new PopupMessage(*this, look->dialog, look->map, ui_settings);
   popup->Create(GetHudRect());
 
   UpdateMapOverlayButtonLayout();

@@ -182,6 +182,10 @@ public final class SoundUtil {
           R.raw.airspace_above);
       SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_AIRSPACE_INSIDE",
           R.raw.airspace_inside);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_STALL", R.raw.stall);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OVERSPEED", R.raw.overspeed);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_AIRBRAKES", R.raw.airbrakes);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_CHECK_GEAR", R.raw.check_gear);
     }
 
     private static final Map<String, Integer> POOL_SAMPLE_ID_BY_TOKEN =

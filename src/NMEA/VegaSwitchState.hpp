@@ -15,6 +15,7 @@ struct VegaSwitchState {
     INPUT_AIRBRAKE_NOT_LOCKED = 6,
     INPUT_ACKNOWLEDGE = 8,
     INPUT_REPEAT = 9,
+    INPUT_VELOCITY_NEVEREXCEED = 19,
     INPUT_STALL = 20,
     INPUT_AIRBRAKE_LOCKED = 21,
     INPUT_USER_SWITCH_UP = 23,
@@ -24,7 +25,10 @@ struct VegaSwitchState {
 
   enum OutputBits {
     OUTPUT_CIRCLING = 0,
+    OUTPUT_VELOCITY_NEVEREXCEED = 5,
+    OUTPUT_GEAR_LANDING = 6,
     OUTPUT_FLAP_LANDING = 7,
+    OUTPUT_STALL = 9,
   };
 
   static constexpr uint_least32_t INPUT_MASK_FLAP_POSITIVE = 1 << INPUT_FLAP_POSITIVE;
@@ -39,8 +43,17 @@ struct VegaSwitchState {
   static constexpr uint_least32_t INPUT_MASK_USER_SWITCH_UP = 1 << INPUT_USER_SWITCH_UP;
   static constexpr uint_least32_t INPUT_MASK_USER_SWITCH_MIDDLE = 1 << INPUT_USER_SWITCH_MIDDLE;
   static constexpr uint_least32_t INPUT_MASK_USER_SWITCH_DOWN = 1 << INPUT_USER_SWITCH_DOWN;
+  static constexpr uint_least32_t INPUT_MASK_VELOCITY_NEVEREXCEED =
+    1 << INPUT_VELOCITY_NEVEREXCEED;
+  static constexpr uint_least32_t INPUT_MASK_STALL = 1 << INPUT_STALL;
   static constexpr uint_least32_t OUTPUT_MASK_CIRCLING = 1 << OUTPUT_CIRCLING;
-  static constexpr uint_least32_t OUTPUT_MASK_FLAP_LANDING = 1 << OUTPUT_FLAP_LANDING;
+  static constexpr uint_least32_t OUTPUT_MASK_VELOCITY_NEVEREXCEED =
+    1 << OUTPUT_VELOCITY_NEVEREXCEED;
+  static constexpr uint_least32_t OUTPUT_MASK_GEAR_LANDING =
+    1 << OUTPUT_GEAR_LANDING;
+  static constexpr uint_least32_t OUTPUT_MASK_FLAP_LANDING =
+    1 << OUTPUT_FLAP_LANDING;
+  static constexpr uint_least32_t OUTPUT_MASK_STALL = 1 << OUTPUT_STALL;
 
   uint_least32_t inputs, outputs;
 
@@ -107,6 +120,19 @@ struct VegaSwitchState {
 
   constexpr bool GetCircling() const noexcept {
     return outputs & OUTPUT_MASK_CIRCLING;
+  }
+
+  constexpr bool GetNeverExceed() const noexcept {
+    return (inputs & INPUT_MASK_VELOCITY_NEVEREXCEED) ||
+      (outputs & OUTPUT_MASK_VELOCITY_NEVEREXCEED);
+  }
+
+  constexpr bool GetStall() const noexcept {
+    return (inputs & INPUT_MASK_STALL) || (outputs & OUTPUT_MASK_STALL);
+  }
+
+  constexpr bool GetGearLanding() const noexcept {
+    return outputs & OUTPUT_MASK_GEAR_LANDING;
   }
 
   constexpr bool GetFlapLanding() const noexcept {

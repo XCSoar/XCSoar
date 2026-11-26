@@ -13,8 +13,15 @@
 #include "Terrain/Thread.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "Device/Fault.hpp"
+#include "Device/MultipleDevices.hpp"
+#include "Device/Descriptor.hpp"
+#include "Language/Language.hpp"
+#include "Simulator.hpp"
+#include "util/TruncateString.hpp"
 
 #include <cassert>
+#include <string>
 
 GlueMapWindow::GlueMapWindow(const Look &look) noexcept
   :MapWindow(look.map, look.traffic),
@@ -118,6 +125,46 @@ GlueMapWindow::SetUIState(const UIState &new_value) noexcept
 }
 
 void
+GlueMapWindow::RefreshDeviceFaults() noexcept
+{
+  device_faults.clear();
+
+  if (backend_components == nullptr ||
+      backend_components->devices == nullptr)
+    return;
+
+  auto &devices = *backend_components->devices;
+  auto &blackboard = *backend_components->device_blackboard;
+
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    const DeviceDescriptor &device = devices[i];
+    const DeviceConfig &config = device.GetConfig();
+    const DeviceFaultKind kind =
+      ClassifyDeviceFault(config.IsDisabled(), config.IsAvailable(),
+                          device.IsConfigured(), is_simulator(),
+                          config.port_type == DeviceConfig::PortType::INTERNAL,
+                          device.GetState(),
+                          blackboard.RealState(i).alive);
+    if (kind == DeviceFaultKind::NONE)
+      continue;
+
+    const char *status = _("No data");
+    std::string error;
+    if (kind == DeviceFaultKind::ERROR) {
+      error = device.GetErrorMessage();
+      status = error.empty() ? _("Error") : error.c_str();
+    }
+
+    auto &slot = device_faults.append();
+    slot.clear();
+    slot.push_back(char('A' + i));
+    slot.append(": ");
+    CopyTruncateString(slot.data() + slot.length(),
+                       slot.capacity() - slot.length(), status);
+  }
+}
+
+void
 GlueMapWindow::ExchangeBlackboard() noexcept
 {
   /* copy device_blackboard to MapWindow */
@@ -127,6 +174,7 @@ GlueMapWindow::ExchangeBlackboard() noexcept
     const std::lock_guard lock{device_blackboard.mutex};
     ReadBlackboard(device_blackboard.Basic(),
                    device_blackboard.Calculated());
+    RefreshDeviceFaults();
   }
 
 #ifndef ENABLE_OPENGL

@@ -66,6 +66,13 @@ not connected is a red error, and replaces that warning:
   be disconnected or switched off.
 \end{description}
 
+A configured device that is disconnected, has no data, or has a port
+error is a red label on the same lower-left stack, with a device
+symbol and the slot letter from the Devices list (for example
+\emph{A: No data} or \emph{B:} and the error).  It stays until that
+device recovers.  Internal GPS uses the GPS labels above, not a
+device slot.  Connecting is not shown.
+
 When the GPS is not connected for more than one minute, XCSoar automatically 
 attempts to restart communication with the device and will then resume waiting. 
 This method has shown to provide the most reliable way of recovering from 
@@ -122,7 +129,15 @@ This set is expected to expand to include engine and fuel monitoring.
 
 Other logical inputs from Vega include computed quantities relating to
 specific airframe alerts and aircraft operating envelope warnings, for
-example ``airbrake extended and gear retracted''.  
+example ``airbrake extended and gear retracted''.
+
+While flying, XCSoar speaks \emph{Stall}, \emph{Overspeed},
+\emph{Airbrakes unlocked}, and \emph{Check gear} when those
+conditions apply, and shows them as red labels at the top of the map.
+Stall uses a Vega stall switch or stall ratio.  Overspeed is indicated
+airspeed above the plane's maximum speed, or Vega's never-exceed flag.
+Airbrakes unlocked is the airbrake switch.  Check gear is Vega's
+landing-gear reminder, or landing flap with the gear still up.
 
 Refer to the Vega documentation %and {\em XCSoar Advanced Configuration Manual}
 for more details on switch inputs and how they may be used.

@@ -19,6 +19,12 @@ Version 7.47 - not yet released
   - deactivate the current plane from the Planes dialog, which
     clears its polar #3270
 * ui
+  - show status messages and file-load progress as rounded labels
+    at the top of the map, the same look as Simulator on the
+    lower left, including the same icons when the text matches.
+    Long text wraps. Stall and other errors are red, cautions
+    yellow. Touch a message to dismiss it; progress fills while
+    the load runs and stays a moment after it finishes
   - add a ground-side shadow to the artificial horizon line so it
     stays visible on both sky and ground
   - draw the artificial-horizon aircraft reference as a yellow bar
@@ -54,6 +60,9 @@ Version 7.47 - not yet released
     is one step higher
   - size dialog rows and buttons to at least 30 pt on a mouse,
     the same as on a touch screen #3021
+  - speak Stall, Overspeed, Airbrakes unlocked, and Check gear
+    while they apply in flight, and show them as red labels at
+    the top of the map
   - fix the progress dialog staying on the light splash colours
     when Dark mode is on
   - fix latitude and longitude displays that showed 60 seconds or
@@ -84,6 +93,11 @@ Version 7.47 - not yet released
   - show Simulator, with a joystick symbol, and Replay, with a
     circular arrow, as white labels at the top of that lower-left
     stack. Errors sit at the bottom, warnings between
+  - show a red device label on the lower left while a configured
+    device is disconnected, has no data, or has a port error, named
+    like the Devices list (A, B, …). Internal GPS stays on the GPS
+    labels. Connecting is not shown. Each label drops when that
+    device recovers
   - draw the wind arrow light blue when the wind comes from an
     external sensor, grey when XCSoar estimated it
   - draw the instantaneous wind of an external sensor (Larus) as a
@@ -166,6 +180,9 @@ Version 7.47 - not yet released
     login (wrong e-mail or password, subscription not active, too
     many devices) instead of "Loading SkySight catalog..." #2860
 * documentation
+  - describe device disconnect labels on the lower left of the map
+  - describe spoken Stall, Overspeed, Airbrakes unlocked, and
+    Check gear warnings
   - describe the map Waypoints filter: a type can be hidden, the
     choice is saved, and task or watched waypoints stay drawn
   - describe the MacCready InfoBox speed-to-fly comment as true
@@ -181,9 +198,11 @@ Version 7.47 - not yet released
     data directory, as in waypoints/details/ETSI_1.png #3453
   - describe which airspace the list of map elements selects
   - describe the Imhof Atlas lite terrain colour ramp
+  - describe status messages and file-load progress as rounded
+    labels at the top of the map
 * data
   - add an option on Site files to download newer copies of files
-    already on the device when XCSoar starts. The progress bar
+    already on the device when XCSoar starts. A progress label
     shows the download, and a message reports when files were
     updated. A download that finishes in flight is loaded at the
     next start #417

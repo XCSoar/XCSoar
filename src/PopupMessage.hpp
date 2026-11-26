@@ -4,14 +4,24 @@
 #pragma once
 
 #include "ui/window/PaintWindow.hpp"
-#include "Renderer/TextRenderer.hpp"
+#include "ui/canvas/Color.hpp"
+#include "Operation/Operation.hpp"
 #include "thread/Mutex.hxx"
+#include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"
 
 #include <chrono>
+#include <memory>
+
+#ifndef DEBUG_ALL_MAP_OVERLAYS
+#define DEBUG_ALL_MAP_OVERLAYS 0
+#endif
 
 struct UISettings;
 struct DialogLook;
+struct MapLook;
+class Font;
+class MaskedIcon;
 namespace UI { class SingleWindow; }
 
 /**
@@ -39,6 +49,11 @@ public:
 
 private:
   static constexpr unsigned MAXMESSAGES = 20;
+#if DEBUG_ALL_MAP_OVERLAYS
+  static constexpr unsigned MAX_PILLS = 16;
+#else
+  static constexpr unsigned MAX_PILLS = 8;
+#endif
 
   struct Message {
     Type type = MSG_UNKNOWN;
@@ -47,6 +62,9 @@ private:
     std::chrono::steady_clock::duration tshow; // time message is visible for
 
     StaticString<256u> text;
+    Color fill = COLOR_WHITE;
+    /** 2 error, 1 caution, 0 info; HUD stack paints high first */
+    unsigned rank = 0;
 
     /** From #StatusMessage::sound; nullptr if none or not from status file. */
     const char *sound = nullptr;
@@ -81,27 +99,59 @@ private:
      */
     bool Update(std::chrono::steady_clock::time_point now) noexcept;
 
-    /**
-     * @return true if a message has been appended
-     */
-    bool AppendTo(StaticString<2000> &buffer,
-                  std::chrono::steady_clock::time_point now) noexcept;
+    [[gnu::pure]]
+    bool IsVisible(std::chrono::steady_clock::time_point now) const noexcept;
   };
 
   UI::SingleWindow &parent;
   const DialogLook &look;
+  const MapLook &map_look;
 
-  PixelRect rc; // maximum message size
-
-  TextRenderer renderer;
-
-  const UISettings &settings;
+  PixelRect rc; // HUD rectangle (parent coordinates)
 
   Mutex mutex;
   struct Message messages[MAXMESSAGES];
-  StaticString<2000> text;
 
-  unsigned n_visible = 0;
+  struct StatusPill {
+    StaticString<256> text;
+    Color fill = COLOR_WHITE;
+    const MaskedIcon *icon = nullptr;
+  };
+
+  StaticArray<StatusPill, MAX_PILLS> status_pills;
+
+  class SlotEnv final : public QuietOperationEnvironment {
+    PopupMessage &host;
+    const void *key;
+
+  public:
+    SlotEnv(PopupMessage &_host, const void *_key) noexcept
+      :host(_host), key(_key) {}
+
+    void SetText(const char *text) noexcept override {
+      host.SetProgressText(key, text);
+    }
+
+    void SetProgressRange(unsigned range) noexcept override {
+      host.SetProgressRange(key, range);
+    }
+
+    void SetProgressPosition(unsigned position) noexcept override {
+      host.SetProgressPosition(key, position);
+    }
+  };
+
+  struct ProgressSlot {
+    const void *key = nullptr;
+    StaticString<128> text;
+    unsigned range = 0;
+    unsigned position = 0;
+    /** {} while live; set by ClearProgress to linger at 100% */
+    std::chrono::steady_clock::time_point hold_until{};
+    std::unique_ptr<SlotEnv> env;
+  };
+
+  StaticArray<ProgressSlot, MAX_PILLS> progress_slots;
 
   /** when was the last haptic feedback for a new message generated? */
   std::chrono::steady_clock::time_point last_haptic{};
@@ -110,7 +160,8 @@ private:
 
 public:
   PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
-               const UISettings &settings) noexcept;
+               const MapLook &_map_look,
+               [[maybe_unused]] const UISettings &settings) noexcept;
 
   void Create(const PixelRect _rc) noexcept;
 
@@ -118,6 +169,13 @@ public:
 
   /** returns true if messages have changed */
   bool Render() noexcept;
+
+  void BeginProgress(const void *key, const char *text) noexcept;
+  void ClearProgress(const void *key) noexcept;
+  OperationEnvironment &GetProgressEnvironment(const void *key) noexcept;
+  void SetProgressText(const void *key, const char *text) noexcept;
+  void SetProgressRange(const void *key, unsigned range) noexcept;
+  void SetProgressPosition(const void *key, unsigned position) noexcept;
 
 protected:
   /** Caller must hold the lock. */
@@ -139,16 +197,23 @@ public:
 
 private:
   [[gnu::pure]]
-  unsigned CalculateWidth() const noexcept;
+  int FindProgressLocked(const void *key) const noexcept;
 
   [[gnu::pure]]
-  PixelRect GetRect(PixelSize size) const noexcept;
+  bool HasPills() const noexcept;
+  [[gnu::pure]]
+  const Font &GetFont() const noexcept;
 
   [[gnu::pure]]
   PixelRect GetRect() const noexcept;
 
+  void CollectStatusPills() noexcept;
   void UpdateTextAndLayout() noexcept;
   int GetEmptySlot() noexcept;
+
+#if DEBUG_ALL_MAP_OVERLAYS
+  void SeedDebugHud() noexcept;
+#endif
 
 protected:
   /* virtual methods from class Window */
