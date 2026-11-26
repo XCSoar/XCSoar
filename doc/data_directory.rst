@@ -257,6 +257,9 @@ Some paths intentionally remain at the top level of the data root:
   whether to restore them and does so after 5 seconds.  No leaves
   them unused.  This is not a profile: copying
   a :file:`*.prf` does not copy it.
+- **This device** — :file:`device.xcd` (:file:`DeviceFile.cpp`).
+  Fly / Sim / Ask.  One file for this computer, shared by every
+  profile.  Copying a :file:`*.prf` does not copy it.
 - **Migration marker** — :file:`.xcsoar-subdir-layout-v1` — empty file
   written after the 7.45 layout migration; see :ref:`typed-layout-7-45`
 
