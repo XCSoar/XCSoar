@@ -348,6 +348,7 @@ constexpr std::string_view PagesDistinctZoom = "PagesDistinctZoom";
 constexpr std::string_view WaveAssistant = "WaveAssistant";
 
 constexpr std::string_view MasterAudioVolume = "MasterAudioVolume";
+constexpr std::string_view SpokenClimbRate = "SpokenClimbRate";
 
 constexpr std::string_view RaspFile = "RaspFile";
 constexpr std::string_view RaspAutoUpdate = "RaspAutoUpdate";

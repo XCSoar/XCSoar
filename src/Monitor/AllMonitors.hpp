@@ -11,6 +11,7 @@
 #include "TaskAdvanceMonitor.hpp"
 #include "MatTaskMonitor.hpp"
 #include "TrafficMonitor.hpp"
+#include "ClimbRateMonitor.hpp"
 
 /**
  * A container that combines all monitor classes.
@@ -22,6 +23,7 @@ class AllMonitors final : NullBlackboardListener, RateLimiter {
   TaskAdvanceMonitor task_advance;
   MatTaskMonitor mat_task;
   TrafficMonitor traffic;
+  ClimbRateMonitor climb_rate;
 
 public:
   AllMonitors();
@@ -34,6 +36,7 @@ public:
     task_advance.Reset();
     mat_task.Reset();
     traffic.Reset();
+    climb_rate.Reset();
   }
 
   void Check() {
@@ -43,6 +46,7 @@ public:
     task_advance.Check();
     mat_task.Check();
     traffic.Check();
+    climb_rate.Check();
   }
 
 private:

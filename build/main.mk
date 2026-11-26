@@ -537,6 +537,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Version.cpp \
 	$(SRC)/system/StandardVersion.cpp \
 	$(SRC)/Audio/Sound.cpp \
+	$(SRC)/Audio/SpokenVerticalSpeed.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Screen.cpp \
@@ -629,6 +630,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Monitor/TaskAdvanceMonitor.cpp \
 	$(SRC)/Monitor/MatTaskMonitor.cpp \
 	$(SRC)/Monitor/TrafficMonitor.cpp \
+	$(SRC)/Monitor/ClimbRateMonitor.cpp \
 	$(SRC)/Monitor/AllMonitors.cpp \
 	\
 	$(SRC)/Hardware/PowerGlobal.cpp \

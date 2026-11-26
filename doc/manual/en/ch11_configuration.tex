@@ -1019,12 +1019,22 @@ service have a look at \url{https://skylines.aero}.
 
 \section{Setup / Audio}\label{sec:audiovario-gauge}
 
-Master volume and the audio variometer. \label{conf:audiovariogauge}
+Master volume, the audio variometer and the spoken climb
+rate. \label{conf:audiovariogauge}
 
 \begin{description}
 \item[Master Volume]  The overall audio output volume.
 \item[Audio Vario]  Enable/Disable the audio variometer. The other
   audio vario settings on this page are hidden while it is off.
+\item[Spoken climb rate] \label{conf:spokenclimbrate} While circling,
+  speaks the average climb of the last 30 seconds every 30 seconds,
+  in English, as a bare number in your vertical speed unit: {\em one
+  point five}, {\em minus zero point five}.  Feet per minute are
+  rounded to a hundred: {\em three hundred}.  The first value comes
+  30 seconds after circling mode starts, so it covers the climb
+  only.  Nothing is spoken on the ground, without a vertical speed
+  (vario or GPS altitude), or while a FLARM collision alarm or an
+  airspace warning is active.  Off by default.
 \item[Vario Volume]  Set the volume of the variometer sounds.
 \item[Mode switching]  Stay in manual audio mode, or switch automatically
   between Vario in circling and speed-to-fly in cruise.

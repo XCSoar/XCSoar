@@ -12987,3 +12987,9 @@ msgstr ""
 
 msgid "[DEL]"
 msgstr "[ENTF]"
+
+msgid "Spoken climb rate"
+msgstr "Gesprochenes Steigen"
+
+msgid "While circling, speak the average climb of the last 30 seconds every 30 seconds: \"one point five\"."
+msgstr "Spricht beim Kreisen alle 30 Sekunden das mittlere Steigen der letzten 30 Sekunden: \"one point five\"."

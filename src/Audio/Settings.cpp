@@ -12,5 +12,7 @@ SoundSettings::SetDefaults()
 
   master_volume = 50;
 
+  spoken_climb_rate = false;
+
   vario.SetDefaults();
 }
