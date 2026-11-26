@@ -16,4 +16,8 @@ endef
 
 $(foreach file,$(DATA_RESOURCES),$(eval $(call add-data-file,$(file))))
 
+# The data symbols are defined in top-level asm, which an LTO symbol
+# table does not list; the linker would not extract them from libdata.a.
+$(call SRC_TO_OBJ,$(DATA_SOURCES)): CFLAGS += -fno-lto
+
 $(eval $(call link-library,libdata,DATA))
