@@ -127,6 +127,12 @@ Version 7.47 - not yet released
   - fix coordinates sent with 60 minutes to FLARM, Altair, CAI302 and LXNAV
   - fix a Volkslogger download whose security record gained an extra
     group when the flight data already ended on a three-byte boundary
+* simulator
+  - add a “Startup mode” setting (Setup → Language, Input) to always
+    start in fly or simulator mode instead of answering the Fly /
+    Simulator prompt on every start; the choice is stored per device
+    (device.xcd), not in the profile, so it applies to all
+    profiles #2859
 * tracking
   - SkyLines: while offline, queue one fix every 25 seconds as
     intended, instead of keeping arbitrary fixes #3516
