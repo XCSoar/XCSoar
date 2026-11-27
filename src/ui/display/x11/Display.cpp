@@ -17,7 +17,7 @@
 
 namespace X11 {
 
-Display::Display()
+Display::Display([[maybe_unused]] unsigned antialiasing_samples)
   :display(XOpenDisplay(nullptr))
 {
   if (display == nullptr)

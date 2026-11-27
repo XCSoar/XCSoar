@@ -24,6 +24,16 @@ public:
     FBO::BindFramebuffer(FBO::FRAMEBUFFER, id);
   }
 
+#ifdef HAVE_MULTISAMPLE_FBO
+  /**
+   * Bind to one of #FBO::READ_FRAMEBUFFER / #FBO::DRAW_FRAMEBUFFER,
+   * as the explicit multisample resolve needs.
+   */
+  void Bind(GLenum target) noexcept {
+    FBO::BindFramebuffer(target, id);
+  }
+#endif
+
   static void Unbind() noexcept {
 
     FBO::BindFramebuffer(FBO::FRAMEBUFFER, GL_UNBIND_FRAMEBUFFER);
