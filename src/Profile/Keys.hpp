@@ -13,6 +13,7 @@ constexpr std::string_view StatusBar = "StatusBar";
 constexpr std::string_view UIScale = "UIScale";
 constexpr std::string_view ViewingDistance = "ViewingDistance";
 constexpr std::string_view CustomDPI = "CustomDPI";
+constexpr std::string_view AntiAliasing = "AntiAliasing";
 constexpr std::string_view DarkMode = "DarkMode";
 constexpr std::string_view DisplayType = "DisplayType";
 constexpr std::string_view DownloadAreaFilter = "DownloadAreaFilter";

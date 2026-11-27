@@ -28,9 +28,32 @@ class BufferCanvas : public Canvas {
 
   GLTexture *texture = nullptr;
 
+  /**
+   * The framebuffer #texture is attached to.  With the explicit
+   * multisample resolve this is only the resolve target; drawing goes
+   * to #msaa_frame_buffer.
+   */
   GLFrameBuffer *frame_buffer = nullptr;
 
   GLRenderBuffer *stencil_buffer = nullptr;
+
+  /**
+   * The multisampled framebuffer drawing goes to when the resolve is
+   * explicit, together with its multisampled colour attachment.  Both
+   * are nullptr otherwise - with the implicit resolve, and when this
+   * buffer is not multisampled at all.
+   */
+  GLFrameBuffer *msaa_frame_buffer = nullptr;
+  GLRenderBuffer *color_buffer = nullptr;
+
+  /**
+   * The number of MSAA samples this buffer renders with, or 0 for
+   * none.  Decided in Create() from the user's setting and what the
+   * GL implementation can do, and reset to 0 whenever the
+   * multisampled framebuffer turns out to be incomplete (which the
+   * new size can cause in Resize(), too).
+   */
+  GLsizei samples = 0;
 
   GLint old_viewport[4];
 
@@ -124,6 +147,44 @@ public:
               PixelRect src_rc) noexcept;
 
 private:
+  /**
+   * The framebuffer drawing goes to, which is the multisampled one
+   * where there is one.
+   */
+  [[gnu::pure]]
+  GLFrameBuffer &GetDrawFrameBuffer() const noexcept;
+
+  /**
+   * Allocate the renderbuffers (and, for the explicit resolve, the
+   * second framebuffer) that go with the current #texture and
+   * #samples.
+   */
+  void CreateAttachments() noexcept;
+
+  /**
+   * Detach and free what CreateAttachments() allocated.
+   */
+  void DestroyAttachments() noexcept;
+
+  /**
+   * Like CreateAttachments(), but verify that a multisampled
+   * framebuffer really is complete, and fall back to no
+   * multisampling if it is not.
+   */
+  void CreateAttachmentsChecked() noexcept;
+
+  /**
+   * Bind the draw framebuffer and attach the colour and stencil
+   * buffers to it.
+   */
+  void AttachAll() noexcept;
+
+  /**
+   * Finish drawing: resolve the multisamples if that is not implicit,
+   * and unbind.
+   */
+  void FinishDrawing() noexcept;
+
   void Activate() noexcept;
   void Deactivate() noexcept;
 };

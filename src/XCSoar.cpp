@@ -13,6 +13,7 @@
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
+#include "UISettings.hpp"
 #include "Look/GlobalFonts.hpp"
 #include "ui/window/Init.hpp"
 #include "ui/event/Queue.hpp"
@@ -34,6 +35,10 @@
 #include "util/PrintException.hxx"
 #include "UIActions.hpp"
 #include "Hardware/SystemPower.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/File.hpp"
+#include "Profile/Map.hpp"
+#include "Profile/Keys.hpp"
 
 #include <cstdio>
 
@@ -66,7 +71,28 @@ Main()
      UI::BlockSignals() */
   UI::BlockSignals();
 
-  ScreenGlobalInit screen_init;
+  // Peek at the profile for the AA setting without modifying global
+  // Profile state - Profile::GetPath() must remain nullptr so that
+  // dlgStartupShowModal() is still shown later.  Unless a profile was
+  // given on the command line, use the most recently used one: that is
+  // what the startup dialog will preselect.
+  unsigned antialiasing_samples = ANTIALIASING_OFF;
+  try {
+    Path path = Profile::GetPath();
+    AllocatedPath default_path;
+    if (path == nullptr) {
+      default_path = Profile::GetMostRecentPath();
+      path = default_path;
+    }
+    ProfileMap temp_map;
+    Profile::LoadFile(temp_map, path);
+    temp_map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
+    if (!IsValidAntialiasing(antialiasing_samples))
+      antialiasing_samples = ANTIALIASING_OFF;
+  } catch (...) {
+  }
+
+  ScreenGlobalInit screen_init(antialiasing_samples);
 
 #ifdef _WIN32
   /* try to make the UI most responsive */

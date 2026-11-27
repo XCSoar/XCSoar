@@ -10,6 +10,18 @@
 #define HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
 #endif
 
+/**
+ * Can this build render a framebuffer object with multisampling?
+ * Both mechanisms need tokens and typedefs from the extension
+ * headers, and the code paths are written as a pair, so they are
+ * gated together.  Whether the running implementation actually offers
+ * one of them is OpenGL::fbo_antialiasing_mode.
+ */
+#if defined(GL_EXT_multisampled_render_to_texture) && \
+  defined(GL_NV_framebuffer_blit)
+#define HAVE_MULTISAMPLE_FBO
+#endif
+
 namespace GLExt {
 
 #ifdef HAVE_DYNAMIC_MAPBUFFER
@@ -44,5 +56,35 @@ static inline void MultiDrawElements(Args... args) noexcept {
 #ifdef GL_EXT_discard_framebuffer
 inline PFNGLDISCARDFRAMEBUFFEREXTPROC discard_framebuffer;
 #endif // GL_EXT_discard_framebuffer
+
+#ifdef HAVE_MULTISAMPLE_FBO
+/**
+ * Allocate multisampled renderbuffer storage.  Both multisample
+ * mechanisms need this, and both spell the entry point
+ * "glRenderbufferStorageMultisample" with an assortment of vendor
+ * suffixes; whichever one resolves is stored here.
+ */
+inline PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC
+  renderbuffer_storage_multisample;
+
+/**
+ * Attach a texture as a multisampled colour buffer, resolved
+ * implicitly when the framebuffer is unbound
+ * (GL_EXT_multisampled_render_to_texture).  nullptr if the
+ * implementation does not offer implicit resolve; tiled GPUs do,
+ * desktop GPUs generally do not.
+ */
+inline PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC
+  framebuffer_texture_2d_multisample;
+
+/**
+ * Resolve a multisampled framebuffer explicitly by blitting it into a
+ * single-sampled one.  nullptr if the implementation cannot do that;
+ * the NV typedef is used because it is the spelling the GLES2 headers
+ * always provide, but the entry point loaded may be any of the core,
+ * EXT, NV or ANGLE variants, which share this signature.
+ */
+inline PFNGLBLITFRAMEBUFFERNVPROC blit_framebuffer;
+#endif // HAVE_MULTISAMPLE_FBO
 
 } // namespace GLExt

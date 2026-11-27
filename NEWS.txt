@@ -59,6 +59,10 @@ Version 7.47 - not yet released
     is one step higher
   - size dialog rows and buttons to at least 30 pt on a mouse,
     the same as on a touch screen #3021
+  - add an Anti-aliasing setting on Setup / Screen for smoother lines
+    and edges (Off, 2x, 4x, 8x, 16x; takes effect after a restart).
+    Where the device offers fewer levels, the map and the gauges each
+    use the next lower one, and the list shows what each gets
   - fix the progress dialog staying on the light splash colours
     when Dark mode is on
   - fix latitude and longitude displays that showed 60 seconds or
@@ -160,6 +164,8 @@ Version 7.47 - not yet released
     seconds, e.g. after a knock on the USB plug, instead of only when
     it is unplugged; drivers for devices that may stay silent, such as
     radios, are left out #3346
+* Linux
+  - prefer 24-bit colour on Wayland instead of 16-bit
 * dialogs
   - list thermal hotspots in the waypoint type editor. A CUP file
     has no style for them, so saving the file stores them as
@@ -199,6 +205,7 @@ Version 7.47 - not yet released
     data directory, as in waypoints/details/ETSI_1.png #3453
   - describe which airspace the list of map elements selects
   - describe the Imhof Atlas lite terrain colour ramp
+  - describe the Anti-aliasing setting on Setup / Screen
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar

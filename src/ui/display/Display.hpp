@@ -39,7 +39,9 @@ namespace UI {
 
 class Display : public EGL::Display, public OpenGL::Display {
 public:
-  using EGL::Display::Display;
+  explicit Display(EGLNativeDisplayType native_display,
+                   unsigned antialiasing_samples = 0)
+    :EGL::Display(native_display, antialiasing_samples) {}
 };
 
 #elif defined(USE_EGL) && defined(USE_X11)
@@ -48,8 +50,9 @@ class Display
   : public X11::Display, public EGL::Display,
     public OpenGL::Display {
 public:
-  Display()
-    :EGL::Display(X11::Display::GetXDisplay()) {}
+  explicit Display(unsigned antialiasing_samples = 0)
+    :X11::Display(antialiasing_samples),
+     EGL::Display(X11::Display::GetXDisplay(), antialiasing_samples) {}
 };
 
 #elif defined(MESA_KMS)
@@ -71,9 +74,9 @@ class Display
   bool dirty = true;
 
 public:
-  Display()
+  explicit Display(unsigned antialiasing_samples = 0)
     :EGL::GbmDisplay(GetDriFD()),
-     EGL::Display(GetGbmDevice()) {}
+     EGL::Display(GetGbmDevice(), antialiasing_samples) {}
 
   void SetDirty() noexcept {
     dirty = true;
@@ -90,8 +93,8 @@ class Display
   : public Wayland::Display, public EGL::Display, public OpenGL::Display
 {
 public:
-  Display()
-    :EGL::Display(GetWaylandDisplay()) {}
+  explicit Display(unsigned antialiasing_samples = 0)
+    :EGL::Display(GetWaylandDisplay(), antialiasing_samples) {}
 };
 
 #elif defined(ENABLE_SDL)
@@ -103,7 +106,8 @@ class Display
 #endif
 {
 public:
-  using SDL::Display::Display;
+  explicit Display(unsigned antialiasing_samples = 0)
+    :SDL::Display(antialiasing_samples) {}
 };
 
 #else
