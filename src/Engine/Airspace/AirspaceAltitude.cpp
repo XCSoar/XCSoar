@@ -47,7 +47,8 @@ ParseAirspaceAltitude(StringParser<> &input,
     if (input.IsEmpty())
       break;
 
-    if (IsDigitASCII(input.front())) {
+    if (const char *p = input.c_str();
+        IsDigitASCII(*p) || (*p == '-' && IsDigitASCII(p[1]))) {
       if (auto x = input.ReadDouble())
         value = *x;
     } else if (input.SkipMatchIgnoreCase("GND"sv) ||
