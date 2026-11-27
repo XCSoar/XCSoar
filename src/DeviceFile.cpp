@@ -89,18 +89,14 @@ Save() noexcept
 StartupMode
 GetStartupMode() noexcept
 {
-  StartupMode mode = StartupMode::ASK;
-  state.GetEnum(Keys::StartupMode, mode);
+  int value;
+  if (!state.Get(Keys::StartupMode, value) ||
+      value < int(StartupMode::ASK) ||
+      value > int(StartupMode::SIMULATOR))
+    /* missing, or a value that does not fit the enum */
+    return StartupMode::ASK;
 
-  switch (mode) {
-  case StartupMode::ASK:
-  case StartupMode::FLY:
-  case StartupMode::SIMULATOR:
-    return mode;
-  }
-
-  /* invalid value in the device file */
-  return StartupMode::ASK;
+  return StartupMode(value);
 }
 
 void

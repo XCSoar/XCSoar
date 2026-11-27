@@ -121,6 +121,11 @@ TestInvalidValues()
   ok1(WriteTextFile(state_path, "StartupMode=\"garbage\"\n"));
   DeviceFile::Load();
   ok1(DeviceFile::GetStartupMode() == DeviceFile::StartupMode::ASK);
+
+  /* 257 truncates to FLY if stored in the enum's 8-bit type */
+  ok1(WriteTextFile(state_path, "StartupMode=\"257\"\n"));
+  DeviceFile::Load();
+  ok1(DeviceFile::GetStartupMode() == DeviceFile::StartupMode::ASK);
 }
 
 int
@@ -128,7 +133,7 @@ main()
 {
   SetFakeLogFileQuiet(true);
 
-  plan_tests(20);
+  plan_tests(22);
   TestDefaultsWithoutFile();
   TestRoundTrip();
   TestPreservesUnknownKeys();
