@@ -128,15 +128,39 @@ TestInvalidValues()
   ok1(DeviceFile::GetStartupMode() == DeviceFile::StartupMode::ASK);
 }
 
+static void
+TestAntialiasing()
+{
+  char template_path[] = "/tmp/xcsoar-state-XXXXXX";
+  const auto state_path = SetUpDataPath(template_path);
+
+  DeviceFile::Load();
+  ok1(DeviceFile::GetAntialiasing() == 0);
+
+  DeviceFile::SetAntialiasing(4);
+  ok1(FileContainsLine(state_path, "AntiAliasing=\"4\""));
+
+  DeviceFile::Load();
+  ok1(DeviceFile::GetAntialiasing() == 4);
+
+  ok1(WriteTextFile(state_path, "AntiAliasing=\"7\"\n"));
+  DeviceFile::Load();
+  ok1(DeviceFile::GetAntialiasing() == 0);
+
+  DeviceFile::SetAntialiasing(3);
+  ok1(DeviceFile::GetAntialiasing() == 0);
+}
+
 int
 main()
 {
   SetFakeLogFileQuiet(true);
 
-  plan_tests(22);
+  plan_tests(22 + 7);
   TestDefaultsWithoutFile();
   TestRoundTrip();
   TestPreservesUnknownKeys();
   TestInvalidValues();
+  TestAntialiasing();
   return exit_status();
 }

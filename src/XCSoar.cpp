@@ -34,6 +34,7 @@
 #include "util/PrintException.hxx"
 #include "UIActions.hpp"
 #include "Hardware/SystemPower.hpp"
+#include "DeviceFile.hpp"
 
 #include <cstdio>
 
@@ -66,7 +67,11 @@ Main()
      UI::BlockSignals() */
   UI::BlockSignals();
 
-  ScreenGlobalInit screen_init;
+  /* anti-aliasing is a property of this screen, so it is read from
+     device.xcd before the display exists (#1993).  Startup() loads
+     the same file again for the fly/simulator choice. */
+  DeviceFile::Load();
+  ScreenGlobalInit screen_init(DeviceFile::GetAntialiasing());
 
 #ifdef _WIN32
   /* try to make the UI most responsive */
