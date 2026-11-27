@@ -78,6 +78,8 @@ TestOpenAir()
       ok1(equals(circle.GetRadius(), Units::ToSysUnit(5, Unit::NAUTICAL_MILES)));
       ok1(equals(circle.GetReferenceLocation(),
                  Angle::Degrees(1.091667), Angle::Degrees(0.091667)));
+      ok1(circle.GetBase().reference == AltitudeReference::MSL);
+      ok1(circle.GetBase().altitude == -50);
     } else if (StringIsEqual("Arc-Test", airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))
         continue;
@@ -396,7 +398,7 @@ TestActivationTime()
 
 int main()
 try {
-  plan_tests(174);
+  plan_tests(174 + 2);
 
   TestOpenAir();
   TestTNP();

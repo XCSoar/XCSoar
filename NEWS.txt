@@ -102,6 +102,7 @@ Version 7.47 - not yet released
 * airspace
   - show the bottom airspace warning in bold, white on the red
     Inside fill
+  - preserve altitudes below mean sea level when loading OpenAir files
 * task
   - sign in to SoaringScoring from Services and load the contest task
     from its task manager page, shown while signed in. Upload Flight
