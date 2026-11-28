@@ -349,11 +349,16 @@ IGCScanBRecord(IGCRecordingSpan &span, const char *line) noexcept
 
   ++span.fix_lines;
 
-  BrokenTime time;
-  if (!IGCParseTime(line + 1, time))
+  /* same accept rule as IgcReplay::Update: a parsed GPS-valid fix
+     with a plausible time. Extensions do not affect that decision. */
+  IGCExtensions extensions;
+  extensions.clear();
+  IGCFix fix;
+  if (!IGCParseFix(line, extensions, fix) || !fix.gps_valid ||
+      !fix.time.IsPlausible())
     return;
 
-  const TimeStamp time_stamp{time.DurationSinceMidnight()};
+  const TimeStamp time_stamp{fix.time.DurationSinceMidnight()};
   if (!span.start_time.IsDefined())
     span.start_time = time_stamp;
   span.end_time = time_stamp;

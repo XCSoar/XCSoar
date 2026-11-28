@@ -74,7 +74,7 @@ IGCParseTime(const char *buffer, BrokenTime &time);
 
 /**
  * B-record summary of one IGC file: how many B lines it has, and the
- * time of day of the first and last B line whose time parses.
+ * time of day of the first and last B line IgcReplay would emit.
  */
 struct IGCRecordingSpan {
   unsigned fix_lines = 0;
@@ -84,8 +84,8 @@ struct IGCRecordingSpan {
 
 /**
  * Count one IGC line. A B record increments #IGCRecordingSpan::fix_lines
- * even when its time of day is missing or not plausible. The first
- * plausible time becomes the start, and each later one the end.
+ * even when it is not a fix. The start and end times come only from a
+ * record IgcReplay would emit: parsed, GPS-valid, and a plausible time.
  */
 void
 IGCScanBRecord(IGCRecordingSpan &span, const char *line) noexcept;

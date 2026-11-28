@@ -257,6 +257,15 @@ TestScanBRecord()
   IGCScanBRecord(span, "B235960");
   ok1(span.fix_lines == 5);
   ok1(span.end_time == second);
+
+  /* a validity of V, or a location the reader rejects, still counts */
+  IGCScanBRecord(span, "B1124005103117N00742367EV004900048700000");
+  ok1(span.fix_lines == 6);
+  ok1(span.end_time == second);
+
+  IGCScanBRecord(span, "B1125005103117X00742367EA004900048700000");
+  ok1(span.fix_lines == 7);
+  ok1(span.end_time == second);
 }
 
 static void
@@ -316,7 +325,7 @@ TestDeclarationTurnpoint()
 
 int main()
 {
-  plan_tests(148 + 8 + 7 + 16);
+  plan_tests(148 + 8 + 7 + 20);
 
   TestHeader();
   TestDate();

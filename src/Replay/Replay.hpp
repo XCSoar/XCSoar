@@ -145,9 +145,14 @@ public:
   void Stop();
 
   /**
-   * Throws std::runtime_errror on error.
+   * Throws std::runtime_error on error.
+   *
+   * @param keep_scan retain the recording scan for an internal rewind
+   * of the same file. A public open drops it, including a same-path
+   * open, so a replaced file is not seeked with the previous bounds.
    */
-  void Start(Path _path, const DeviceConfig &device);
+  void Start(Path _path, const DeviceConfig &device,
+             bool keep_scan = false);
 
   Path GetFilename() const {
     return path;
@@ -242,10 +247,13 @@ public:
 
 private:
   /**
-   * Return the scan of the current recording, reading the file once
-   * and caching the result.
+   * Fill #recording_scan, reading the file once.  The first 500 ms
+   * run on the caller; a longer read continues in \a runner, which
+   * can cancel it.  \a cancelled is set when that read is cancelled.
+   *
+   * @return true when the cache is valid
    */
-  const RecordingScan &GetRecordingScan() noexcept;
+  bool PrepareRecordingScan(JobRunner &runner, bool &cancelled) noexcept;
 
   /**
    * Read the next fix from the #AbstractReplay, keeping #fixes_read
@@ -263,12 +271,15 @@ private:
    * replay is active with a defined #virtual_time and not in demo
    * mode.
    *
+   * @param warped set when a genuine backward time jump stops the scan
    * @return true if the predicate matched or the scan was cancelled
    */
   bool ForwardScan(MergeThread &merge_thread,
                    CalculationThread &calculation_thread,
                    JobRunner &runner,
-                   std::function<bool(OperationEnvironment &)> matched) noexcept;
+                   std::function<bool(OperationEnvironment &)> matched,
+                   bool &warped,
+                   CirclingMode *start_phase = nullptr) noexcept;
 
   /**
    * Scan forward from the current position until the given time of

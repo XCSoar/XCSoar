@@ -48,6 +48,51 @@ constexpr std::chrono::steady_clock::duration SYNC_SEEK_BUDGET =
 constexpr std::chrono::steady_clock::duration PROGRESS_UPDATE_INTERVAL =
   std::chrono::milliseconds(100);
 
+/* A midnight wrap is a short step once one day is added. A longer
+   jump backward is a bad timestamp and stops the seek. Same bound as
+   the IGC flight-time scan. */
+constexpr FloatDuration ONE_DAY{24. * 60. * 60.};
+constexpr FloatDuration HALF_DAY{12. * 60. * 60.};
+constexpr FloatDuration MAX_MIDNIGHT_STEP{60. * 60.};
+
+/**
+ * Time of \a time on one timeline that continues across midnight.
+ * \a new_offset is the day offset to keep for the next fix.
+ * Undefined means a genuine backward jump.
+ */
+TimeStamp
+ScanAbsoluteTime(TimeStamp time, TimeStamp last_raw,
+                 FloatDuration day_offset,
+                 FloatDuration &new_offset) noexcept
+{
+  new_offset = day_offset;
+
+  const TimeStamp previous = last_raw + day_offset;
+  const TimeStamp absolute = time + day_offset;
+  if (!(absolute + HALF_DAY < previous)) {
+    if (absolute < previous)
+      return TimeStamp::Undefined();
+    return absolute;
+  }
+
+  const TimeStamp rolled = absolute + ONE_DAY;
+  const auto step = rolled - previous;
+  if (step.count() > 0 && step <= MAX_MIDNIGHT_STEP) {
+    new_offset = day_offset + ONE_DAY;
+    return rolled;
+  }
+
+  return TimeStamp::Undefined();
+}
+
+TimeStamp
+TimeOfDay(TimeStamp time) noexcept
+{
+  while (time.ToDuration() >= ONE_DAY)
+    time = time - ONE_DAY;
+  return time;
+}
+
 void
 ApplyReplayFix(DeviceBlackboard &device_blackboard,
                MergeThread &merge_thread,
@@ -204,7 +249,7 @@ Replay::Stop()
 }
 
 void
-Replay::Start(Path _path, const DeviceConfig &device)
+Replay::Start(Path _path, const DeviceConfig &device, bool keep_scan)
 {
   assert(_path != nullptr);
 
@@ -214,9 +259,11 @@ Replay::Start(Path _path, const DeviceConfig &device)
 
   device_config = &device;
 
-  if (path != _path)
-    /* another file: the cached scan no longer describes it */
+  if (!keep_scan) {
+    /* a public open may replace the file at the same path */
     recording_scan_valid = false;
+    recording_scan = {};
+  }
 
   path = _path;
 
@@ -244,33 +291,73 @@ Replay::Start(Path _path, const DeviceConfig &device)
   timer.Schedule(std::chrono::milliseconds(100));
 }
 
-const Replay::RecordingScan &
-Replay::GetRecordingScan() noexcept
+bool
+Replay::PrepareRecordingScan(JobRunner &runner, bool &cancelled) noexcept
 {
+  cancelled = false;
+
   if (recording_scan_valid)
-    return recording_scan;
+    return true;
 
-  recording_scan = {};
-  recording_scan_valid = true;
-
-  if (path == nullptr || path.empty() ||
-      !FilenameMatchesFileType(path.GetBase().c_str(), FileType::IGC))
-    return recording_scan;
-
-  try {
-    FileLineReaderA reader{path};
-    IGCRecordingSpan span;
-    while (const char *line = reader.ReadLine())
-      IGCScanBRecord(span, line);
-
-    recording_scan.fix_lines = span.fix_lines;
-    recording_scan.start_time = span.start_time;
-    recording_scan.end_time = span.end_time;
-  } catch (...) {
+  /* 0 done, 1 budget exhausted, 2 cancelled, 3 read failed */
+  const auto read = [&](OperationEnvironment &env, bool bounded){
+    const TimeStamp played_origin = recording_scan.start_time;
     recording_scan = {};
-  }
 
-  return recording_scan;
+    if (path == nullptr || path.empty() ||
+        !FilenameMatchesFileType(path.GetBase().c_str(), FileType::IGC)) {
+      /* NMEA has no B records. Keep the first played fix as the
+         origin, and do not retry the scan on the next seek. */
+      recording_scan.start_time = played_origin;
+      recording_scan_valid = true;
+      return 0;
+    }
+
+    PeriodClock budget;
+    budget.Update();
+
+    try {
+      FileLineReaderA reader{path};
+      IGCRecordingSpan span;
+      while (const char *line = reader.ReadLine()) {
+        if (env.IsCancelled())
+          return 2;
+
+        if (bounded && budget.Check(SYNC_SEEK_BUDGET))
+          /* shortcut: the job rereads from the start, resume the
+             reader when a large IGC makes the repeated prefix matter */
+          return 1;
+
+        IGCScanBRecord(span, line);
+      }
+
+      recording_scan.fix_lines = span.fix_lines;
+      recording_scan.start_time = span.start_time;
+      recording_scan.end_time = span.end_time;
+      recording_scan_valid = true;
+      return 0;
+    } catch (...) {
+      /* leave the cache invalid so a later seek can retry */
+      recording_scan = {};
+      return 3;
+    }
+  };
+
+  NullOperationEnvironment sync_env;
+  const int sync_result = read(sync_env, true);
+  if (sync_result == 0)
+    return true;
+
+  /* a failed read is not helped by showing the progress dialog */
+  if (sync_result != 1)
+    return false;
+
+  ReplaySeekJob job{[&](OperationEnvironment &env){
+    if (read(env, false) == 2)
+      cancelled = true;
+  }};
+  RunSeekJob(runner, job);
+  return recording_scan_valid;
 }
 
 bool
@@ -301,11 +388,18 @@ Replay::SeekToFlightElapsedMinutes(unsigned minutes,
   if (!IsActive() || path == nullptr || path.empty())
     return false;
 
-  const RecordingScan &scan = GetRecordingScan();
+  bool scan_cancelled = false;
+  if (!PrepareRecordingScan(runner, scan_cancelled))
+    return scan_cancelled;
+
+  const RecordingScan &scan = recording_scan;
 
   if (scan.start_time.IsDefined() && virtual_time.IsDefined()) {
     const TimeStamp forward_target =
       scan.start_time + FloatDuration{(double)minutes * 60.};
+
+    if (forward_target == virtual_time)
+      return true;
 
     if (forward_target > virtual_time) {
       /* the target lies ahead of the current position: scan forward
@@ -329,7 +423,7 @@ Replay::SeekToFlightElapsedMinutes(unsigned minutes,
 
   try {
     Stop();
-    Start(saved_path, *device_config);
+    Start(saved_path, *device_config, true);
   } catch (...) {
     return false;
   }
@@ -378,8 +472,10 @@ Replay::SeekToFlightElapsedMinutes(unsigned minutes,
   const double progress_range =
     std::max(1., (progress_end - anchor).count());
 
-  TimeStamp last_time = anchor;
+  TimeStamp last_raw = anchor;
+  FloatDuration day_offset{0};
   bool complete = false;
+  bool warped = false;
 
   /* returns false when the time budget ran out and the scan must
      continue in a job behind the progress dialog */
@@ -405,22 +501,29 @@ Replay::SeekToFlightElapsedMinutes(unsigned minutes,
         continue;
       }
 
-      if (next_data.time > target_ts)
+      FloatDuration new_offset{0};
+      const TimeStamp absolute =
+        ScanAbsoluteTime(next_data.time, last_raw, day_offset,
+                         new_offset);
+      if (!absolute.IsDefined()) {
+        /* a genuine backward jump, not a midnight wrap */
+        warped = true;
+        return true;
+      }
+
+      if (absolute > target_ts)
         break;
 
-      if (next_data.time < last_time)
-        /* time warp, e.g. midnight wraparound during NMEA replay:
-           stop here instead of replaying the whole remaining file */
-        return true;
+      day_offset = new_offset;
 
       ApplyReplayFix(device_blackboard, merge_thread, calculation_thread,
                      next_data);
-      last_time = next_data.time;
+      last_raw = next_data.time;
 
       if (progress_clock.CheckUpdate(PROGRESS_UPDATE_INTERVAL)) {
         env.SetProgressRange(unsigned(progress_range));
         env.SetProgressPosition(
-          unsigned(std::clamp((last_time - anchor).count(), 0.,
+          unsigned(std::clamp((absolute - anchor).count(), 0.,
                               progress_range)));
       }
 
@@ -447,8 +550,8 @@ Replay::SeekToFlightElapsedMinutes(unsigned minutes,
 
   /* when the seek stopped early (end of recording, time warp or
      cancelled), stay at the last applied fix instead of jumping past
-     the applied data */
-  virtual_time = complete ? target_ts : last_time;
+     the applied data. The playback clock stays the time of day. */
+  virtual_time = complete ? TimeOfDay(target_ts) : last_raw;
 
   if (complete && cli != nullptr) {
     /* the fix that ended the scan is still held back and has not
@@ -483,16 +586,18 @@ Replay::SeekToFlightElapsedMinutes(unsigned minutes,
   TriggerCalculatedUpdate();
   TriggerVarioUpdate();
 
-  return true;
+  return !warped;
 }
 
 bool
 Replay::ForwardScan(MergeThread &merge_thread,
                     CalculationThread &calculation_thread,
                     JobRunner &runner,
-                    std::function<bool(OperationEnvironment &)> matched) noexcept
+                    std::function<bool(OperationEnvironment &)> matched,
+                    bool &warped, CirclingMode *start_phase) noexcept
 {
   timer.Cancel();
+  warped = false;
 
   /* declared before the suspension guard so the timer is re-armed
      after the worker threads have been resumed */
@@ -510,9 +615,18 @@ Replay::ForwardScan(MergeThread &merge_thread,
 
   const ScopedWorkerSuspend suspend{merge_thread, calculation_thread};
 
+  /* the calculation thread can still publish a phase until it is
+     suspended, so the seek's idea of "already in this phase" is read
+     here, before the first fix is applied */
+  if (start_phase != nullptr) {
+    const std::lock_guard lock{device_blackboard.mutex};
+    *start_phase = device_blackboard.Calculated().turn_mode;
+  }
+
   bool found = false;
   bool cancelled = false;
-  TimeStamp last_time = virtual_time;
+  TimeStamp last_raw = virtual_time;
+  FloatDuration day_offset{0};
 
   /* returns false when the time budget ran out and the scan must
      continue in a job behind the progress dialog */
@@ -530,13 +644,21 @@ Replay::ForwardScan(MergeThread &merge_thread,
       if (!next_data.time_available)
         continue;
 
-      if (next_data.time < last_time)
-        /* time warp, e.g. midnight wraparound during NMEA replay */
+      FloatDuration new_offset{0};
+      const TimeStamp absolute =
+        ScanAbsoluteTime(next_data.time, last_raw, day_offset,
+                         new_offset);
+      if (!absolute.IsDefined()) {
+        /* a genuine backward jump, not a midnight wrap */
+        warped = true;
         break;
+      }
+
+      day_offset = new_offset;
 
       ApplyReplayFix(device_blackboard, merge_thread, calculation_thread,
                      next_data);
-      last_time = next_data.time;
+      last_raw = next_data.time;
 
       if (cli != nullptr)
         cli->Update(next_data.time, next_data.location,
@@ -569,11 +691,15 @@ Replay::ForwardScan(MergeThread &merge_thread,
 
   /* even when no match was found (end of recording, time warp or
      cancelled), keep the position that was reached, so playback
-     resumes consistently with the fixes already applied */
-  if (last_time > virtual_time) {
-    virtual_time = last_time;
+     resumes consistently with the fixes already applied. The clock
+     stays the time of day, including after midnight. Update it even
+     when the position did not move, so the time spent seeking is not
+     played back. */
+  clock.Update();
+
+  if (last_raw != virtual_time || day_offset.count() != 0) {
+    virtual_time = last_raw;
     fast_forward = TimeStamp::Undefined();
-    clock.Update();
 
     {
       const std::lock_guard lock{device_blackboard.mutex};
@@ -598,23 +724,36 @@ Replay::ForwardScanToTime(TimeStamp target_ts, TimeStamp progress_end,
     std::max(1., (progress_end - start).count());
 
   /* reaching the end of the recording before the target is not an
-     error, so the scan result is ignored */
-  ForwardScan(merge_thread, calculation_thread, runner,
-              [this, start, target_ts, progress_range,
-               progress_clock = PeriodClock{}]
-              (OperationEnvironment &env) mutable {
+     error; a genuine backward jump is */
+  bool warped = false;
+  const bool reached =
+    ForwardScan(merge_thread, calculation_thread, runner,
+                [this, start, target_ts, progress_range,
+                 day_offset = FloatDuration{0},
+                 last_raw = start,
+                 progress_clock = PeriodClock{}]
+                (OperationEnvironment &env) mutable {
+    FloatDuration new_offset{0};
+    const TimeStamp absolute =
+      ScanAbsoluteTime(next_data.time, last_raw, day_offset, new_offset);
+    if (absolute.IsDefined()) {
+      day_offset = new_offset;
+      last_raw = next_data.time;
+    }
+
     if (progress_clock.CheckUpdate(PROGRESS_UPDATE_INTERVAL)) {
       env.SetProgressRange(unsigned(progress_range));
 
-      const auto elapsed = next_data.time - start;
+      const TimeStamp shown = absolute.IsDefined() ? absolute : start;
+      const auto elapsed = shown - start;
       env.SetProgressPosition(
         unsigned(std::clamp(elapsed.count(), 0., progress_range)));
     }
 
-    return next_data.time >= target_ts;
-  });
+    return absolute.IsDefined() && absolute >= target_ts;
+  }, warped);
 
-  return true;
+  return reached || !warped;
 }
 
 bool
@@ -633,7 +772,11 @@ Replay::SeekForward(FloatDuration delta,
 
   /* clamp the progress scale at the recording end, so the bar still
      reaches 100% when skipping past the end of the flight */
-  const RecordingScan &scan = GetRecordingScan();
+  bool scan_cancelled = false;
+  if (!PrepareRecordingScan(runner, scan_cancelled))
+    return scan_cancelled;
+
+  const RecordingScan &scan = recording_scan;
   TimeStamp progress_end = target_ts;
   if (scan.end_time.IsDefined() && scan.end_time > virtual_time &&
       scan.end_time < target_ts)
@@ -658,28 +801,32 @@ Replay::SeekToNextFlightMode(CirclingMode mode,
   /* the number of fixes until the requested phase cannot be known in
      advance, so the bar shows how far through the remaining recording
      the scan has come */
-  const unsigned total_fixes = GetRecordingScan().fix_lines;
+  bool scan_cancelled = false;
+  if (!PrepareRecordingScan(runner, scan_cancelled))
+    return scan_cancelled;
+
+  const unsigned total_fixes = recording_scan.fix_lines;
   const unsigned remaining_fixes =
     total_fixes > fixes_read ? total_fixes - fixes_read : 0;
 
-  /* the interface blackboard is only refreshed from the event queue,
-     so right after a seek it still shows the phase from before it;
-     read the current phase from the device blackboard instead, under
-     its mutex because the worker threads still run here */
-  CirclingMode start_mode;
-  {
-    const std::lock_guard lock{device_blackboard.mutex};
-    start_mode = device_blackboard.Calculated().turn_mode;
-  }
-
-  bool passed_current_phase = !IsInPhase(mode, start_mode);
+  /* filled by ForwardScan after the workers are suspended, before
+     the first fix of this seek is applied */
+  CirclingMode start_mode{};
   const TimeStamp scan_start = virtual_time;
 
+  bool warped = false;
   return ForwardScan(merge_thread, calculation_thread, runner,
-                     [this, mode, passed_current_phase,
+                     [this, mode, &start_mode,
+                      passed_current_phase = false,
+                      have_start = false,
                       remaining_fixes, scan_start, applied = 0u,
                       progress_clock = PeriodClock{}]
                      (OperationEnvironment &env) mutable {
+    if (!have_start) {
+      passed_current_phase = !IsInPhase(mode, start_mode);
+      have_start = true;
+    }
+
     ++applied;
 
     if (progress_clock.CheckUpdate(PROGRESS_UPDATE_INTERVAL)) {
@@ -696,7 +843,7 @@ Replay::SeekToNextFlightMode(CirclingMode mode,
       passed_current_phase = true;
 
     return passed_current_phase && current == mode;
-  });
+  }, warped, &start_mode);
 }
 
 bool
@@ -757,6 +904,8 @@ Replay::Update()
       if (next_data.time_available) {
         if (!virtual_time.IsDefined()) {
           virtual_time = next_data.time;
+          if (!recording_scan.start_time.IsDefined())
+            recording_scan.start_time = next_data.time;
           if (fast_forward.IsDefined())
             fast_forward = virtual_time + fast_forward.ToDuration();
           clock.Update();
@@ -791,6 +940,8 @@ Replay::Update()
 
     if (!virtual_time.IsDefined()) {
       virtual_time = cli->GetMaxTime();
+      if (!recording_scan.start_time.IsDefined())
+        recording_scan.start_time = virtual_time;
       if (fast_forward.IsDefined())
         fast_forward = virtual_time + fast_forward.ToDuration();
       clock.Update();
@@ -825,8 +976,11 @@ Replay::ProcessAllFixes(MergeThread &merge_thread,
   while (ReadNextFix(data)) {
     assert(!data.gps.real);
 
-    if (data.time_available)
+    if (data.time_available) {
+      if (!recording_scan.start_time.IsDefined())
+        recording_scan.start_time = data.time;
       virtual_time = data.time;
+    }
 
     {
       const std::lock_guard lock{device_blackboard.mutex};

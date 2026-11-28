@@ -30,6 +30,14 @@ class ReplayControlWidget final
   };
 
   Replay &replay;
+  Button *seek_buttons[4]{};
+
+  void UpdateSeekButtons() noexcept {
+    const bool active = replay.IsActive();
+    for (auto *button : seek_buttons)
+      if (button != nullptr)
+        button->SetEnabled(active);
+  }
 
 public:
   ReplayControlWidget(Replay &_replay, const DialogLook &look) noexcept
@@ -38,10 +46,15 @@ public:
   void CreateButtons(WidgetDialog &dialog) noexcept {
     dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
     dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
-    dialog.AddButton(_("+10'"), [this](){ OnSkipClicked(); });
-    dialog.AddButton(_("Seek"), [this](){ OnSeekClicked(); });
-    dialog.AddButton(_("Circling"), [this](){ OnSeekNextCirclingClicked(); });
-    dialog.AddButton(_("Cruise"), [this](){ OnSeekNextCruiseClicked(); });
+    seek_buttons[0] =
+      dialog.AddButton(_("+10'"), [this](){ OnSkipClicked(); });
+    seek_buttons[1] =
+      dialog.AddButton(_("Seek"), [this](){ OnSeekClicked(); });
+    seek_buttons[2] = dialog.AddButton(
+        _("Circling"), [this](){ OnSeekNextCirclingClicked(); });
+    seek_buttons[3] =
+      dialog.AddButton(_("Cruise"), [this](){ OnSeekNextCruiseClicked(); });
+    UpdateSeekButtons();
   }
 
 private:
@@ -93,6 +106,7 @@ inline void
 ReplayControlWidget::OnStopClicked() noexcept
 {
   replay.Stop();
+  UpdateSeekButtons();
 }
 
 inline void
@@ -105,6 +119,8 @@ ReplayControlWidget::OnStartClicked() noexcept
   } catch (...) {
     ShowError(std::current_exception(), _("Replay"));
   }
+
+  UpdateSeekButtons();
 }
 
 inline void
