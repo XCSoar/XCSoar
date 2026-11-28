@@ -62,7 +62,8 @@ public:
   /**
    * Accessor for arm request state
    *
-   * @return True if arm requested
+   * @return True if the pilot should be asked to arm now (for the
+   * start only while the aircraft is in the start area)
    */
   bool NeedToArm() const noexcept  {
     return request_armed;

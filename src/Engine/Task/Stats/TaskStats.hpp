@@ -78,7 +78,8 @@ public:
   bool inside_oz;
 
   /**
-   * Does the current task point need to be armed?
+   * Should the pilot be asked to arm the current task point now?
+   * For the start only while the aircraft is in the start area.
    */
   bool need_to_arm;
 
