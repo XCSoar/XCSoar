@@ -203,6 +203,8 @@ Version 7.47 - not yet released
     data directory, as in waypoints/details/ETSI_1.png #3453
   - describe which airspace the list of map elements selects
   - describe the Imhof Atlas lite terrain colour ramp
+  - describe logger replay seek to a flight minute, the next circling
+    or cruise phase, and the ten-minute skip
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar
