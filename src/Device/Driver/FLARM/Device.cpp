@@ -25,6 +25,12 @@ FlarmDevice::LinkTimeout()
     was_binary = true;
 
   mode = Mode::UNKNOWN;
+
+  /* the FLARM data is forgotten now; ask for these settings again
+     once the FLARM talks */
+  ogn_config_received.store(0, std::memory_order_relaxed);
+  ogn_config_countdown = OGN_CONFIG_RETRY_TICKS;
+  ogn_config_requests_left = OGN_CONFIG_MAX_RETRIES;
 }
 
 bool

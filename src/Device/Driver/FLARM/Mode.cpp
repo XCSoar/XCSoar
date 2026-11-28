@@ -20,8 +20,8 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     /* request self-test results, version and radio id from FLARM */
     Send("PFLAE,R", env);
     Send("PFLAV,R", env);
-    Send("PFLAC,R,RADIOID", env);
     Send("PFLAC,R,DEVTYPE", env);
+    RequestOGNConfig(env);
     return true;
 
   case Mode::NMEA:
@@ -100,4 +100,33 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
 
   // Apparently the switch to binary mode didn't work
   return false;
+}
+
+void
+FlarmDevice::RequestOGNConfig(OperationEnvironment &env)
+{
+  /* radio id, aircraft type and privacy, for forwarding to the Open
+     Glider Network */
+  Send("PFLAC,R,RADIOID", env);
+  Send("PFLAC,R,ACFT", env);
+  Send("PFLAC,R,PRIV", env);
+  Send("PFLAC,R,NOTRACK", env);
+}
+
+void
+FlarmDevice::OnSysTicker()
+{
+  /* only while the port thread reads NMEA: a request must not go into
+     a flight download */
+  if (mode != Mode::NMEA ||
+      ogn_config_received.load(std::memory_order_relaxed) == OGN_ALL ||
+      ogn_config_requests_left == 0 ||
+      --ogn_config_countdown > 0)
+    return;
+
+  ogn_config_countdown = OGN_CONFIG_RETRY_TICKS;
+  --ogn_config_requests_left;
+
+  NullOperationEnvironment env;
+  RequestOGNConfig(env);
 }

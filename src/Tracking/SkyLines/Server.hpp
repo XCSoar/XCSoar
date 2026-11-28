@@ -16,6 +16,8 @@ struct GeoPoint;
 
 namespace SkyLinesTracking {
 
+struct ReceivedFix;
+
 /**
  * A server for the SkyLines live tracking protocol.
  *
@@ -66,13 +68,12 @@ protected:
   virtual void OnPing(const Client &client, unsigned id);
 
   virtual void OnFix([[maybe_unused]] const Client &client,
-                     [[maybe_unused]] std::chrono::milliseconds time_of_day,
-                     [[maybe_unused]] const ::GeoPoint &location,
-                     [[maybe_unused]] int altitude,
-                     [[maybe_unused]] unsigned track_deg,
-                     [[maybe_unused]] bool track_valid) {}
+                     [[maybe_unused]] const ReceivedFix &fix) {}
 
-  virtual void OnTrafficRequest([[maybe_unused]] const Client &client, [[maybe_unused]] bool near) {}
+  virtual void OnTrafficRequest([[maybe_unused]] const Client &client,
+                                [[maybe_unused]] bool nearby,
+                                [[maybe_unused]] const ::GeoPoint &location,
+                                [[maybe_unused]] int altitude) {}
 
   virtual void OnUserNameRequest([[maybe_unused]] const Client &client, [[maybe_unused]] uint32_t user_id) {}
 

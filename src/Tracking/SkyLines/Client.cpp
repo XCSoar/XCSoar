@@ -123,6 +123,18 @@ SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
 }
 
 void
+SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
+                                             bool near_,
+                                             ::GeoPoint location,
+                                             int altitude)
+{
+  assert(key != 0);
+
+  SendPacket(MakeLocatedTrafficRequest(key, followees, club, near_,
+                                      location, altitude));
+}
+
+void
 SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
 {
   assert(key != 0);

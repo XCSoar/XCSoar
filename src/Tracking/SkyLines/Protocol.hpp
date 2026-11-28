@@ -189,6 +189,11 @@ struct FixPacket {
   static const uint32_t FLAG_VARIO = 0x20;
   static const uint32_t FLAG_ENL = 0x40;
 
+  /**
+   * A #FixOGNExtension follows; the packet is an #OGNFixPacket.
+   */
+  static const uint32_t FLAG_OGN = 0x80;
+
   Header header;
 
   uint32_t flags;
@@ -243,6 +248,69 @@ static_assert(sizeof(FixPacket) == 48, "Wrong struct size");
 #endif
 
 /**
+ * What the XCSoar Cloud needs to forward a fix to the Open Glider
+ * Network (OGN): the aircraft's radio address and the GPS altitude,
+ * which OGN receivers report, so the two tracks of one aircraft
+ * merge.
+ *
+ * It is appended to a #FixPacket with #FixPacket::FLAG_OGN.  The
+ * SkyLines server rejects a fix which is longer than #FixPacket, so
+ * only clients of the XCSoar Cloud send it.
+ */
+struct FixOGNExtension {
+  /**
+   * The pilot agrees that this fix is forwarded to OGN.
+   */
+  static const uint16_t FLAG_OPT_IN = 0x1;
+
+  static const uint16_t FLAG_GPS_ALTITUDE = 0x2;
+  static const uint16_t FLAG_VERTICAL_SPEED = 0x4;
+
+  /**
+   * The OGN APRS "id" field: bits 0-23 are the radio address, bits
+   * 24-25 its type (0 unknown, 1 ICAO, 2 FLARM, 3 OGN), bits 26-29
+   * the aircraft type, bit 30 "no tracking" and bit 31 "stealth".
+   * Zero if not known.
+   */
+  uint32_t id;
+
+  uint16_t flags;
+
+  /**
+   * GPS altitude in m above MSL.
+   */
+  int16_t gps_altitude;
+
+  /**
+   * Vertical speed in m/256s, not total energy compensated.
+   */
+  int16_t vertical_speed;
+
+  /**
+   * Reserved for future use.  Set to zero.  They also pad the
+   * #OGNFixPacket to a multiple of 8 bytes, the alignment of
+   * #Header::key.
+   */
+  uint16_t reserved[3];
+};
+
+#ifdef __cplusplus
+static_assert(sizeof(FixOGNExtension) == 16, "Wrong struct size");
+#endif
+
+/**
+ * A #FixPacket with #FixOGNExtension, for the XCSoar Cloud.
+ */
+struct OGNFixPacket {
+  FixPacket fix;
+  FixOGNExtension ogn;
+};
+
+#ifdef __cplusplus
+static_assert(sizeof(OGNFixPacket) == 64, "Wrong struct size");
+#endif
+
+/**
  * The client requests traffic information.
  */
 struct TrafficRequestPacket {
@@ -259,11 +327,20 @@ struct TrafficRequestPacket {
   static const uint32_t FLAG_CLUB = 0x2;
 
   /**
-   * The client wants to receive information about all traffic near
-   * the location he submitted recently in a #FixPacket.  The server
-   * chooses a reasonable range.
+   * The client wants traffic near a position: the
+   * #TrafficRequestLocation in this datagram, or the location he
+   * submitted recently in a #FixPacket when that tail is absent.
+   * The server chooses a reasonable range.
    */
   static const uint32_t FLAG_NEAR = 0x4;
+
+  /**
+   * A #TrafficRequestLocation follows this struct.  It says where
+   * the client wants traffic.  It is not a position report.  Clients
+   * that do not send it leave this flag clear, and the datagram
+   * stays 24 bytes.
+   */
+  static const uint32_t FLAG_LOCATION = 0x8;
 
   Header header;
 
@@ -274,6 +351,49 @@ struct TrafficRequestPacket {
 
 #ifdef __cplusplus
 static_assert(sizeof(TrafficRequestPacket) == 24, "Wrong struct size");
+#endif
+
+/**
+ * Optional tail of #TrafficRequestPacket.  Present when
+ * #TrafficRequestPacket::FLAG_LOCATION is set and the datagram is
+ * long enough.  Send it only to the XCSoar Cloud.
+ */
+struct TrafficRequestLocation {
+  GeoPoint location;
+
+  /**
+   * Altitude in metres.  Below 0 means the client did not send one.
+   */
+  int16_t altitude;
+
+  /**
+   * Reserved for future use.  Set to zero.
+   */
+  uint16_t reserved;
+
+  /**
+   * Reserved.  Pads this tail to 16 bytes, a multiple of the
+   * alignment of #Header::key, so the packet has no implicit padding.
+   */
+  uint32_t reserved2;
+};
+
+#ifdef __cplusplus
+static_assert(sizeof(TrafficRequestLocation) == 16,
+              "Wrong struct size");
+#endif
+
+/**
+ * A #TrafficRequestPacket with #TrafficRequestLocation.
+ */
+struct LocatedTrafficRequestPacket {
+  TrafficRequestPacket request;
+  TrafficRequestLocation tail;
+};
+
+#ifdef __cplusplus
+static_assert(sizeof(LocatedTrafficRequestPacket) == 40,
+              "Wrong struct size");
 #endif
 
 /**

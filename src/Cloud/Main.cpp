@@ -5,11 +5,13 @@
 #include "Dump.hpp"
 #include "OGNAprs.hpp"
 #include "OGNClient.hpp"
+#include "OGNDeviceDatabase.hpp"
 #include "Sender.hpp"
 #include "Serialiser.hpp"
 #include "TimeOfDay.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
+#include "Tracking/SkyLines/Import.hpp"
 #include "util/ByteOrder.hxx"
 #include "event/Loop.hxx"
 #include "event/CoarseTimerEvent.hxx"
@@ -132,6 +134,13 @@ class CloudServer final
 
   std::unique_ptr<OGNClient> ogn_client;
 
+  /**
+   * Which aircraft must not be forwarded to OGN; loaded from the file
+   * named by XCS_CLOUD_OGN_DDB, which a cron job downloads from
+   * ddb.glidernet.org before sending SIGHUP.
+   */
+  OGNDeviceDatabase ogn_ddb;
+
 public:
   CloudServer(AllocatedPath &&_db_path, EventLoop &event_loop,
               SocketAddress bind_address, bool enable_ogn)
@@ -153,6 +162,12 @@ public:
 
     ScheduleSave();
 
+    /* OGN: with the default login "N0CALL" the server only receives.
+       To forward the fixes of pilots who agreed (OGNXCS), set
+       XCS_CLOUD_OGN_USER=XCSOAR with its APRS-IS passcode in
+       XCS_CLOUD_OGN_PASS, and XCS_CLOUD_OGN_DDB to a file a cron job
+       refreshes from https://ddb.glidernet.org/download/ before
+       sending SIGHUP; without that file nothing is forwarded. */
     if (enable_ogn) {
       std::string host{GetEnvString("XCS_CLOUD_OGN_HOST", "aprs.glidernet.org")};
       const unsigned port = unsigned(
@@ -165,6 +180,8 @@ public:
       cout << "OGN\tenabled\thost=" << host << "\tport=" << port
            << "\tuser=" << (user_configured ? "configured" : "default")
            << endl;
+
+      LoadOGNDeviceDatabase();
 
       ogn_client = std::make_unique<OGNClient>(
         event_loop, cares_channel, *this,
@@ -228,6 +245,11 @@ private:
                            uint32_t pilot_id,
                            const std::string &callsign) noexcept;
 
+  void SendNearTrafficSnapshot(SocketAddress address, uint64_t key,
+                               const GeoPoint &location, int altitude,
+                               unsigned client_id,
+                               const char *reason) noexcept;
+
   void SendNearTrafficSnapshot(CloudClient &client,
                                const char *reason) noexcept;
 
@@ -261,12 +283,20 @@ private:
 protected:
   /* virtual methods from class SkyLinesTracking::Server */
   void OnFix(const Client &client,
-             std::chrono::milliseconds time_of_day,
-             const ::GeoPoint &location, int altitude,
-             unsigned track_deg, bool track_valid) override;
+             const SkyLinesTracking::ReceivedFix &fix) override;
 
-  void OnTrafficRequest(const Client &client,
-                        bool near) override;
+  void LoadOGNDeviceDatabase() noexcept;
+
+  /**
+   * Forward the fix to OGN, if the pilot agreed and the aircraft may
+   * be tracked.
+   */
+  void ForwardToOGN(CloudClient &client,
+                    const SkyLinesTracking::ReceivedFix &fix) noexcept;
+
+  void OnTrafficRequest(const Client &client, bool nearby,
+                        const ::GeoPoint &location,
+                        int altitude) override;
 
   void OnUserNameRequest(const Client &client,
                          uint32_t user_id) override;
@@ -307,6 +337,7 @@ protected:
 
   void OnReloadSignal() noexcept {
     SaveSafely();
+    LoadOGNDeviceDatabase();
   }
 
   void OnDumpSignal() noexcept {
@@ -404,24 +435,34 @@ void
 CloudServer::SendNearTrafficSnapshot(CloudClient &client,
                                        const char *reason) noexcept
 {
+  SendNearTrafficSnapshot(client.address, client.key, client.location,
+                          client.altitude, client.id, reason);
+}
+
+void
+CloudServer::SendNearTrafficSnapshot(SocketAddress address, uint64_t key,
+                                     const GeoPoint &location, int altitude,
+                                     unsigned client_id,
+                                     const char *reason) noexcept
+{
   const auto now = std::chrono::steady_clock::now();
   const auto min_stamp = now - MAX_TRAFFIC_AGE;
   const auto min_ogn_stamp = now - MAX_OGN_TRAFFIC_AGE;
 
-  TrafficResponseSender s(*this, client.address, client.key);
+  TrafficResponseSender s(*this, address, key);
 
   unsigned n = 0;
   unsigned n_cloud = 0;
   unsigned n_ogn = 0;
-  for (const auto &traffic : clients.QueryWithinRange(client.location,
+  for (const auto &traffic : clients.QueryWithinRange(location,
                                                       TRAFFIC_RANGE)) {
-    if (traffic.get() == &client)
+    if (traffic->key == key)
       continue;
 
     if (traffic->stamp < min_stamp)
       continue;
 
-    if (!IsTrafficRelevantToClient(client.location, client.altitude,
+    if (!IsTrafficRelevantToClient(location, altitude,
                                    traffic->location, traffic->altitude,
                                    traffic->altitude >= 0))
       continue;
@@ -443,14 +484,14 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
   if (n < MAX_TRAFFIC_TARGETS_PER_RESPONSE) {
     const uint32_t time_ms = MsUtcMidnight();
     for (const auto &og :
-         ogn_traffic.QueryWithinRange(client.location, TRAFFIC_RANGE)) {
+         ogn_traffic.QueryWithinRange(location, TRAFFIC_RANGE)) {
       if (og->stamp < min_ogn_stamp)
         continue;
 
       if (!IsForwardableOgnTraffic(*og))
         continue;
 
-      if (!IsTrafficRelevantToClient(client.location, client.altitude,
+      if (!IsTrafficRelevantToClient(location, altitude,
                                      og->location, og->altitude,
                                      og->altitude_valid))
         continue;
@@ -460,8 +501,7 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
 
       s.Add(og->pilot_id, time_ms, og->location, og->altitude,
             TrafficRecordExtensions::FromOgn(*og));
-      SendTrafficCallsign(client.address, client.key,
-                          og->pilot_id, og->callsign);
+      SendTrafficCallsign(address, key, og->pilot_id, og->callsign);
       ++n_ogn;
       ++n;
     }
@@ -470,22 +510,71 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
   s.Flush();
 
   if (n > 0 || std::strcmp(reason, "TRAFFIC_FIX") == 0) {
-    cout << reason << '\t' << client.address << '\t'
-         << std::hex << client.key << std::dec << '\t'
-         << client.id << '\t' << client.location << '\t'
-         << "alt=" << client.altitude << "m\t"
+    cout << reason << '\t' << address << '\t'
+         << std::hex << key << std::dec << '\t'
+         << client_id << '\t' << location << '\t'
+         << "alt=" << altitude << "m\t"
          << "cloud=" << n_cloud << "\togn=" << n_ogn
          << "\ttotal=" << n << endl;
   }
 }
 
 void
-CloudServer::OnFix(const Client &c,
-                   std::chrono::milliseconds time_of_day,
-                   const ::GeoPoint &location, int altitude,
-                   unsigned track_deg, bool track_valid)
+CloudServer::LoadOGNDeviceDatabase() noexcept
 {
-  const uint32_t time_of_day_ms = time_of_day.count();
+  const char *path = GetEnvString("XCS_CLOUD_OGN_DDB", nullptr);
+  if (path == nullptr)
+    return;
+
+  if (ogn_ddb.LoadFile(Path(path)))
+    cout << "OGN\tddb\tblocked=" << ogn_ddb.GetBlockedCount() << endl;
+}
+
+void
+CloudServer::ForwardToOGN(CloudClient &client,
+                          const SkyLinesTracking::ReceivedFix &fix) noexcept
+{
+  using namespace std::chrono;
+
+  if (ogn_client == nullptr || !ogn_client->CanSend() ||
+      !fix.ogn || !fix.ogn->opt_in || !fix.ogn->gps_altitude ||
+      !fix.location.IsValid() || !ogn_ddb.IsAllowed(fix.ogn->id))
+    return;
+
+  /* one fix every 10 s at most, and never an older one; a much
+     smaller time is the next day */
+  if (client.ogn_forwarded) {
+    const auto last = *client.ogn_forwarded;
+    if (fix.time_of_day < last + seconds{10} &&
+        fix.time_of_day + hours{12} > last)
+      return;
+  }
+
+  const std::string line = FormatOGNXCSBeacon({
+    fix.ogn->id,
+    fix.time_of_day,
+    fix.location,
+    fix.track_valid ? std::optional<unsigned>{fix.track_deg} : std::nullopt,
+    fix.ground_speed,
+    *fix.ogn->gps_altitude,
+    fix.ogn->vertical_speed,
+  });
+  if (line.empty() || !ogn_client->SendLine(line))
+    return;
+
+  client.ogn_forwarded = fix.time_of_day;
+  cout << "OGN_TX\t" << line << endl;
+}
+
+void
+CloudServer::OnFix(const Client &c,
+                   const SkyLinesTracking::ReceivedFix &fix)
+{
+  const ::GeoPoint &location = fix.location;
+  const int altitude = fix.altitude;
+  const unsigned track_deg = fix.track_deg;
+  const bool track_valid = fix.track_valid;
+  const uint32_t time_of_day_ms = fix.time_of_day.count();
 
   bool use_fix = location.IsValid();
   if (use_fix && IsReorderedFix(clients.Find(c.key), time_of_day_ms)) {
@@ -510,6 +599,8 @@ CloudServer::OnFix(const Client &c,
          << client->altitude << 'm';
     if (track_valid)
       cout << "\ttrack=" << track_deg;
+    if (fix.ogn && fix.ogn->gps_altitude)
+      cout << "\tgps=" << *fix.ogn->gps_altitude << 'm';
     cout << endl;
 
     if (was_empty)
@@ -518,6 +609,11 @@ CloudServer::OnFix(const Client &c,
     client = clients.Find(c.key);
     if (client != nullptr)
       clients.Refresh(*client, c.address);
+  }
+
+  if (client != nullptr && use_fix) {
+    client->UpdateFix(fix);
+    ForwardToOGN(*client, fix);
   }
 
   if (client == nullptr || !use_fix)
@@ -534,12 +630,21 @@ CloudServer::OnFix(const Client &c,
 }
 
 void
-CloudServer::OnTrafficRequest(const Client &c, bool near)
+CloudServer::OnTrafficRequest(const Client &c, bool nearby,
+                             const ::GeoPoint &location, int altitude)
 {
-  if (!near) {
+  if (!nearby) {
     if (GetEnvBool("XCS_CLOUD_DEBUG"))
       cerr << "TRAFFIC_REQUEST\tignored\tnot-near\t"
            << std::hex << c.key << std::dec << endl;
+    return;
+  }
+
+  /* the position in the request is where the client wants traffic;
+     it is not stored and not forwarded */
+  if (location.IsValid()) {
+    SendNearTrafficSnapshot(c.address, c.key, location, altitude,
+                            0, "TRAFFIC_REQUEST");
     return;
   }
 

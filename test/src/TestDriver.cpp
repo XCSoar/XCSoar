@@ -918,6 +918,127 @@ TestFLARMRangeRequest()
   }
 }
 
+/**
+ * What the FLARM tells about itself on connect, which the XCSoar
+ * Cloud needs to forward fixes to OGN (#1282).
+ */
+static void
+TestFLARMOGNConfig()
+{
+  NullPort null;
+  std::unique_ptr<Device> device{flarm_driver.CreateOnPort(dummy_config,
+                                                           null)};
+
+  NMEAInfo info;
+  info.Reset();
+  info.clock = TimeStamp{FloatDuration{1}};
+
+  /* one sentence as the port thread passes it, without CR LF */
+  const auto Line = [](std::string_view sentence) {
+    return fmt::format("${}*{:02X}", sentence, NMEAChecksum(sentence));
+  };
+
+  const auto &hardware = info.flarm.hardware;
+  ok1(hardware.radio_id_type == 0);
+  ok1(!hardware.privacy_known);
+  ok1(!hardware.no_tracking_known);
+
+  ok1(device->ParseNMEA(Line("PFLAC,A,RADIOID,2,DD1234").c_str(),
+                        info));
+  ok1(hardware.radio_id == FlarmId::Parse("DD1234", nullptr));
+  ok1(hardware.radio_id_type == 2);
+
+  ok1(device->ParseNMEA(Line("PFLAC,A,RADIOID,1,3E4F21").c_str(),
+                        info));
+  ok1(hardware.radio_id_type == 1);
+
+  /* an unknown type is not passed on */
+  ok1(device->ParseNMEA(Line("PFLAC,A,RADIOID,7,3E4F21").c_str(),
+                        info));
+  ok1(hardware.radio_id_type == 0);
+
+  ok1(device->ParseNMEA(Line("PFLAC,A,ACFT,1").c_str(), info));
+  ok1(hardware.aircraft_type == 1);
+
+  ok1(device->ParseNMEA(Line("PFLAC,A,PRIV,0").c_str(), info));
+  ok1(hardware.privacy_known && !hardware.privacy);
+  ok1(device->ParseNMEA(Line("PFLAC,A,NOTRACK,1").c_str(), info));
+  ok1(hardware.no_tracking_known && hardware.no_tracking);
+
+  /* an error answer changes nothing */
+  ok1(device->ParseNMEA(Line("PFLAC,A,ERROR").c_str(), info));
+  ok1(hardware.no_tracking_known && hardware.no_tracking);
+}
+
+/**
+ * The FLARM falls silent and does not answer the request sent then;
+ * the driver asks again once it talks (#1282).
+ */
+static void
+TestFLARMOGNConfigRetry()
+{
+  NullOperationEnvironment env;
+  ReplyPort port{""};
+  std::unique_ptr<Device> device{flarm_driver.CreateOnPort(dummy_config,
+                                                           port)};
+
+  NMEAInfo info;
+  info.Reset();
+  info.clock = TimeStamp{FloatDuration{1}};
+
+  const auto Answer = [&](std::string_view sentence) {
+    const auto line = fmt::format("${}*{:02X}", sentence,
+                                  NMEAChecksum(sentence));
+    device->ParseNMEA(line.c_str(), info);
+  };
+
+  const auto CountRequests = [&port] {
+    unsigned n = 0;
+    for (const auto &line : port.GetLines())
+      if (line.find("PFLAC,R,PRIV") != std::string::npos)
+        ++n;
+    return n;
+  };
+
+  const auto Tick = [&device](unsigned n) {
+    for (unsigned i = 0; i < n; ++i)
+      device->OnSysTicker();
+  };
+
+  device->EnableNMEA(env);
+  ok1(CountRequests() == 1);
+
+  /* only the radio id arrives: ask again after 30 ticks */
+  Answer("PFLAC,A,RADIOID,1,7C6AAF");
+  port.Clear();
+  Tick(29);
+  ok1(CountRequests() == 0);
+  Tick(1);
+  ok1(CountRequests() == 1);
+
+  /* all answered: no more requests */
+  Answer("PFLAC,A,ACFT,1");
+  Answer("PFLAC,A,PRIV,0");
+  Answer("PFLAC,A,NOTRACK,0");
+  port.Clear();
+  Tick(60);
+  ok1(CountRequests() == 0);
+
+  /* the link times out: nothing is sent until NMEA is enabled again,
+     then the answers are needed again */
+  device->LinkTimeout();
+  Tick(60);
+  ok1(CountRequests() == 0);
+  device->EnableNMEA(env);
+  port.Clear();
+  Tick(30);
+  ok1(CountRequests() == 1);
+
+  /* a FLARM that never answers is asked at most 10 times */
+  Tick(30 * 20);
+  ok1(CountRequests() == 10);
+}
+
 static std::string
 EncodeBase64(std::string_view src)
 {
@@ -5013,6 +5134,7 @@ int main()
 
   plan_tests(1103 /* drivers */ + 15 /* ACD configuration */
              + 45 /* PFLAU extended */
+             + 18 /* PFLAC for OGN */ + 7 /* PFLAC retry */
              + 40 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
@@ -5048,6 +5170,8 @@ int main()
   TestFLARMRangeParser();
   TestFLARMRangeRequest();
   TestDeviceCoordinates();
+  TestFLARMOGNConfigRetry();
+  TestFLARMOGNConfig();
   TestNanoDownloadFlight();
   TestNanoDownloadFlightRecordLength();
   TestAltairRU();

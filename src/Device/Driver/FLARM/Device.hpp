@@ -8,6 +8,7 @@
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
 
+#include <atomic>
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -33,6 +34,39 @@ class FlarmDevice: public AbstractDevice
 
   Mode mode = Mode::UNKNOWN;
   bool was_binary = false;
+
+  /**
+   * The settings the XCSoar Cloud needs to forward fixes to the Open
+   * Glider Network, one bit each (#OGNConfig).
+   */
+  enum OGNConfig : uint8_t {
+    OGN_RADIOID = 0x1,
+    OGN_ACFT = 0x2,
+    OGN_PRIV = 0x4,
+    OGN_NOTRACK = 0x8,
+    OGN_ALL = 0xf,
+  };
+
+  /**
+   * Which of the #OGNConfig settings the FLARM has answered since the
+   * link was established.  XCSoar forgets them with the rest of the
+   * FLARM data when the FLARM falls silent, and the request sent then
+   * gets no answer, so OnSysTicker() asks again.  Written by the port
+   * thread, reset by LinkTimeout().
+   */
+  std::atomic<uint8_t> ogn_config_received = 0;
+
+  /**
+   * OnSysTicker() calls (about one per second) until the #OGNConfig
+   * settings are requested again, and how many more requests may be
+   * sent; an old FLARM that does not know a setting answers each
+   * request with an error.
+   */
+  unsigned ogn_config_countdown = OGN_CONFIG_RETRY_TICKS;
+  unsigned ogn_config_requests_left = OGN_CONFIG_MAX_RETRIES;
+
+  static constexpr unsigned OGN_CONFIG_RETRY_TICKS = 30;
+  static constexpr unsigned OGN_CONFIG_MAX_RETRIES = 10;
 
   uint16_t sequence_number = 0;
 
@@ -119,6 +153,7 @@ protected:
 public:
   /* virtual methods from class Device */
   void LinkTimeout() override;
+  void OnSysTicker() override;
   bool EnableNMEA(OperationEnvironment &env) override;
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
@@ -191,6 +226,11 @@ public:
   bool ResetRangeStatistics(OperationEnvironment &env);
 
 private:
+  /**
+   * Ask the FLARM for the #OGNConfig settings.
+   */
+  void RequestOGNConfig(OperationEnvironment &env);
+
   /**
    * Sends the supplied sentence with a $ prepended and a line break appended
    */

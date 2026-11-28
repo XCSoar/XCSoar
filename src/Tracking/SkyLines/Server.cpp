@@ -81,8 +81,6 @@ Server::OnDatagramReceived(Client &&client,
   client.key = FromBE64(header.key);
 
   const auto &ping = *(const PingPacket *)data;
-  const auto &fix = *(const FixPacket *)data;
-  const auto &traffic = *(const TrafficRequestPacket *)data;
   const auto &user_name = *(const UserNameRequestPacket *)data;
   const auto &wave = ((const WaveSubmitPacket *)data)->wave;
   const auto &thermal = ((const ThermalSubmitPacket *)data)->thermal;
@@ -96,29 +94,15 @@ Server::OnDatagramReceived(Client &&client,
     break;
 
   case FIX:
-    if (length < sizeof(fix))
-      return;
-
-    OnFix(client,
-          ImportTimeMs(fix.time),
-          fix.flags & ToBE32(FixPacket::FLAG_LOCATION)
-          ? ImportGeoPoint(fix.location)
-          : ::GeoPoint::Invalid(),
-          fix.flags & ToBE32(FixPacket::FLAG_ALTITUDE)
-          ? (int16_t)FromBE16(fix.altitude)
-          : -1,
-          fix.flags & ToBE32(FixPacket::FLAG_TRACK)
-          ? unsigned(FromBE16(fix.track))
-          : 0u,
-          (fix.flags & ToBE32(FixPacket::FLAG_TRACK)) != 0);
+    if (const auto received = ImportFix({(const std::byte *)data, length}))
+      OnFix(client, *received);
     break;
 
   case TRAFFIC_REQUEST:
-    if (length < sizeof(traffic))
-      return;
-
-    OnTrafficRequest(client,
-                     traffic.flags & ToBE32(TrafficRequestPacket::FLAG_NEAR));
+    if (const auto request =
+          ImportTrafficRequest({(const std::byte *)data, length}))
+      OnTrafficRequest(client, request->nearby, request->location,
+                       request->altitude);
     break;
 
   case USER_NAME_REQUEST:
