@@ -659,6 +659,15 @@ The following attributes are provided by ``xcsoar.replay``:
  * - ``fast_forward(dt)``
    - Fast forwards ``dt`` [s].  Returns whether replay was already
      running with a known virtual time.
+ * - ``seek_to_flight_minutes(minutes)``
+   - Jumps to ``minutes`` after the recording started.  Returns false
+     when replay is not active or the seek is rejected.
+ * - ``seek_to_next_circling()``
+   - Jumps forward to the next circling phase.  Returns false when the
+     rest of the recording has none.
+ * - ``seek_to_next_cruise()``
+   - Jumps forward to the next cruise phase.  Returns false when the
+     rest of the recording has none.
  * - ``set_time_scale(r)``
    - Sets replay clock rate to ``r``.
  * - ``time_scale``

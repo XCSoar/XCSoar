@@ -12855,3 +12855,24 @@ msgstr ""
 
 msgid "The trail fades with its age, also in cruise."
 msgstr ""
+
+msgid "Seek"
+msgstr ""
+
+msgid "Flight min"
+msgstr ""
+
+msgid "Position in the flight to jump to, in minutes since the recording started."
+msgstr ""
+
+msgid "Replay is not active."
+msgstr ""
+
+msgid "Could not seek replay."
+msgstr ""
+
+msgid "No further circling phase found."
+msgstr ""
+
+msgid "No further cruise phase found."
+msgstr ""
