@@ -9,6 +9,7 @@
 #include "IGCDeclaration.hpp"
 #include "time/BrokenDate.hpp"
 #include "time/BrokenTime.hpp"
+#include "time/Stamp.hpp"
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
@@ -338,6 +339,24 @@ IGCParseTime(const char *buffer, BrokenTime &time)
 
   time = BrokenTime(hour, minute, second);
   return time.IsPlausible();
+}
+
+void
+IGCScanBRecord(IGCRecordingSpan &span, const char *line) noexcept
+{
+  if (line == nullptr || *line != 'B')
+    return;
+
+  ++span.fix_lines;
+
+  BrokenTime time;
+  if (!IGCParseTime(line + 1, time))
+    return;
+
+  const TimeStamp time_stamp{time.DurationSinceMidnight()};
+  if (!span.start_time.IsDefined())
+    span.start_time = time_stamp;
+  span.end_time = time_stamp;
 }
 
 static bool

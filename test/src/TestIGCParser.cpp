@@ -220,6 +220,46 @@ TestFixTime()
 }
 
 static void
+TestScanBRecord()
+{
+  IGCRecordingSpan span;
+  const TimeStamp first{std::chrono::seconds{11 * 3600 + 22 * 60 + 38}};
+  const TimeStamp second{std::chrono::seconds{11 * 3600 + 23 * 60}};
+
+  IGCScanBRecord(span, "HFDTE010203");
+  ok1(span.fix_lines == 0);
+  ok1(!span.start_time.IsDefined());
+  ok1(!span.end_time.IsDefined());
+
+  /* a B line counts even when it has no plausible time */
+  IGCScanBRecord(span, "B");
+  ok1(span.fix_lines == 1);
+  ok1(!span.start_time.IsDefined());
+
+  IGCScanBRecord(span, "B240000");
+  ok1(span.fix_lines == 2);
+  ok1(!span.start_time.IsDefined());
+
+  IGCScanBRecord(span, "b1122385103117N00742367EA004900048700000");
+  ok1(span.fix_lines == 2);
+
+  IGCScanBRecord(span, "B1122385103117N00742367EA004900048700000");
+  ok1(span.fix_lines == 3);
+  ok1(span.start_time == first);
+  ok1(span.end_time == first);
+
+  IGCScanBRecord(span, "B1123005103117N00742367EA004900048700000");
+  ok1(span.fix_lines == 4);
+  ok1(span.start_time == first);
+  ok1(span.end_time == second);
+
+  /* an implausible time still counts, and does not move the span */
+  IGCScanBRecord(span, "B235960");
+  ok1(span.fix_lines == 5);
+  ok1(span.end_time == second);
+}
+
+static void
 TestDeclarationHeader()
 {
   IGCDeclarationHeader header;
@@ -276,7 +316,7 @@ TestDeclarationTurnpoint()
 
 int main()
 {
-  plan_tests(148 + 8 + 7);
+  plan_tests(148 + 8 + 7 + 16);
 
   TestHeader();
   TestDate();
@@ -284,6 +324,7 @@ int main()
   TestExtensions();
   TestFix();
   TestFixTime();
+  TestScanBRecord();
   TestDeclarationHeader();
   TestDeclarationTurnpoint();
 

@@ -23,6 +23,20 @@ enum class CirclingMode: uint8_t {
   POSSIBLE_CRUISE,
 };
 
+/**
+ * Does \a mode belong to the definite flight phase \a phase
+ * (#CirclingMode::CLIMB or #CirclingMode::CRUISE)? The transitional
+ * POSSIBLE_* states count as part of the phase they may be leaving,
+ * because they often revert without an actual phase change.
+ */
+constexpr bool
+IsInPhase(CirclingMode phase, CirclingMode mode) noexcept
+{
+  return phase == CirclingMode::CLIMB
+    ? mode == CirclingMode::CLIMB || mode == CirclingMode::POSSIBLE_CRUISE
+    : mode == CirclingMode::CRUISE || mode == CirclingMode::POSSIBLE_CLIMB;
+}
+
 /** Data for tracking of climb/cruise mode and transition points */
 struct CirclingInfo
 {

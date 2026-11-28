@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "time/Stamp.hpp"
+
 struct IGCFix;
 struct IGCHeader;
 struct IGCExtensions;
@@ -69,6 +71,24 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix);
  */
 bool
 IGCParseTime(const char *buffer, BrokenTime &time);
+
+/**
+ * B-record summary of one IGC file: how many B lines it has, and the
+ * time of day of the first and last B line whose time parses.
+ */
+struct IGCRecordingSpan {
+  unsigned fix_lines = 0;
+  TimeStamp start_time = TimeStamp::Undefined();
+  TimeStamp end_time = TimeStamp::Undefined();
+};
+
+/**
+ * Count one IGC line. A B record increments #IGCRecordingSpan::fix_lines
+ * even when its time of day is missing or not plausible. The first
+ * plausible time becomes the start, and each later one the end.
+ */
+void
+IGCScanBRecord(IGCRecordingSpan &span, const char *line) noexcept;
 
 /**
  * Parse an IGC "C" header record.
