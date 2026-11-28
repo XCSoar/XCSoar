@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Replay.hpp"
+#include "IGC/IGCParser.hpp"
 #include "IgcReplay.hpp"
 #include "NmeaReplay.hpp"
 #include "DemoReplayGlue.hpp"
@@ -110,20 +111,6 @@ public:
 };
 
 /**
- * Does the given turn mode belong to the given definite flight phase
- * (#CirclingMode::CLIMB or #CirclingMode::CRUISE)?  The transitional
- * POSSIBLE_* states count as part of the phase they may be leaving,
- * because they often revert without an actual phase change.
- */
-constexpr bool
-IsInPhase(CirclingMode phase, CirclingMode mode) noexcept
-{
-  return phase == CirclingMode::CLIMB
-    ? mode == CirclingMode::CLIMB || mode == CirclingMode::POSSIBLE_CRUISE
-    : mode == CirclingMode::CRUISE || mode == CirclingMode::POSSIBLE_CLIMB;
-}
-
-/**
  * Suspend the merge and calculation worker threads for the lifetime
  * of this object so replay fixes can be processed synchronously.
  */
@@ -173,6 +160,13 @@ MakeInterpolatedFix(const CatmullRomInterpolator &cli, TimeStamp time,
   data.gps_altitude_available.Update(data.clock);
   data.ProvidePressureAltitude(r.baro_altitude);
   data.ProvideBaroAltitudeTrue(r.baro_altitude);
+
+  /* The fix time is ahead of this sample. Expire() treats a
+     validity stamp in the future as a time warp and drops the
+     logged airspeed. */
+  if (data.airspeed_available)
+    data.airspeed_available.Update(data.clock);
+
   return data;
 }
 
@@ -265,33 +259,13 @@ Replay::GetRecordingScan() noexcept
 
   try {
     FileLineReaderA reader{path};
-    while (const char *line = reader.ReadLine()) {
-      if (*line != 'B')
-        continue;
+    IGCRecordingSpan span;
+    while (const char *line = reader.ReadLine())
+      IGCScanBRecord(span, line);
 
-      ++recording_scan.fix_lines;
-
-      /* B records start with the time of day as HHMMSS; the
-         comparison stops at the terminating null byte of short
-         lines */
-      const char *t = line + 1;
-      bool valid = true;
-      for (unsigned i = 0; valid && i < 6; ++i)
-        valid = t[i] >= '0' && t[i] <= '9';
-
-      if (valid) {
-        const unsigned hh = (t[0] - '0') * 10 + (t[1] - '0');
-        const unsigned mm = (t[2] - '0') * 10 + (t[3] - '0');
-        const unsigned ss = (t[4] - '0') * 10 + (t[5] - '0');
-        if (hh < 24 && mm < 60 && ss < 60) {
-          const TimeStamp time_stamp{
-            std::chrono::seconds{hh * 3600 + mm * 60 + ss}};
-          if (!recording_scan.start_time.IsDefined())
-            recording_scan.start_time = time_stamp;
-          recording_scan.end_time = time_stamp;
-        }
-      }
-    }
+    recording_scan.fix_lines = span.fix_lines;
+    recording_scan.start_time = span.start_time;
+    recording_scan.end_time = span.end_time;
   } catch (...) {
     recording_scan = {};
   }
@@ -817,12 +791,6 @@ Replay::Update()
     }
 
     const NMEAInfo data = MakeInterpolatedFix(*cli, virtual_time, next_data);
-
-    /* The fix time is ahead of this sample. Expire() treats a
-       validity stamp in the future as a time warp and drops the
-       logged airspeed. */
-    if (data.airspeed_available)
-      data.airspeed_available.Update(data.clock);
 
     {
       const std::lock_guard lock{device_blackboard.mutex};

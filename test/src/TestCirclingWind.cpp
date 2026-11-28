@@ -238,10 +238,26 @@ TestParagliderPolarSpeedQuality() noexcept
   ok1(matched.quality > mismatched.quality);
 }
 
+static void
+TestIsInPhase()
+{
+  /* POSSIBLE_CRUISE is still the climb it may return to */
+  ok1(IsInPhase(CirclingMode::CLIMB, CirclingMode::CLIMB));
+  ok1(IsInPhase(CirclingMode::CLIMB, CirclingMode::POSSIBLE_CRUISE));
+  ok1(!IsInPhase(CirclingMode::CLIMB, CirclingMode::CRUISE));
+  ok1(!IsInPhase(CirclingMode::CLIMB, CirclingMode::POSSIBLE_CLIMB));
+
+  /* POSSIBLE_CLIMB is still the cruise it may return to */
+  ok1(IsInPhase(CirclingMode::CRUISE, CirclingMode::CRUISE));
+  ok1(IsInPhase(CirclingMode::CRUISE, CirclingMode::POSSIBLE_CLIMB));
+  ok1(!IsInPhase(CirclingMode::CRUISE, CirclingMode::CLIMB));
+  ok1(!IsInPhase(CirclingMode::CRUISE, CirclingMode::POSSIBLE_CRUISE));
+}
+
 int
 main()
 {
-  plan_tests(1 + 2 + 2 + 2 + 2 + 2 + 2 + 4);
+  plan_tests(1 + 2 + 2 + 2 + 2 + 2 + 2 + 4 + 8);
 
   SetFakeLogFileQuiet(true);
 
@@ -253,6 +269,7 @@ main()
   TestParagliderReplayJitter();
   TestParagliderThreeSecondFixes();
   TestParagliderPolarSpeedQuality();
+  TestIsInPhase();
 
   return exit_status();
 }
