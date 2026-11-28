@@ -5385,8 +5385,14 @@ msgstr "この機能はあなたのシステムでは使用できません"
 msgid "Maximum start speed exceeded"
 msgstr "出発速度超過"
 
-msgid "In sector, arm advance when ready"
-msgstr "セクター内　次に向かえ"
+msgid "In area, arm turn when ready"
+msgstr "エリア内、準備ができたら旋回点をアーム"
+
+msgid "Area reached, arm turn when ready"
+msgstr "エリア到達、準備ができたら旋回点をアーム"
+
+msgid "In start area, arm start when ready"
+msgstr "スタートエリア内、準備ができたらスタートをアーム"
 
 msgid "Arm"
 msgstr "アーム"

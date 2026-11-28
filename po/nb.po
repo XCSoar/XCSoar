@@ -5347,8 +5347,14 @@ msgstr "Denne funksjonen er ikke tilgjengelig på din plattform enda."
 msgid "Maximum start speed exceeded"
 msgstr "Maksimal startfart overskredet"
 
-msgid "In sector, arm advance when ready"
-msgstr "I sektor, armer neste hvis klar"
+msgid "In area, arm turn when ready"
+msgstr "I området, armér sving når klar"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Område nådd, armér sving når klar"
+
+msgid "In start area, arm start when ready"
+msgstr "I startområdet, armér start når klar"
 
 msgid "Arm"
 msgstr "Armer"

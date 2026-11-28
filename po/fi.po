@@ -5348,11 +5348,17 @@ msgstr "Tämä funktio ei ole vielä käytettävissä sinun laitteestasi."
 msgid "Maximum start speed exceeded"
 msgstr "Alkuvauhti ylittää raja"
 
-msgid "In sector, arm advance when ready"
-msgstr "Sektorissa, varmista edistysnäkyminen kun olet valmis"
+msgid "In area, arm turn when ready"
+msgstr "Alueella, aktivoi käännös kun olet valmis"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Alue saavutettu, aktivoi käännös kun olet valmis"
+
+msgid "In start area, arm start when ready"
+msgstr "Lähtöalueella, aktivoi lähtö kun olet valmis"
 
 msgid "Arm"
-msgstr "Varmaa"
+msgstr "Aktivoi"
 
 msgid "Dismiss"
 msgstr "Hylkää"

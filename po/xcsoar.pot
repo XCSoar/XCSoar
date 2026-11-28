@@ -8711,7 +8711,13 @@ msgstr ""
 msgid "Maximum start speed exceeded"
 msgstr ""
 
-msgid "In sector, arm advance when ready"
+msgid "In area, arm turn when ready"
+msgstr ""
+
+msgid "Area reached, arm turn when ready"
+msgstr ""
+
+msgid "In start area, arm start when ready"
 msgstr ""
 
 msgid "Arm"

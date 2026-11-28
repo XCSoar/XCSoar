@@ -5370,8 +5370,14 @@ msgstr "Ši funkcija dar neturi jūsų platformoje galimybės."
 msgid "Maximum start speed exceeded"
 msgstr "Nustatytas maksimalus starto greitis viršutinis"
 
-msgid "In sector, arm advance when ready"
-msgstr "Sektorioje, įgalinkite išvadas kai bus gatvuojama"
+msgid "In area, arm turn when ready"
+msgstr "Srityje, kai būsite pasiruošę, įgalinkite posūkį"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Sritis pasiekta, kai būsite pasiruošę, įgalinkite posūkį"
+
+msgid "In start area, arm start when ready"
+msgstr "Starto srityje, kai būsite pasiruošę, įgalinkite startą"
 
 msgid "Arm"
 msgstr "Įgalinti"

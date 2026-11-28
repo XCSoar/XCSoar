@@ -5381,8 +5381,14 @@ msgstr "Ta funkcja nie jest jeszcze dostępna na Twoim urządzeniu."
 msgid "Maximum start speed exceeded"
 msgstr "Przekroczono maks. prędkość startu lotnego"
 
-msgid "In sector, arm advance when ready"
-msgstr "Jesteś wewnątrz strefy obserw., zalicz PZ jak będziesz gotowy."
+msgid "In area, arm turn when ready"
+msgstr "W obszarze, aktywuj PZ, gdy będziesz gotowy"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Obszar osiągnięty, aktywuj PZ, gdy będziesz gotowy"
+
+msgid "In start area, arm start when ready"
+msgstr "W obszarze startu, aktywuj start, gdy będziesz gotowy"
 
 msgid "Arm"
 msgstr "Aktywuj"

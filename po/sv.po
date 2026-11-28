@@ -5309,11 +5309,17 @@ msgstr "Denna funktion är ej tillgänglig på din plattform ännu."
 msgid "Maximum start speed exceeded"
 msgstr "Maximal starthastighet överskriden"
 
-msgid "In sector, arm advance when ready"
-msgstr "Inom sektor, armera nästa vägpunkt"
+msgid "In area, arm turn when ready"
+msgstr "I området, aktivera sväng när du är klar"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Område nått, aktivera sväng när du är klar"
+
+msgid "In start area, arm start when ready"
+msgstr "I startområdet, sätt i startläge när du är klar"
 
 msgid "Arm"
-msgstr "Rigga"
+msgstr "Aktivera"
 
 msgid "Dismiss"
 msgstr "Avböj"

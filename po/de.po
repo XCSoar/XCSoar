@@ -5395,11 +5395,17 @@ msgstr "Diese Funktion ist auf deiner Plattform bisher nicht verfügbar."
 msgid "Maximum start speed exceeded"
 msgstr "Maximale Abfluggeschwindigkeit überschritten"
 
-msgid "In sector, arm advance when ready"
-msgstr "Im Sektor, 'Abflugbereit' drücken, wenn bereit"
+msgid "In area, arm turn when ready"
+msgstr "Im Gebiet, Wende aktivieren, wenn bereit"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Gebiet erreicht, Wende aktivieren, wenn bereit"
+
+msgid "In start area, arm start when ready"
+msgstr "Im Abflugbereich, Abflug aktivieren, wenn bereit"
 
 msgid "Arm"
-msgstr "Abflugbereit"
+msgstr "Aktivieren"
 
 msgid "Dismiss"
 msgstr "Abbrechen"

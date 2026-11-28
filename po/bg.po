@@ -5395,8 +5395,14 @@ msgstr "Тази функция все още не е налична за ваш
 msgid "Maximum start speed exceeded"
 msgstr "Максималната стартова скорост е превишена"
 
-msgid "In sector, arm advance when ready"
-msgstr "В сектора сте, активирайте преминаване когато сте готови"
+msgid "In area, arm turn when ready"
+msgstr "В зоната, активирайте поврата, когато сте готови"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Зоната е достигната, активирайте поврата, когато сте готови"
+
+msgid "In start area, arm start when ready"
+msgstr "В стартовата зона, активирайте старта, когато сте готови"
 
 msgid "Arm"
 msgstr "Активирай"

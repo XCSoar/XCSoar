@@ -5427,8 +5427,14 @@ msgstr "Αυτή η συνάρτηση δεν είναι ακόμα διαθέσ
 msgid "Maximum start speed exceeded"
 msgstr "Μέγιστη γωγή αρχικοποίησης υπερβασμένη"
 
-msgid "In sector, arm advance when ready"
-msgstr "Στο τομέα, ενεργοποίηση προόδου όταν είστε στη φάση"
+msgid "In area, arm turn when ready"
+msgstr "Στην περιοχή, ενεργοποιήστε τη στροφή όταν είστε έτοιμοι"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Η περιοχή επιτεύχθηκε, ενεργοποιήστε τη στροφή όταν είστε έτοιμοι"
+
+msgid "In start area, arm start when ready"
+msgstr "Στην περιοχή εκκίνησης, ενεργοποιήστε την έναρξη όταν είστε έτοιμοι"
 
 msgid "Arm"
 msgstr "Ενεργοποίηση"

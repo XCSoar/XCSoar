@@ -1046,6 +1046,54 @@ TestFinishAfterStartOnlyLeft()
 }
 
 /**
+ * A start that has to be armed asks for arming only while the glider
+ * is in the start area, and again when it comes back, so the
+ * "In start area, arm start when ready" question does not stay up
+ * outside.
+ */
+static void
+TestStartArmRequest()
+{
+  OrderedTaskSettings settings = task_behaviour.ordered_defaults;
+  settings.start_constraints.require_arm = true;
+
+  OrderedTask task(task_behaviour);
+  task.SetOrderedTaskSettings(settings);
+  task.Append(StartPoint(std::make_unique<CylinderZone>(wp1->location, 5000),
+                         WaypointPtr(wp1), task_behaviour,
+                         settings.start_constraints));
+  task.Append(FinishPoint(std::make_unique<CylinderZone>(wp3->location, 1000),
+                          WaypointPtr(wp3), task_behaviour,
+                          settings.finish_constraints, false));
+  task.UpdateGeometry();
+  ok1(!IsError(task.CheckTask()));
+
+  /* inside the 5 km start cylinder, out of it, and back in */
+  static constexpr struct {
+    double latitude;
+    bool need_to_arm;
+  } route[] = {
+    {45.0, true}, {45.03, true}, {45.1, false}, {45.02, true},
+  };
+
+  auto state_last = MakeTimedAircraft(0, route[0].latitude, 1000,
+                                      FloatDuration{3600});
+  task.Update(state_last, state_last, glide_polar);
+  ok1(task.GetStats().need_to_arm == route[0].need_to_arm);
+
+  for (unsigned i = 1; i < std::size(route); ++i) {
+    const auto state = MakeTimedAircraft(0, route[i].latitude, 1000,
+                                         FloatDuration{3600 + 60 * i});
+    task.Update(state, state_last, glide_polar);
+    state_last = state;
+    ok1(task.GetStats().need_to_arm == route[i].need_to_arm);
+  }
+
+  /* not armed: still waiting at the start */
+  ok1(task.GetActiveIndex() == 0);
+}
+
+/**
  * Fly an out-and-return from the start line at 45 degrees north to the
  * turn point at 46 degrees north and back, going on to 46.07 degrees
  * (7.8 km beyond the turn point) before turning back.
@@ -1310,7 +1358,7 @@ TestAll()
 
 int main()
 {
-  plan_tests(746 + 8 + 31 + 5 + 49 + 123 + 62 + 4 + 12 + 3 + 4 + 6);
+  plan_tests(746 + 8 + 31 + 5 + 49 + 123 + 62 + 4 + 12 + 3 + 4 + 6 + 6);
 
   task_behaviour.SetDefaults();
 
@@ -1340,6 +1388,7 @@ int main()
   TestFinishNearestPoint();
   TestStartNearestPointContinuity();
   TestFinishAfterStartOnlyLeft();
+  TestStartArmRequest();
   TestTurnPointDepth();
   TestStartCylinderExit();
   TestAreaBeforeTurnPoint();

@@ -5393,11 +5393,17 @@ msgstr "פונקציה זו זמינה עדיין עבור שפתך."
 msgid "Maximum start speed exceeded"
 msgstr "מהירות התחלה מקסימלית נדונה"
 
-msgid "In sector, arm advance when ready"
-msgstr "בתוך הסקטור, התמקד את ההתקדמות כאשר תהיי מוכן"
+msgid "In area, arm turn when ready"
+msgstr "באזור, הפעל פנייה כשאתה מוכן"
+
+msgid "Area reached, arm turn when ready"
+msgstr "הגעת לאזור, הפעל פנייה כשאתה מוכן"
+
+msgid "In start area, arm start when ready"
+msgstr "באזור ההתחלה, הפעל התחלה כשאתה מוכן"
 
 msgid "Arm"
-msgstr "התמקד"
+msgstr "הפעל"
 
 msgid "Dismiss"
 msgstr "בטל"

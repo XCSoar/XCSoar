@@ -5395,11 +5395,17 @@ msgstr "Эта функция ещэ не доступна на Вашей пл�
 msgid "Maximum start speed exceeded"
 msgstr "Максимальная начальная скорость превышена"
 
-msgid "In sector, arm advance when ready"
-msgstr "В секторе отметки, укажите когда будете готовы"
+msgid "In area, arm turn when ready"
+msgstr "В зоне, активируйте поворот, когда будете готовы"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Зона достигнута, активируйте поворот, когда будете готовы"
+
+msgid "In start area, arm start when ready"
+msgstr "В стартовой зоне, активируйте старт, когда будете готовы"
 
 msgid "Arm"
-msgstr "Армирование"
+msgstr "Активировать"
 
 msgid "Dismiss"
 msgstr "Отмена"

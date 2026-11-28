@@ -5353,11 +5353,17 @@ msgstr "Bu fonksiyon henüz platformunuzda mevcut değildir."
 msgid "Maximum start speed exceeded"
 msgstr "Başlangıç hızı maksimuma ulaşıldı"
 
-msgid "In sector, arm advance when ready"
-msgstr "Sektor içinde, hazır olduğunda ilerleme arka planını ayarlayın"
+msgid "In area, arm turn when ready"
+msgstr "Alanda, hazır olduğunuzda dönüşü etkinleştirin"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Alana ulaşıldı, hazır olduğunuzda dönüşü etkinleştirin"
+
+msgid "In start area, arm start when ready"
+msgstr "Başlangıç alanında, hazır olduğunuzda başlangıcı etkinleştirin"
 
 msgid "Arm"
-msgstr "Ayarla"
+msgstr "Etkinleştir"
 
 msgid "Dismiss"
 msgstr "İptal Et"

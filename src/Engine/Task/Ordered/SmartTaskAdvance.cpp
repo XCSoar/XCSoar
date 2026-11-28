@@ -28,8 +28,10 @@ SmartTaskAdvance::CheckReadyToAdvance(const TaskPoint &tp,
         state = TaskAdvance::START_ARMED;
       } else {
         state = TaskAdvance::START_DISARMED;
-        if (sp.IsInSector(aircraft))
-          request_armed = true;
+        /* ask for arming only while in the start area, and again
+           when the glider comes back; "Arm start" in the menu still
+           works anywhere */
+        request_armed = sp.IsInSector(aircraft);
       }
       return armed && state_ready;
     } else {
