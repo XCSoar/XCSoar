@@ -511,6 +511,7 @@ Replay::ForwardScan(MergeThread &merge_thread,
   const ScopedWorkerSuspend suspend{merge_thread, calculation_thread};
 
   bool found = false;
+  bool cancelled = false;
   TimeStamp last_time = virtual_time;
 
   /* returns false when the time budget ran out and the scan must
@@ -547,6 +548,11 @@ Replay::ForwardScan(MergeThread &merge_thread,
       }
     }
 
+    /* a cancel is not a missing phase: the caller keeps the position
+       reached so far and should not report a failed search */
+    if (env.IsCancelled() || stop_pending)
+      cancelled = true;
+
     return true;
   };
 
@@ -578,7 +584,7 @@ Replay::ForwardScan(MergeThread &merge_thread,
     TriggerVarioUpdate();
   }
 
-  return found;
+  return found || cancelled;
 }
 
 bool

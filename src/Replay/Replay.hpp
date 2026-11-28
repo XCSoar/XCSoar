@@ -218,6 +218,9 @@ public:
    * changes to the requested state (circling or cruise).  The scan is
    * run through the given #JobRunner, which may allow cancelling; a
    * cancelled seek keeps the position that was reached.
+   *
+   * @return false when the recording ends without the requested
+   * phase.  Cancellation returns true.
    */
   bool SeekToNextFlightMode(CirclingMode mode,
                             MergeThread &merge_thread,
@@ -260,7 +263,7 @@ private:
    * replay is active with a defined #virtual_time and not in demo
    * mode.
    *
-   * @return true if the predicate matched
+   * @return true if the predicate matched or the scan was cancelled
    */
   bool ForwardScan(MergeThread &merge_thread,
                    CalculationThread &calculation_thread,
