@@ -85,6 +85,12 @@ PNG_SPLASH_320_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_320_rgb
 PNG_SPLASH_160_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_160_rgba.png,$(SVG_SPLASH))
 PNG_SPLASH_80_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_80_rgba.png,$(SVG_SPLASH))
 
+ifeq ($(USE_RESVG_FOR_SPLASH),y)
+$(PNG_SPLASH_320) $(PNG_SPLASH_160) $(PNG_SPLASH_80) \
+$(PNG_SPLASH_320_RGBA) $(PNG_SPLASH_160_RGBA) $(PNG_SPLASH_80_RGBA): \
+  private SVG_RENDERER = resvg
+endif
+
 # render from SVG to PNG
 $(eval $(call rsvg-convert,$(PNG_SPLASH_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_160),$(DATA)/graphics/%_160.png,Data/graphics/%.svg,--width=160))

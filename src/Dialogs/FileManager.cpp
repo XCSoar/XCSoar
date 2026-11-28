@@ -461,13 +461,15 @@ ManagedFileListWidget::UpdateButtons()
 void
 ManagedFileListWidget::OnActivateItem(unsigned index) noexcept
 {
+  /* assert() is compiled out of a release build, so the parameter
+     would otherwise be unused when DEBUG=n. */
+  (void)index;
+
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (items.empty()) {
     assert(index == 0);
     Add();
   }
-#else
-  (void)index;
 #endif
 }
 

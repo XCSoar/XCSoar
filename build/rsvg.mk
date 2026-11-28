@@ -7,6 +7,7 @@ define rsvg-convert
 
 $(1): $(2): $(3) | $$(dir $$(firstword $(1)))/dirstamp
 	@$$(NQ)echo "  SVG     $$@"
-	$$(Q)rsvg-convert $(4) $$< -o $$@
+	$$(Q)$$(if $$(filter resvg,$$(SVG_RENDERER)),\
+	  resvg $(4) $$< $$@,rsvg-convert $(4) $$< -o $$@)
 
 endef

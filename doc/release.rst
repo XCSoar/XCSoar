@@ -24,6 +24,9 @@ The release manager must keep these files in sync:
 ``debian/changelog``
   Contains a top stanza for the current version.
 
+``xcsoar.spec``
+  Contains the RPM version and changelog. See `RPM spec`_.
+
 ``android/AndroidManifest.xml.template``
   Contains the baseline Android ``versionName`` and ``versionCode``.  CI
   replaces these values for master and tag builds, but the checked-in values
@@ -134,6 +137,19 @@ that version.  One Debian bullet per ``NEWS.txt`` bullet, including
 There is no character cap.  Wrap each line at 80 columns.  Continuation
 lines are indented four spaces.  ``dpkg-parsechangelog`` must accept
 the file.
+
+RPM spec
+========
+
+When opening a development cycle or preparing a patch release, set
+``Version:`` in ``xcsoar.spec`` to the new version, keep
+``Release: 1%{?dist}``, and add a top ``%changelog`` entry. Use
+``7.47~rc1`` for a prerelease such as ``v7.47-rc1``. When releasing
+the development version, set ``Version:`` to the final version (for
+example ``7.47``) and refresh the date of its existing entry.
+
+Renovate updates the OBS Boost and ZXing source URLs with the build pins.
+Update ``BOOST_SHA256`` when accepting a new Boost archive.
 
 Play Store
 ==========

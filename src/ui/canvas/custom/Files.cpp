@@ -14,6 +14,7 @@ static const char *const font_search_paths[] = {
 static const char *const all_font_paths[] = {
   "ttf-dejavu/DejaVuSansCondensed.ttf",
   "dejavu/DejaVuSansCondensed.ttf",
+  "dejavu-sans-fonts/DejaVuSansCondensed.ttf",
   "DejaVuSansCondensed.ttf",
   "roboto/Roboto-Regular.ttf",
   "Roboto-Regular.ttf",
@@ -34,6 +35,7 @@ static const char *const all_font_paths[] = {
 static const char *const all_bold_font_paths[] = {
   "ttf-dejavu/DejaVuSansCondensed-Bold.ttf",
   "dejavu/DejaVuSansCondensed-Bold.ttf",
+  "dejavu-sans-fonts/DejaVuSansCondensed-Bold.ttf",
   "DejaVuSansCondensed-Bold.ttf",
   "roboto/Roboto-Bold.ttf",
   "Roboto-Bold.ttf",
@@ -52,6 +54,7 @@ static const char *const all_bold_font_paths[] = {
 static const char *const all_italic_font_paths[] = {
   "ttf-dejavu/DejaVuSansCondensed-Oblique.ttf",
   "dejavu/DejaVuSansCondensed-Oblique.ttf",
+  "dejavu-sans-fonts/DejaVuSansCondensed-Oblique.ttf",
   "DejaVuSansCondensed-Oblique.ttf",
   "roboto/Roboto-Italic.ttf",
   "Roboto-Italic.ttf",
@@ -67,6 +70,7 @@ static const char *const all_italic_font_paths[] = {
 static const char *const all_bold_italic_font_paths[] = {
   "ttf-dejavu/DejaVuSansCondensed-BoldOblique.ttf",
   "dejavu/DejaVuSansCondensed-BoldOblique.ttf",
+  "dejavu-sans-fonts/DejaVuSansCondensed-BoldOblique.ttf",
   "DejaVuSansCondensed-BoldOblique.ttf",
   "roboto/Roboto-BoldItalic.ttf",
   "Roboto-BoldItalic.ttf",
@@ -82,6 +86,7 @@ static const char *const all_bold_italic_font_paths[] = {
 static const char *const all_monospace_font_paths[] = {
   "ttf-dejavu/DejaVuSansMono.ttf",
   "dejavu/DejaVuSansMono.ttf",
+  "dejavu-sans-mono-fonts/DejaVuSansMono.ttf",
   "DejaVuSansMono.ttf",
   "ttf-droid/DroidSansMono.ttf",
   "droid/DroidSansMono.ttf",

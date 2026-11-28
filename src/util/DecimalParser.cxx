@@ -53,7 +53,7 @@ ParseDecimal(std::string_view src) noexcept
 		if (first != last) {
 			/* we parse the fractional part as an integer
 			   yand then divide by 10^n_digits */
-			uint_least64_t fractional_part;
+			uint_least64_t fractional_part = 0;
 
 			auto [ptr, ec] = std::from_chars(first, last, fractional_part, 10);
 			if (ptr != last || ec != std::errc{})

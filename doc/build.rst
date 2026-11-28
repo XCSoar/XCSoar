@@ -173,6 +173,40 @@ You may specify one of the following targets with ``TARGET=x``:
 ``OPT``    alias for UNIX with optimisation and no debugging
 ========== =================================================
 
+Building a Linux AppImage
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Build on a native x86_64, aarch64 or armhf Linux host. For example, on Debian 13::
+
+  sudo bash ide/provisioning/install-debian-packages.sh UPDATE BASE LINUX
+  sudo apt-get install curl desktop-file-utils libx11-dev
+  make -j"$(nproc)" TARGET=UNIX appimage
+
+The target defaults to an optimized X11 and OpenGL ES desktop build
+and writes ``output/appimage/XCSoar-<version>-<arch>.AppImage``. Pass
+normal Make options such as ``V=2`` or ``USE_CCACHE=y`` on the
+command line. When changing compiler options, use a fresh
+``TARGET_DIR`` to avoid reusing objects built with different settings.
+Packaging verifies the checksums of the downloaded tool and runtime
+and can run without FUSE.
+
+The image needs at least the C library of the build host, so build
+on the oldest distribution it should support. The OBS ``AppImage``
+repository builds on Debian 13 for x86_64, aarch64 and armv7l. Its
+project configuration sets the Debian build profile ``appimage``
+(``%deb_build_profiles``), and ``debian/rules`` then packages the
+binary of the Debian build. OBS fetches the packaging tools as assets
+of ``xcsoar.spec``, then signs and publishes the AppImages. Locally,
+the same build is ``dpkg-buildpackage -b -Pappimage``.
+
+OBS embeds its signature but not its public key. As
+``appimagetool --sign`` does, the packaging embeds the key from
+``unix/appimage-signing-key.asc`` (the armored block of
+``osc signkey home:xcsoar``) in each image OBS signs. Local builds stay
+unsigned. When the OBS project key changes, update that file and the
+fingerprint in the user manual; extending its expiry keeps the
+fingerprint.
+
 Experimental Wayland build
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

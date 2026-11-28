@@ -1,4 +1,6 @@
 Version 7.47 - not yet released
+* Linux
+  - add signed AppImages for x86_64, aarch64 and 32-bit ARM desktops #3522
 * glide computer
   - remember water ballast, crew weight, and bugs when XCSoar is
     restarted during a flight. Startup asks before restoring and
