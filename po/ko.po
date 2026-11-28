@@ -5304,7 +5304,7 @@ msgid "In start area, arm start when ready"
 msgstr "스타트 구역 내, 준비되면 스타트 활성화"
 
 msgid "Arm"
-msgstr "활동준비"
+msgstr "활성화"
 
 msgid "Dismiss"
 msgstr "무시"

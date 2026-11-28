@@ -5391,7 +5391,7 @@ msgid "In start area, arm start when ready"
 msgstr "Na área de partida, arme a partida quando pronto"
 
 msgid "Arm"
-msgstr "Armamento"
+msgstr "Armar"
 
 msgid "Dismiss"
 msgstr "Descartar"

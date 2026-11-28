@@ -5366,7 +5366,7 @@ msgid "In start area, arm start when ready"
 msgstr "V območju starta, aktivirajte start, ko boste pripravljeni"
 
 msgid "Arm"
-msgstr "Pripravi"
+msgstr "Aktiviraj"
 
 msgid "Dismiss"
 msgstr "Zavrni"

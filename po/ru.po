@@ -5405,7 +5405,7 @@ msgid "In start area, arm start when ready"
 msgstr "В стартовой зоне, активируйте старт, когда будете готовы"
 
 msgid "Arm"
-msgstr "Армирование"
+msgstr "Активировать"
 
 msgid "Dismiss"
 msgstr "Отмена"

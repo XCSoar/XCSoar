@@ -5403,13 +5403,13 @@ msgid "Maximum start speed exceeded"
 msgstr "Velocitat inicial màxima excedida"
 
 msgid "In area, arm turn when ready"
-msgstr "A l'àrea, arma el punt de viratge quan estiguis preparat"
+msgstr "A l'àrea, activa el punt de viratge quan estiguis preparat"
 
 msgid "Area reached, arm turn when ready"
-msgstr "Àrea assolida, arma el punt de viratge quan estiguis preparat"
+msgstr "Àrea assolida, activa el punt de viratge quan estiguis preparat"
 
 msgid "In start area, arm start when ready"
-msgstr "A l'àrea de sortida, arma la sortida quan estiguis preparat"
+msgstr "A l'àrea de sortida, activa la sortida quan estiguis preparat"
 
 msgid "Arm"
 msgstr "Activar"

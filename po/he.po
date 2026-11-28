@@ -5403,7 +5403,7 @@ msgid "In start area, arm start when ready"
 msgstr "באזור ההתחלה, הפעל התחלה כשאתה מוכן"
 
 msgid "Arm"
-msgstr "התמקד"
+msgstr "הפעל"
 
 msgid "Dismiss"
 msgstr "בטל"

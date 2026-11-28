@@ -5200,7 +5200,7 @@ msgid "In start area, arm start when ready"
 msgstr "在出發區域，準備好時進行開始準備"
 
 msgid "Arm"
-msgstr "Arm"
+msgstr "準備"
 
 msgid "Dismiss"
 msgstr "解散"

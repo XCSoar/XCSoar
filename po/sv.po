@@ -5319,7 +5319,7 @@ msgid "In start area, arm start when ready"
 msgstr "I startområdet, sätt i startläge när du är klar"
 
 msgid "Arm"
-msgstr "Rigga"
+msgstr "Aktivera"
 
 msgid "Dismiss"
 msgstr "Avböj"

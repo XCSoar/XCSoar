@@ -5363,7 +5363,7 @@ msgid "In start area, arm start when ready"
 msgstr "Başlangıç alanında, hazır olduğunuzda başlangıcı etkinleştirin"
 
 msgid "Arm"
-msgstr "Ayarla"
+msgstr "Etkinleştir"
 
 msgid "Dismiss"
 msgstr "İptal Et"

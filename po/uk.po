@@ -5399,7 +5399,7 @@ msgid "In start area, arm start when ready"
 msgstr "У стартовій зоні, активуйте старт, коли будете готові"
 
 msgid "Arm"
-msgstr "Рука"
+msgstr "Активувати"
 
 msgid "Dismiss"
 msgstr "Відхилити"

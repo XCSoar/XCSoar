@@ -5251,7 +5251,7 @@ msgid "In start area, arm start when ready"
 msgstr "ప్రారంభ ప్రాంతంలో, సిద్ధంగా ఉన్నప్పుడు స్టార్ట్ అర్మింగ్ చేయండి"
 
 msgid "Arm"
-msgstr "తారా"
+msgstr "అర్మింగ్"
 
 msgid "Dismiss"
 msgstr "అనుతరణ తీసుకోల"

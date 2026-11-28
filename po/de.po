@@ -5405,7 +5405,7 @@ msgid "In start area, arm start when ready"
 msgstr "Im Abflugbereich, Abflug aktivieren, wenn bereit"
 
 msgid "Arm"
-msgstr "Abflugbereit"
+msgstr "Aktivieren"
 
 msgid "Dismiss"
 msgstr "Abbrechen"

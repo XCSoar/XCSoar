@@ -5367,13 +5367,13 @@ msgid "Maximum start speed exceeded"
 msgstr "Maximum indítási sebesség túllépése"
 
 msgid "In area, arm turn when ready"
-msgstr "Területen, élesítsd a fordulót, ha kész vagy"
+msgstr "Területen, engedélyezd a fordulót, ha kész vagy"
 
 msgid "Area reached, arm turn when ready"
-msgstr "Terület elérve, élesítsd a fordulót, ha kész vagy"
+msgstr "Terület elérve, engedélyezd a fordulót, ha kész vagy"
 
 msgid "In start area, arm start when ready"
-msgstr "Startterületen, élesítsd a startot, ha kész vagy"
+msgstr "Startterületen, engedélyezd a startot, ha kész vagy"
 
 msgid "Arm"
 msgstr "Engedélyezés"

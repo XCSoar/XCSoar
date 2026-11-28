@@ -5362,7 +5362,7 @@ msgid "In start area, arm start when ready"
 msgstr "V oblasti startu, aktivuj start, až budeš připraven"
 
 msgid "Arm"
-msgstr "Obrat"
+msgstr "Aktivuj"
 
 msgid "Dismiss"
 msgstr "Zruš"

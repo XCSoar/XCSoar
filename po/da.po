@@ -5366,16 +5366,16 @@ msgid "Maximum start speed exceeded"
 msgstr "Startfart overstiger maksimum"
 
 msgid "In area, arm turn when ready"
-msgstr "I området, godkend vendepunkt når du er klar"
+msgstr "I området, aktivér vendepunkt når du er klar"
 
 msgid "Area reached, arm turn when ready"
-msgstr "Område nået, godkend vendepunkt når du er klar"
+msgstr "Område nået, aktivér vendepunkt når du er klar"
 
 msgid "In start area, arm start when ready"
-msgstr "I startområdet, godkend start når du er klar"
+msgstr "I startområdet, aktivér start når du er klar"
 
 msgid "Arm"
-msgstr "Arme"
+msgstr "Aktivér"
 
 msgid "Dismiss"
 msgstr "Afslut"

@@ -5358,7 +5358,7 @@ msgid "In start area, arm start when ready"
 msgstr "Lähtöalueella, aktivoi lähtö kun olet valmis"
 
 msgid "Arm"
-msgstr "Varmaa"
+msgstr "Aktivoi"
 
 msgid "Dismiss"
 msgstr "Hylkää"

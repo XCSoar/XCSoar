@@ -5428,13 +5428,13 @@ msgid "Maximum start speed exceeded"
 msgstr "Μέγιστη γωγή αρχικοποίησης υπερβασμένη"
 
 msgid "In area, arm turn when ready"
-msgstr "Στην περιοχή, οπλίστε τη στροφή όταν είστε έτοιμοι"
+msgstr "Στην περιοχή, ενεργοποιήστε τη στροφή όταν είστε έτοιμοι"
 
 msgid "Area reached, arm turn when ready"
-msgstr "Η περιοχή επιτεύχθηκε, οπλίστε τη στροφή όταν είστε έτοιμοι"
+msgstr "Η περιοχή επιτεύχθηκε, ενεργοποιήστε τη στροφή όταν είστε έτοιμοι"
 
 msgid "In start area, arm start when ready"
-msgstr "Στην περιοχή εκκίνησης, οπλίστε την έναρξη όταν είστε έτοιμοι"
+msgstr "Στην περιοχή εκκίνησης, ενεργοποιήστε την έναρξη όταν είστε έτοιμοι"
 
 msgid "Arm"
 msgstr "Ενεργοποίηση"

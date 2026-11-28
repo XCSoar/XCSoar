@@ -5390,7 +5390,7 @@ msgid "In start area, arm start when ready"
 msgstr "Na área de largada, arme a largada quando pronto"
 
 msgid "Arm"
-msgstr "Armado"
+msgstr "Armar"
 
 msgid "Dismiss"
 msgstr "Descartar"
