@@ -54,8 +54,10 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line, NMEAInfo &info)
     const auto type = ParseInteger<uint8_t>(id_type);
     info.flarm.hardware.radio_id_type =
       id.IsDefined() && type && (*type == 1 || *type == 2) ? *type : 0;
-    if (id.IsDefined())
+    if (id.IsDefined()) {
       info.flarm.hardware.available.Update(info.clock);
+      ogn_config_received |= OGN_RADIOID;
+    }
 
     return true;
   }
@@ -79,14 +81,17 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line, NMEAInfo &info)
      Network */
   if (const auto number = ParseInteger<unsigned>(value)) {
     auto &hardware = info.flarm.hardware;
-    if (name == "ACFT"sv)
+    if (name == "ACFT"sv) {
       hardware.aircraft_type = *number < 16 ? *number : 0;
-    else if (name == "PRIV"sv) {
+      ogn_config_received |= OGN_ACFT;
+    } else if (name == "PRIV"sv) {
       hardware.privacy = *number != 0;
       hardware.privacy_known = true;
+      ogn_config_received |= OGN_PRIV;
     } else if (name == "NOTRACK"sv) {
       hardware.no_tracking = *number != 0;
       hardware.no_tracking_known = true;
+      ogn_config_received |= OGN_NOTRACK;
     }
   }
 
