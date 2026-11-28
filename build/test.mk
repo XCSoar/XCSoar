@@ -1163,6 +1163,7 @@ $(eval $(call link-program,TestContainerWindow,TEST_CONTAINER_WINDOW))
 
 TEST_DISPLAY_DPI_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestDisplayDPI.cpp
 TEST_DISPLAY_DPI_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL

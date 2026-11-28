@@ -105,6 +105,19 @@ public:
                               GL_TEXTURE_2D, id, 0);
   }
 
+#ifdef HAVE_MULTISAMPLE_FBO
+  /**
+   * Like AttachFramebuffer(), but rendering happens in an implicit
+   * multisample buffer which is resolved into this texture when the
+   * framebuffer is unbound.  The texture itself stays single-sampled.
+   */
+  void AttachFramebufferMultisample(GLenum attachment,
+                                    GLsizei samples) noexcept {
+    FBO::FramebufferTexture2DMultisample(FBO::FRAMEBUFFER, attachment,
+                                         GL_TEXTURE_2D, id, 0, samples);
+  }
+#endif
+
   void Draw(PixelRect dest, PixelRect src) const noexcept;
 
   void Draw(PixelPoint dest) const noexcept {

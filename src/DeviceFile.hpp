@@ -50,4 +50,21 @@ GetStartupMode() noexcept;
 void
 SetStartupMode(StartupMode mode) noexcept;
 
+/**
+ * MSAA sample count for this computer's screen (0 = off, or 2, 4, 8,
+ * 16).  Missing or unrecognised values are off.  This is a property
+ * of the display, so it lives here rather than in a shareable
+ * profile (#1993).
+ */
+[[gnu::pure]]
+unsigned
+GetAntialiasing() noexcept;
+
+/**
+ * Store the sample count and persist it (calls Save()).  A value
+ * that is not one of the counts above is stored as off.
+ */
+void
+SetAntialiasing(unsigned samples) noexcept;
+
 } // namespace DeviceFile

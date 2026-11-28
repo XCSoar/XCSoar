@@ -21,7 +21,28 @@ namespace DeviceFile {
 
 namespace Keys {
 constexpr std::string_view StartupMode = "StartupMode";
+constexpr std::string_view AntiAliasing = "AntiAliasing";
 } // namespace Keys
+
+/**
+ * Counts the screen can actually be asked for.  Keep in step with
+ * ANTIALIASING_SAMPLE_COUNTS in UISettings.hpp; this file does not
+ * include that header.
+ */
+static bool
+IsStoredAntialiasing(unsigned samples) noexcept
+{
+  switch (samples) {
+  case 0:
+  case 2:
+  case 4:
+  case 8:
+  case 16:
+    return true;
+  default:
+    return false;
+  }
+}
 
 /** the in-memory copy of device.xcd */
 static ProfileMap state;
@@ -103,6 +124,27 @@ void
 SetStartupMode(StartupMode mode) noexcept
 {
   state.SetEnum(Keys::StartupMode, mode);
+  Save();
+}
+
+unsigned
+GetAntialiasing() noexcept
+{
+  unsigned value;
+  if (!state.Get(Keys::AntiAliasing, value) ||
+      !IsStoredAntialiasing(value))
+    return 0;
+
+  return value;
+}
+
+void
+SetAntialiasing(unsigned samples) noexcept
+{
+  if (!IsStoredAntialiasing(samples))
+    samples = 0;
+
+  state.Set(Keys::AntiAliasing, samples);
   Save();
 }
 

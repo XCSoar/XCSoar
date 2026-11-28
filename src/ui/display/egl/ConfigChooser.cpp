@@ -2,18 +2,20 @@
 // Copyright The XCSoar Project
 
 #include "ConfigChooser.hpp"
+#include "ui/canvas/opengl/Globals.hpp"
 #include "lib/fmt/RuntimeError.hxx"
+#include "LogFile.hpp"
 
 #ifdef MESA_KMS
 #include "ui/canvas/egl/GBM.hpp"
 #endif
 
+#include <algorithm>
 #include <array>
+#include <optional>
 #include <span>
 
 namespace EGL {
-
-#ifdef ANDROID
 
 [[gnu::pure]]
 static int
@@ -25,6 +27,8 @@ GetConfigAttrib(EGLDisplay display, EGLConfig config,
     ? value
     : default_value;
 }
+
+#ifndef MESA_KMS
 
 [[gnu::pure]]
 static int
@@ -48,7 +52,8 @@ AttribDistance(EGLDisplay display, EGLConfig config,
 static int
 ConfigDistance(EGLDisplay display, EGLConfig config,
                int want_r, int want_g, int want_b, int want_a,
-               int want_depth, int want_stencil) noexcept
+               int want_depth, int want_stencil,
+               int want_samples) noexcept
 {
   int distance = 0;
 
@@ -64,8 +69,9 @@ ConfigDistance(EGLDisplay display, EGLConfig config,
   int a = AttribDistance(display, config, EGL_ALPHA_SIZE, want_a);
   int d = AttribDistance(display, config, EGL_DEPTH_SIZE, want_depth);
   int s = AttribDistance(display, config, EGL_STENCIL_SIZE, want_stencil);
+  int samples = AttribDistance(display, config, EGL_SAMPLES, want_samples);
 
-  return distance + r + g + b + a + d + s;
+  return distance + r + g + b + a + d + s + samples;
 }
 
 [[gnu::pure]]
@@ -74,15 +80,16 @@ FindClosestConfig(EGLDisplay display,
                   std::span<const EGLConfig> configs,
                   int want_r, int want_g, int want_b,
                   int want_a,
-                  int want_depth, int want_stencil) noexcept
+                  int want_depth, int want_stencil,
+                  int want_samples) noexcept
 {
   EGLConfig closestConfig = nullptr;
-  int closestDistance = 1000;
+  int closestDistance = 10000;
 
   for (EGLConfig config : configs) {
     int distance = ConfigDistance(display, config,
                                   want_r, want_g, want_b, want_a,
-                                  want_depth, want_stencil);
+                                  want_depth, want_stencil, want_samples);
     if (distance < closestDistance) {
       closestDistance = distance;
       closestConfig = config;
@@ -119,10 +126,19 @@ FindConfigWithAttribute(EGLDisplay display,
 
 #endif /* MESA_KMS */
 
-EGLConfig
-ChooseConfig(EGLDisplay display)
+/**
+ * Ask EGL for a list of configurations and pick the one which suits
+ * XCSoar best. Throws on error.
+ *
+ * @param antialiasing_samples the requested number of MSAA samples;
+ * 0 disables antialiasing
+ * @return the chosen config or std::nullopt if there is no
+ * configuration matching the requested antialiasing
+ */
+static std::optional<EGLConfig>
+TryChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
 {
-  static constexpr EGLint attributes[] = {
+  static constexpr EGLint base_attributes[] = {
 #ifdef ANDROID
     /* EGL_STENCIL_SIZE not listed here because we have a fallback for
        configurations without stencil (but we prefer native stencil)
@@ -153,14 +169,30 @@ ChooseConfig(EGLDisplay display)
     EGL_NONE
   };
 
+  /* the base attributes plus an optional multisampling request;
+     eglChooseConfig() sorts configurations without multisampling
+     first, so we need to ask for it explicitly instead of picking a
+     multisample configuration from the result list */
+  std::array<EGLint, std::size(base_attributes) + 4> attributes;
+  auto *a = std::copy_n(base_attributes, std::size(base_attributes) - 1,
+                        attributes.data());
+  if (antialiasing_samples > 0) {
+    *a++ = EGL_SAMPLE_BUFFERS;
+    *a++ = 1;
+    *a++ = EGL_SAMPLES;
+    *a++ = static_cast<EGLint>(antialiasing_samples);
+  }
+  *a = EGL_NONE;
+
   std::array<EGLConfig, 64> configs;
   EGLint num_configs;
-  if (!eglChooseConfig(display, attributes, configs.data(), configs.size(),
+  if (!eglChooseConfig(display, attributes.data(),
+                       configs.data(), configs.size(),
                        &num_configs))
     throw FmtRuntimeError("eglChooseConfig() failed: {:#x}", eglGetError());
 
   if (num_configs == 0)
-    throw std::runtime_error("eglChooseConfig() failed");
+    return std::nullopt;
 
 #ifdef MESA_KMS
   /* On some GBM targets, such as the Raspberry Pi 4,
@@ -174,18 +206,89 @@ ChooseConfig(EGLDisplay display)
     i = FindConfigWithAttribute(display, configs.data(), num_configs,
                                 EGL_NATIVE_VISUAL_ID,
                                 XCSOAR_GBM_FORMAT_FALLBACK);
+
+  if (i < 0 && antialiasing_samples > 0)
+    /* none of the multisample configurations has a usable native
+       visual; let the caller retry without antialiasing */
+    return std::nullopt;
+
   return i >= 0 ? configs[i] : configs[0];
-#elif defined(ANDROID)
+#else
+  /* Android, X11 and Wayland: pick 8/8/8 (and the requested sample
+     count) rather than eglChooseConfig()'s first result, which Mesa
+     often ranks as RGB 5/6/5. */
   const auto closest_config =
     FindClosestConfig(display, {configs.data(), std::size_t(num_configs)},
-                      8, 8, 8, 0, 0, 1);
+                      8, 8, 8, 0, 0, 1, antialiasing_samples);
   if (closest_config == nullptr)
-    throw std::runtime_error("eglChooseConfig() failed");
+    return std::nullopt;
 
   return closest_config;
-#else
-  return configs[0];
 #endif
+}
+
+EGLConfig
+ChooseConfig(EGLDisplay display, unsigned requested_samples)
+{
+  /* probe first so the request can step down to the next lower
+     level this display actually offers, instead of jumping straight
+     from the request to "disabled" */
+  const unsigned mask = ProbeAntialiasingSamples(display);
+  OpenGL::SetAvailableAntialiasingSamples(mask);
+
+  const unsigned samples =
+    OpenGL::SelectAntialiasingSamples(requested_samples, mask);
+
+  if (requested_samples > 0 && samples != requested_samples) {
+    if (samples > 0)
+      LogFormat("Requested %ux anti-aliasing not available, using %ux",
+                requested_samples, samples);
+    else
+      LogFormat("Requested %ux anti-aliasing not available, disabling",
+                requested_samples);
+  }
+
+  if (samples > 0) {
+    if (const auto config = TryChooseConfig(display, samples))
+      return *config;
+
+    /* the probe said this level exists; if the driver still refuses
+       it, fall through to the "disabled" configuration below */
+    LogFormat("Failed to obtain the %ux anti-aliasing configuration "
+              "reported available, disabling", samples);
+  }
+
+  const auto config = TryChooseConfig(display, 0);
+  if (!config)
+    throw std::runtime_error("eglChooseConfig() failed");
+
+  return *config;
+}
+
+unsigned
+ProbeAntialiasingSamples(EGLDisplay display) noexcept
+{
+  /* bit 0 marks the mask as valid; "no antialiasing" always works */
+  unsigned mask = 1;
+
+  for (const unsigned n : OpenGL::ANTIALIASING_SAMPLE_COUNTS) {
+    try {
+      /* this asks exactly the question the user cares about: would
+         ChooseConfig() find a usable configuration for this level?
+         EGL_SAMPLES matches "at least", though, so a request for 8
+         may return a 16x configuration; only an exact match means
+         this level exists (a larger one sets its own bit in its own
+         iteration) */
+      const auto config = TryChooseConfig(display, n);
+      if (config &&
+          unsigned(GetConfigAttrib(display, *config, EGL_SAMPLES, 0)) == n)
+        mask |= 1u << n;
+    } catch (...) {
+      /* eglChooseConfig() failed; treat this level as unavailable */
+    }
+  }
+
+  return mask;
 }
 
 } // namespace EGL

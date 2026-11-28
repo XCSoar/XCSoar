@@ -37,10 +37,10 @@
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 #include "Dialogs/Message.hpp"
-#include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
 #include "Startup.hpp"
 #include "Interface.hpp"
+#include "DeviceFile.hpp"
 #include "java/Global.hxx"
 #include "java/File.hxx"
 #include "java/InputStream.hxx"
@@ -284,6 +284,9 @@ try {
   InitialiseDataPath();
   AtScopeExit() { DeinitialiseDataPath(); };
 
+  /* same store as the desktop build: this screen, not the profile */
+  DeviceFile::Load();
+
   LogFormat("Starting %s", XCSoar_ProductToken);
 
   TextUtil::Initialise(env);
@@ -360,7 +363,7 @@ try {
     saf_helper = nullptr;
   };
 
-  ScreenGlobalInit screen_init;
+  ScreenGlobalInit screen_init(DeviceFile::GetAntialiasing());
   AtScopeExit() { Fonts::Deinitialize(); };
 
   AllowLanguage();
