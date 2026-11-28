@@ -5,6 +5,7 @@
 #include "ButtonPanelWidget.hpp"
 #include "TextWidget.hpp"
 #include "Form/ButtonPanel.hpp"
+#include "ui/event/KeyCode.hpp"
 
 QuestionWidget::QuestionWidget(const char *_message) noexcept
   :SolidWidget(std::make_unique<ButtonPanelWidget>(std::make_unique<TextWidget>(),
@@ -55,6 +56,67 @@ QuestionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   if (message_colors)
     ApplyMessageColors();
+}
+
+inline ButtonPanel &
+QuestionWidget::GetButtonPanel() noexcept
+{
+  return ((ButtonPanelWidget &)GetWidget()).GetButtonPanel();
+}
+
+bool
+QuestionWidget::FocusButton(unsigned index) noexcept
+{
+  if (!prepared || buttons.empty())
+    return false;
+
+  if (index >= buttons.size())
+    index = 0;
+
+  ButtonPanel &panel = GetButtonPanel();
+  panel.DisableCursorSelection();
+  panel.EnableCursorSelection(index);
+  return true;
+}
+
+int
+QuestionWidget::GetFocusedButton() noexcept
+{
+  return prepared ? GetButtonPanel().GetSelectedIndex() : -1;
+}
+
+bool
+QuestionWidget::KeyPress(unsigned key_code) noexcept
+{
+  if (GetFocusedButton() < 0)
+    return false;
+
+  ButtonPanel &panel = GetButtonPanel();
+
+  switch (key_code) {
+  case KEY_LEFT:
+  case KEY_RIGHT:
+    return panel.KeyPress(key_code);
+
+  case KEY_RETURN: {
+    ::Button *button = panel.GetSelectedButton();
+    if (button == nullptr)
+      return true;
+
+    /* hand the keys back first: a second Enter must not answer
+       another question, and the click may delete this object */
+    panel.DisableCursorSelection();
+    button->Click();
+    return true;
+  }
+
+  case KEY_ESCAPE:
+    panel.DisableCursorSelection();
+    return true;
+
+  default:
+    return false;
+  }
 }
 
 

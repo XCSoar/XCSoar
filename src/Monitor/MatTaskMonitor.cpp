@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "MatTaskMonitor.hpp"
-#include "PageActions.hpp"
+#include "MainWindow.hpp"
 #include "Widget/QuestionWidget.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -39,10 +39,10 @@ public:
      monitor(_monitor), waypoint(std::move(_waypoint)) {
     AddButton(C_("Button", "Add"), [this](){
       OnAdd();
-      PageActions::RestoreBottom();
+      CommonInterface::main_window->SetBottomQuestionWidget(nullptr);
     });
     AddButton(_("Dismiss"), [](){
-      PageActions::RestoreBottom();
+      CommonInterface::main_window->SetBottomQuestionWidget(nullptr);
     });
   }
 
@@ -167,14 +167,14 @@ MatTaskMonitor::Check()
     const auto id = wp->id;
     if (widget == nullptr && wp->id != last_id) {
       widget = new MatTaskAddWidget(*this, std::move(wp));
-      PageActions::SetCustomBottom(widget);
+      CommonInterface::main_window->SetBottomQuestionWidget(widget);
     }
 
     last_id = id;
   } else {
     /* no nearby turn point: close the QuestionWidget */
     if (widget != nullptr)
-      PageActions::RestoreBottom();
+      CommonInterface::main_window->SetBottomQuestionWidget(nullptr);
 
     last_id = unsigned(-1);
   }

@@ -365,7 +365,17 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code) noexcept
 bool
 InputEvents::processKey(unsigned key_code) noexcept
 {
-  return ProcessKey(getModeID(), key_code);
+  const Mode mode = getModeID();
+
+  /* the airspace warning banner and the task questions never get the
+     keyboard focus, so the map and the pages offer them the key
+     first; not in the menu or while panning (MODE_PAN), where the
+     keys have other jobs */
+  if (mode == MODE_DEFAULT && CommonInterface::main_window != nullptr &&
+      CommonInterface::main_window->OverlayKeyPress(key_code))
+    return true;
+
+  return ProcessKey(mode, key_code);
 }
 
 int

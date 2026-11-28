@@ -753,26 +753,6 @@ PageActions::DeferredRestore()
   CommonInterface::main_window->DeferredRestorePage();
 }
 
-void
-PageActions::RestoreBottom()
-{
-  PageLayout &special_page = CommonInterface::SetUIState().pages.special_page;
-  if (!special_page.IsDefined())
-    return;
-
-  const PageLayout &configured_page = GetConfiguredLayout();
-
-  if (special_page.bottom != configured_page.bottom) {
-    special_page.bottom = configured_page.bottom;
-    if (special_page == configured_page)
-      special_page.SetUndefined();
-  }
-
-  /* Always apply the configured bottom.  A prior restore may have updated
-     special_page.bottom without tearing down a SetCustomBottom widget. */
-  LoadBottom(configured_page);
-}
-
 GlueMapWindow *
 PageActions::ShowMap()
 {
@@ -871,28 +851,8 @@ PageActions::ShowWeatherPage()
 #endif
 }
 
-void
-PageActions::SetCustomBottom(Widget *widget)
-{
-  assert(widget != nullptr);
-
-  PagesState &state = CommonInterface::SetUIState().pages;
-
-  state.special_page = GetCurrentLayout();
-  state.special_page.bottom = PageLayout::Bottom::CUSTOM;
-  CommonInterface::main_window->SetBottomWidget(widget);
-}
-
 bool
 PageActions::AllowMapOverlayButtons() noexcept
 {
-  const PageLayout &special_page =
-    CommonInterface::GetUIState().pages.special_page;
-  if (!special_page.IsDefined())
-    return true;
-
-  /* SetCustomBottom() marks special_page so RestoreBottom() can undo
-     it; the map remains active and overlay buttons should stay. */
-  return special_page.IsMapMain() &&
-    special_page.bottom == PageLayout::Bottom::CUSTOM;
+  return !CommonInterface::GetUIState().pages.special_page.IsDefined();
 }

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 #include "MainWindow.hpp"
+#include "Asset.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -19,6 +20,7 @@
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Form/Form.hpp"
+#include "Widget/QuestionWidget.hpp"
 #include "Widget/Widget.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Look/GlobalFonts.hpp"
@@ -53,6 +55,7 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "ui/event/Globals.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "ui/event/Queue.hpp"
 
 #ifdef ANDROID
@@ -270,6 +273,13 @@ GetMapRectBelow(const PixelRect &rc, const PixelRect &top_rect) noexcept
   return result;
 }
 
+[[gnu::pure]]
+static bool
+IsShown(const WindowWidget *widget) noexcept
+{
+  return widget != nullptr && widget->GetWindow().IsVisible();
+}
+
 /**
  * The screen edges the given area is kept clear of.  InfoBoxes at
  * those edges need a border, because they no longer end at the screen
@@ -294,19 +304,21 @@ GetOuterBorder(const PixelRect &infobox_area_rc, const PixelRect &rc) noexcept
 }
 
 /**
- * The map area between the top and the bottom widget.  The warning
- * banner does not take part: it lies over the bottom edge of the
- * screen and leaves the map as it is.
+ * The map area between the top widget and the bottom question above
+ * the bottom widget.  The warning banner does not take part: it lies
+ * over the bottom edge of the screen and leaves the map as it is.
  */
 [[gnu::pure]]
 static PixelRect
 CalculateMapAreaRect(const PixelRect &main_rect,
                      const Widget *top_widget,
+                     const Widget *bottom_question_widget,
                      const Widget *bottom_widget) noexcept
 {
   PixelRect rc = main_rect;
   rc = GetMapRectBelow(rc, GetTopWidgetRect(rc, top_widget));
-  return GetMapRectAbove(rc, GetBottomWidgetRect(rc, bottom_widget));
+  rc = GetMapRectAbove(rc, GetBottomWidgetRect(rc, bottom_widget));
+  return GetMapRectAbove(rc, GetBottomWidgetRect(rc, bottom_question_widget));
 }
 
 PixelRect
@@ -412,7 +424,29 @@ MainWindow::GetMapAreaRect() const noexcept
   if (map != nullptr)
     return map->GetPosition();
 
-  return CalculateMapAreaRect(GetMainRect(), top_widget, bottom_widget);
+  return CalculateMapAreaRect(GetMainRect(), top_widget,
+                              bottom_question_widget, bottom_widget);
+}
+
+PixelRect
+MainWindow::GetAboveBottomRect() const noexcept
+{
+  PixelRect available = GetAreaStackRect();
+  if (HaveTopWidget())
+    available = GetMapRectBelow(available,
+                                GetTopWidgetRect(available, top_widget));
+  if (HaveBottomWidget())
+    available = GetMapRectAbove(available,
+                                GetBottomWidgetRect(available, bottom_widget));
+  return available;
+}
+
+PixelRect
+MainWindow::GetBottomQuestionRect() const noexcept
+{
+  assert(bottom_question_widget != nullptr);
+
+  return GetBottomWidgetRect(GetAboveBottomRect(), bottom_question_widget);
 }
 
 PixelRect
@@ -523,6 +557,26 @@ MainWindow::LayoutMapArea() noexcept
 
     if (main_rect.bottom <= bottom_rect.bottom)
       main_rect = GetMapRectAbove(main_rect, bottom_rect);
+  }
+
+  /* a transient question (task advance, MAT) sits directly above the
+     configured bottom area, on the map and on a custom page; a dialog
+     simply covers it */
+  if (HaveBottomQuestionWidget()) {
+    PixelRect above_bottom = area_stack_rc;
+    if (HaveTopWidget())
+      above_bottom = GetMapRectBelow(above_bottom, top_rect);
+    if (HaveBottomWidget())
+      above_bottom = GetMapRectAbove(above_bottom, bottom_rect);
+
+    const PixelRect question_rect =
+      GetBottomWidgetRect(above_bottom, bottom_question_widget);
+    if (bottom_question_widget->GetWindow().IsVisible())
+      bottom_question_widget->Move(question_rect);
+    hud_rect = GetMapRectAbove(hud_rect, question_rect);
+
+    if (main_rect.bottom <= question_rect.bottom)
+      main_rect = GetMapRectAbove(main_rect, question_rect);
   }
 
   map->Move(main_rect);
@@ -1301,6 +1355,7 @@ MainWindow::BeginShutdown() noexcept
      a widget left alive until OnDestroy() would unregister itself from
      a monitor that no longer exists */
   KillBottomBannerWidget();
+  KillBottomQuestionWidget();
   KillTopWidget();
   KillBottomWidget();
 }
@@ -1504,13 +1559,58 @@ MainWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
   return true;
 }
 
+inline /**
+ * Let a #QuestionWidget overlay take the cursor keys.  Other overlays
+ * (e.g. the list of current airspaces) are not operated with keys.
+ * Only on devices with cursor keys: elsewhere the selection would not
+ * be drawn (see Button::GetState()), e.g. after the Android "back"
+ * button.
+ */
+static bool
+TakeCursorKeys(WindowWidget *widget) noexcept
+{
+  if (!HasCursorKeys())
+    return false;
+
+  auto *question = dynamic_cast<QuestionWidget *>(widget);
+  return question != nullptr && question->GetWindow().IsVisible() &&
+    question->FocusButton(0);
+}
+
+bool
+MainWindow::OverlayKeyPress(unsigned key_code) noexcept
+{
+  if (IsShown(bottom_banner_widget) &&
+      bottom_banner_widget->KeyPress(key_code)) {
+    /* ESC goes from the banner, the more urgent one, to the
+       question, if any */
+    if (key_code == KEY_ESCAPE)
+      FocusBottomQuestion();
+    return true;
+  }
+
+  return IsShown(bottom_question_widget) &&
+    bottom_question_widget->KeyPress(key_code);
+}
+
+bool
+MainWindow::FocusBottomBanner() noexcept
+{
+  return TakeCursorKeys(bottom_banner_widget);
+}
+
+bool
+MainWindow::FocusBottomQuestion() noexcept
+{
+  return TakeCursorKeys(bottom_question_widget);
+}
+
 bool
 MainWindow::OnKeyDown(unsigned key_code) noexcept
 {
-  return (HaveBottomBannerWidget() &&
-          bottom_banner_widget->GetWindow().IsVisible() &&
-          bottom_banner_widget->KeyPress(key_code)) ||
-    (widget != nullptr && widget->KeyPress(key_code)) ||
+  /* the banner and the bottom question get their keys from
+     InputEvents::processKey() */
+  return (widget != nullptr && widget->KeyPress(key_code)) ||
     (HaveTopWidget() && top_widget->KeyPress(key_code)) ||
     (HaveBottomWidget() && bottom_widget->KeyPress(key_code)) ||
     InputEvents::processKey(key_code) ||
@@ -1682,6 +1782,7 @@ MainWindow::OnDestroy() noexcept
   timer.Cancel();
 
   KillBottomBannerWidget();
+  KillBottomQuestionWidget();
   KillWidget();
   KillTopWidget();
   KillBottomWidget();
@@ -1714,12 +1815,26 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
   }
 
-  if (HaveBottomWidget() && map != nullptr) {
+  const bool question = IsShown(bottom_question_widget);
+  if ((question || HaveBottomWidget()) && map != nullptr) {
     /* draw a separator between the map and the strip below it */
     PixelRect rc = map->GetPosition();
     rc.top = rc.bottom;
     rc.bottom += separator_height;
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
+
+    if (question && HaveBottomWidget()) {
+      /* separator between the question and the configured bottom
+         area; the map may extend underneath both */
+      const PixelRect question_rc =
+        bottom_question_widget->GetWindow().GetPosition();
+      const PixelRect bottom_rc =
+        GetBottomWidgetRect(GetAreaStackRect(), bottom_widget);
+      if (question_rc.bottom < bottom_rc.top)
+        canvas.DrawFilledRectangle({question_rc.left, question_rc.bottom,
+                                    question_rc.right, bottom_rc.top},
+                                   COLOR_BLACK);
+    }
   }
 
   SingleWindow::OnPaint(canvas);
@@ -1968,15 +2083,17 @@ MainWindow::KillBottomWidget() noexcept
   delete old;
 }
 
-void
-MainWindow::KillBottomBannerWidget() noexcept
+/**
+ * Hide, unprepare and delete the widget in this slot, if any, and
+ * clear the slot.
+ */
+static void
+DeleteWindowWidget(WindowWidget *&slot) noexcept
 {
-  if (bottom_banner_widget == nullptr)
+  if (slot == nullptr)
     return;
 
-  WindowWidget *const old = bottom_banner_widget;
-  bottom_banner_widget = nullptr;
-  SetDialogOverlay(nullptr);
+  WindowWidget *const old = std::exchange(slot, nullptr);
 
   if (old->GetWindow().IsVisible())
     old->Hide();
@@ -1986,14 +2103,34 @@ MainWindow::KillBottomBannerWidget() noexcept
 }
 
 void
+MainWindow::KillBottomBannerWidget() noexcept
+{
+  if (bottom_banner_widget == nullptr)
+    return;
+
+  SetDialogOverlay(nullptr);
+  DeleteWindowWidget(bottom_banner_widget);
+}
+
+void
+MainWindow::KillBottomQuestionWidget() noexcept
+{
+  DeleteWindowWidget(bottom_question_widget);
+}
+
+void
 MainWindow::RaiseBottomBannerWidget() noexcept
 {
-  if (HaveBottomBannerWidget() &&
-      bottom_banner_widget->GetWindow().IsVisible()) {
+  const bool question = IsShown(bottom_question_widget);
+  if (question)
+    BringToTopBelowDialogs(bottom_question_widget->GetWindow());
+
+  const bool banner = IsShown(bottom_banner_widget);
+  if (banner)
     BringToTopBelowDialogs(bottom_banner_widget->GetWindow());
-    if (menu_bar != nullptr && !HasDialog())
-      menu_bar->BringToTop(*this);
-  }
+
+  if ((question || banner) && menu_bar != nullptr && !HasDialog())
+    menu_bar->BringToTop(*this);
 }
 
 void
@@ -2072,6 +2209,41 @@ MainWindow::SetBottomBannerWidget(WindowWidget *_widget) noexcept
   }
 
   LayoutMapArea();
+  map->FullRedraw();
+
+  UpdateMapOverlayButtonLayout();
+}
+
+void
+MainWindow::SetBottomQuestionWidget(WindowWidget *_widget) noexcept
+{
+  if (bottom_question_widget == nullptr && _widget == nullptr)
+    return;
+
+  if (map == nullptr) {
+    /* this doesn't work without a map */
+    delete _widget;
+    return;
+  }
+
+  KillBottomQuestionWidget();
+
+  bottom_question_widget = _widget;
+
+  if (HaveBottomQuestionWidget()) {
+    /* Prepare with the area above the bottom widget so the question
+       can determine its final minimum size. */
+    const PixelRect available = GetAboveBottomRect();
+    bottom_question_widget->Initialise(*this, available);
+    bottom_question_widget->Prepare(*this, available);
+    bottom_question_widget->Show(GetBottomQuestionRect());
+    RaiseBottomBannerWidget();
+  }
+
+  /* the question changes the HUD rectangle, which the status popup
+     and the FLARM and thermal assistant gauges follow */
+  LayoutMapArea();
+  LayoutHudElements();
   map->FullRedraw();
 
   UpdateMapOverlayButtonLayout();

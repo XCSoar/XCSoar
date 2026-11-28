@@ -6,7 +6,6 @@
 #include "PageSettings.hpp"
 
 class GlueMapWindow;
-class Widget;
 
 namespace PageActions
 {
@@ -92,11 +91,6 @@ namespace PageActions
   void DeferredRestore();
 
   /**
-   * Like Restore(), but affects only the bottom area.
-   */
-  void RestoreBottom();
-
-  /**
    * Show a page with the map, or restore the current page if it was
    * configured with a map (for example if the user has activated the
    * FLARM radar page).
@@ -143,16 +137,8 @@ namespace PageActions
   void ResumeWeatherOverlaysAfterPan() noexcept;
 
   /**
-   * Use a custom widget for the "bottom" area.  This is a wrapper for
-   * MainWindow::SetBottomWidget().  Call RestoreBottom() to undo this.
-   */
-  void SetCustomBottom(Widget *widget);
-
-  /**
    * Whether map overlay buttons (menu, QuickMenu, zoom) should be
-   * shown.  False for most special pages (e.g. pan fullscreen); true
-   * when #special_page is only a #SetCustomBottom() overlay such as a
-   * QuestionWidget on an otherwise normal map page.
+   * shown.  False on special pages (e.g. pan fullscreen).
    */
   [[gnu::pure]]
   bool AllowMapOverlayButtons() noexcept;

@@ -427,9 +427,8 @@ ButtonPanel::KeyPress(unsigned key_code) noexcept
       SelectNext();
       return true;
     } else if (key_code == KEY_RETURN) {
-      auto &button = *buttons[selected_index];
-      if (button.IsVisible() && button.IsEnabled()) {
-        button.Click();
+      if (Button *button = GetSelectedButton()) {
+        button->Click();
         return true;
       }
     }
