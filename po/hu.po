@@ -12959,3 +12959,6 @@ msgstr ""
 
 msgid "No further cruise phase found."
 msgstr ""
+
+msgid "+10'"
+msgstr ""

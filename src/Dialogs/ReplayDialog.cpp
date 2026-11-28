@@ -38,7 +38,7 @@ public:
   void CreateButtons(WidgetDialog &dialog) noexcept {
     dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
     dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
-    dialog.AddButton("+10'", [this](){ OnSkipClicked(); });
+    dialog.AddButton(_("+10'"), [this](){ OnSkipClicked(); });
     dialog.AddButton(_("Seek"), [this](){ OnSeekClicked(); });
     dialog.AddButton(_("Circling"), [this](){ OnSeekNextCirclingClicked(); });
     dialog.AddButton(_("Cruise"), [this](){ OnSeekNextCruiseClicked(); });
