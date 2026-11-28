@@ -5192,8 +5192,14 @@ msgstr "此功能在您的平台上尚未可用。"
 msgid "Maximum start speed exceeded"
 msgstr "超过最大开始速度"
 
-msgid "In sector, arm advance when ready"
-msgstr "在扇区，arm准备前进"
+msgid "In area, arm turn when ready"
+msgstr "在区域内，准备好时进行转弯准备"
+
+msgid "Area reached, arm turn when ready"
+msgstr "已到达区域，准备好时进行转弯准备"
+
+msgid "In start area, arm start when ready"
+msgstr "在出发区域，准备好时进行开始准备"
 
 msgid "Arm"
 msgstr "Arm"

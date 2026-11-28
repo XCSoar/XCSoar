@@ -5402,8 +5402,14 @@ msgstr "Această funcție nu este disponibilă pe platforma dumneavoastră înc�
 msgid "Maximum start speed exceeded"
 msgstr "Viteza de start maxim depășit"
 
-msgid "In sector, arm advance when ready"
-msgstr "În sector, armare avansată când ești pregătit"
+msgid "In area, arm turn when ready"
+msgstr "În zonă, armează punctul când ești pregătit"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Zonă atinsă, armează punctul când ești pregătit"
+
+msgid "In start area, arm start when ready"
+msgstr "În zona de start, armează startul când ești pregătit"
 
 msgid "Arm"
 msgstr "Armare"

@@ -5241,8 +5241,14 @@ msgstr "ఈ ఫంక్షన్ మీ ప్లాట్ఫార్మ్ �
 msgid "Maximum start speed exceeded"
 msgstr "ప్రారంభ గడ్డి తీవ్రత నిష్పత్తి అక్షరణ జరగబడినది"
 
-msgid "In sector, arm advance when ready"
-msgstr "సెక్టర్లో, తారా వేర్వేరు చేయండి"
+msgid "In area, arm turn when ready"
+msgstr "ప్రాంతంలో, సిద్ధంగా ఉన్నప్పుడు టర్న్ అర్మింగ్ చేయండి"
+
+msgid "Area reached, arm turn when ready"
+msgstr "ప్రాంతం చేరుకున్నారు, సిద్ధంగా ఉన్నప్పుడు టర్న్ అర్మింగ్ చేయండి"
+
+msgid "In start area, arm start when ready"
+msgstr "ప్రారంభ ప్రాంతంలో, సిద్ధంగా ఉన్నప్పుడు స్టార్ట్ అర్మింగ్ చేయండి"
 
 msgid "Arm"
 msgstr "తారా"

@@ -5357,8 +5357,14 @@ msgstr "Táto funkcia zatiaľ nieje dostupná pre vašu platformu."
 msgid "Maximum start speed exceeded"
 msgstr "Maximálna štartová rýchlosť prekročená"
 
-msgid "In sector, arm advance when ready"
-msgstr "Si v sektore, povoľ postup v úlohe ak si pripravený"
+msgid "In area, arm turn when ready"
+msgstr "V oblasti, aktivuj otočenie, keď si pripravený"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Oblasť dosiahnutá, aktivuj otočenie, keď si pripravený"
+
+msgid "In start area, arm start when ready"
+msgstr "V oblasti štartu, aktivuj štart, keď si pripravený"
 
 msgid "Arm"
 msgstr "Aktivuj"

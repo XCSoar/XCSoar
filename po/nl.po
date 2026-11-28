@@ -5402,8 +5402,14 @@ msgstr "Deze functie is helaas nog niet op het huidige platform beschikbaar."
 msgid "Maximum start speed exceeded"
 msgstr "Maximale startsnelheid overschreden"
 
-msgid "In sector, arm advance when ready"
-msgstr "In sector, schakel naar volgende wanneer gewenst"
+msgid "In area, arm turn when ready"
+msgstr "In gebied, activeer keerpuntsronding wanneer gewenst"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Gebied bereikt, activeer keerpuntsronding wanneer gewenst"
+
+msgid "In start area, arm start when ready"
+msgstr "In startgebied, activeer start wanneer gewenst"
 
 msgid "Arm"
 msgstr "Activeer"

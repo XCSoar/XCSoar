@@ -5294,8 +5294,14 @@ msgstr "이 기기에서 사용할 수 없는 기능."
 msgid "Maximum start speed exceeded"
 msgstr "최대스타트속도에 도달"
 
-msgid "In sector, arm advance when ready"
-msgstr "섹터 내, 활동준비"
+msgid "In area, arm turn when ready"
+msgstr "구역 내, 준비되면 턴포인트 활성화"
+
+msgid "Area reached, arm turn when ready"
+msgstr "구역 도달, 준비되면 턴포인트 활성화"
+
+msgid "In start area, arm start when ready"
+msgstr "스타트 구역 내, 준비되면 스타트 활성화"
 
 msgid "Arm"
 msgstr "활동준비"

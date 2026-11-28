@@ -5410,8 +5410,14 @@ msgstr "Questa funzione non è ancora disponibile sulla tua piattaforma."
 msgid "Maximum start speed exceeded"
 msgstr "Velocità massima di inizio superata"
 
-msgid "In sector, arm advance when ready"
-msgstr "Nel settore, armare avanzamento quando pronti"
+msgid "In area, arm turn when ready"
+msgstr "Nell'area, armare la virata quando pronti"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Area raggiunta, armare la virata quando pronti"
+
+msgid "In start area, arm start when ready"
+msgstr "Nell'area di partenza, armare la partenza quando pronti"
 
 msgid "Arm"
 msgstr "Arma"

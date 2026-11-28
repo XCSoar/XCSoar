@@ -226,6 +226,11 @@ Version 7.47 - not yet released
     times #2520
 * task
   - scan task QR codes with the camera on iOS, like on Android
+  - fix the arm question staying up after the glider has left the
+    start area; it now says "In start area, arm start when ready".
+    In an AAT area it says "In area, arm turn when ready", and after
+    leaving the area without arming "Area reached, arm turn when
+    ready"
 * development
   - queue a key press from Lua with xcsoar.key.press, for scripted
     UI checks and map benchmarks

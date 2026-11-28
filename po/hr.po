@@ -5357,8 +5357,14 @@ msgstr "Ova funkcija još nije dostupna na vašem platformi."
 msgid "Maximum start speed exceeded"
 msgstr "Prekoracena maksimalna brzina starta"
 
-msgid "In sector, arm advance when ready"
-msgstr "U sektoru, 'arm advance' kada si spreman"
+msgid "In area, arm turn when ready"
+msgstr "U području, aktiviraj okretnu točku kad si spreman"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Područje dosegnuto, aktiviraj okretnu točku kad si spreman"
+
+msgid "In start area, arm start when ready"
+msgstr "U startnom području, aktiviraj start kad si spreman"
 
 msgid "Arm"
 msgstr "Pokreni"

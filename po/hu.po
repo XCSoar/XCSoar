@@ -5366,8 +5366,14 @@ msgstr "Ez a funkció még nem elérhető a platformodon."
 msgid "Maximum start speed exceeded"
 msgstr "Maximum indítási sebesség túllépése"
 
-msgid "In sector, arm advance when ready"
-msgstr "Szektorban, élesítsd az előlépést ha kész vagy"
+msgid "In area, arm turn when ready"
+msgstr "Területen, élesítsd a fordulót, ha kész vagy"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Terület elérve, élesítsd a fordulót, ha kész vagy"
+
+msgid "In start area, arm start when ready"
+msgstr "Startterületen, élesítsd a startot, ha kész vagy"
 
 msgid "Arm"
 msgstr "Engedélyezés"

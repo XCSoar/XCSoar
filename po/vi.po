@@ -5336,8 +5336,14 @@ msgstr "Hàm này chưa sẵn dùng trên nền tảng của bạn."
 msgid "Maximum start speed exceeded"
 msgstr "Tốc độ khởi động tối đa đã vượt quá"
 
-msgid "In sector, arm advance when ready"
-msgstr "Trong sector, kích hoạt khi sẵn sàng"
+msgid "In area, arm turn when ready"
+msgstr "Trong khu vực, bật điểm quay vòng khi sẵn sàng"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Đã đến khu vực, bật điểm quay vòng khi sẵn sàng"
+
+msgid "In start area, arm start when ready"
+msgstr "Trong khu vực xuất phát, bật điểm bắt đầu khi sẵn sàng"
 
 msgid "Arm"
 msgstr "Kích hoạt"

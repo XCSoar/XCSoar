@@ -5402,8 +5402,14 @@ msgstr "Aquesta funció encara no està disponible al teu plaform."
 msgid "Maximum start speed exceeded"
 msgstr "Velocitat inicial màxima excedida"
 
-msgid "In sector, arm advance when ready"
-msgstr "En el sector, activa l'avanç quan estiguis preparat"
+msgid "In area, arm turn when ready"
+msgstr "A l'àrea, arma el punt de viratge quan estiguis preparat"
+
+msgid "Area reached, arm turn when ready"
+msgstr "Àrea assolida, arma el punt de viratge quan estiguis preparat"
+
+msgid "In start area, arm start when ready"
+msgstr "A l'àrea de sortida, arma la sortida quan estiguis preparat"
 
 msgid "Arm"
 msgstr "Activar"
