@@ -892,7 +892,14 @@ Murphy; NASA 9.3.3.4.7).  Do not invent a parallel gesture language.
    open the list.
    Escape on the map, with no
    dialogue, menu, or special page open, selects the first InfoBox.
-   Escape on a selected InfoBox returns to the map.  A long press,
+   Escape on a selected InfoBox returns to the map.  While the
+   airspace warning banner or a task question (task advance, MAT) is
+   shown, Escape on the map highlights its first button instead, banner
+   first, then the question, then back to the map; a special page is
+   restored before that.  The map keeps the
+   keyboard focus: ``InputEvents::processKey()`` offers the keys to
+   ``MainWindow::OverlayKeyPress()`` first, and Left, Right and Enter
+   pick a button.  A long press,
    and the arrange screen, are the same action.  E-paper skips hold
    animation
    (``HasEPaper()`` / ``IsSlowCPU()``).

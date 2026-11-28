@@ -61,6 +61,26 @@ public:
   }
 
   /**
+   * @return the index of the button selected with KEY_LEFT /
+   * KEY_RIGHT, or -1 if cursor selection is disabled
+   */
+  int GetSelectedIndex() const noexcept {
+    return selected_index;
+  }
+
+  /**
+   * @return the button selected with KEY_LEFT / KEY_RIGHT if it can
+   * be pressed, or nullptr
+   */
+  Button *GetSelectedButton() noexcept {
+    if (selected_index < 0)
+      return nullptr;
+
+    Button *button = buttons[selected_index];
+    return button->IsVisible() && button->IsEnabled() ? button : nullptr;
+  }
+
+  /**
    * After the enabled/visible state of a button has changed, move
    * #selected_index to the first enabled one if the current
    * selection is no longer operable.  (Otherwise KEY_RETURN on the

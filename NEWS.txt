@@ -218,8 +218,16 @@ Version 7.47 - not yet released
     TMA, unless a waypoint is there
   - show when an OpenAir airspace is active from its activation
     times #2520
+  - let a keyboard or remote stick pick an airspace warning banner
+    button: Escape on the map highlights it, Left and Right move the
+    highlight, and Enter presses it. The task advance and MAT turn
+    point questions work the same way; Escape goes from the banner
+    to the question and then back to the map
 * task
   - scan task QR codes with the camera on iOS, like on Android
+  - fix the task advance and MAT turn point questions disappearing
+    for good when switching pages or panning; they now stay shown,
+    above the cross section or weather controls of the page
 * development
   - queue a key press from Lua with xcsoar.key.press, for scripted
     UI checks and map benchmarks

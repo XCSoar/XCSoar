@@ -303,10 +303,14 @@ public:
     return size;
   }
 
+  bool IsAirspace(const AbstractAirspace &_airspace) const noexcept {
+    return &_airspace == airspace.get();
+  }
+
   bool Update(const AbstractAirspace &_airspace,
               AirspaceWarning::State _state,
               const AirspaceInterceptSolution &solution) noexcept {
-    if (&_airspace != airspace.get())
+    if (!IsAirspace(_airspace))
       return false;
 
     const bool had_details = !details_text.empty();
@@ -447,10 +451,20 @@ AirspaceWarningMonitor::Check() noexcept
     }
 
     if (CommonInterface::GetUISettings().enable_airspace_warning_dialog) {
+      /* the button highlighted with the cursor keys, kept when the
+         banner is recreated for the same airspace (e.g. Near
+         becomes Inside); a different airspace starts without one,
+         so ENTER cannot answer a warning the pilot has not read */
+      int focused_button = -1;
+
       if (warning_widget != nullptr) {
         if (warning_widget->Update(w->GetAirspace(), w->GetWarningState(),
                                    w->GetSolution()))
           return;
+
+        focused_button = warning_widget->IsAirspace(w->GetAirspace())
+          ? warning_widget->GetFocusedButton()
+          : -1;
 
         HideWidget();
         assert(warning_widget == nullptr);
@@ -461,6 +475,11 @@ AirspaceWarningMonitor::Check() noexcept
                                                  w->GetWarningState(),
                                                  w->GetSolution());
       CommonInterface::main_window->SetBottomBannerWidget(warning_widget);
+
+      /* without a map, MainWindow has deleted the widget, and its
+         destructor has cleared #warning_widget */
+      if (focused_button >= 0 && warning_widget != nullptr)
+        warning_widget->FocusButton(focused_button);
     }
 
     // un-blank the display, speak the warning

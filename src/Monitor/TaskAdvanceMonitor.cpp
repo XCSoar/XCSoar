@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TaskAdvanceMonitor.hpp"
-#include "PageActions.hpp"
+#include "MainWindow.hpp"
 #include "Widget/QuestionWidget.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -28,11 +28,11 @@ public:
         advance.SetArmed(true);
       }
 
-      PageActions::RestoreBottom();
+      CommonInterface::main_window->SetBottomQuestionWidget(nullptr);
     });
 
     AddButton(_("Dismiss"), [](){
-      PageActions::RestoreBottom();
+      CommonInterface::main_window->SetBottomQuestionWidget(nullptr);
     });
   }
 
@@ -51,11 +51,11 @@ TaskAdvanceMonitor::Check()
     if (widget == nullptr && (!last_need_to_arm ||
                               stats.active_index != last_active_index)) {
       widget = new TaskAdvanceWidget(*this);
-      PageActions::SetCustomBottom(widget);
+      CommonInterface::main_window->SetBottomQuestionWidget(widget);
     }
   } else {
     if (widget != nullptr)
-      PageActions::RestoreBottom();
+      CommonInterface::main_window->SetBottomQuestionWidget(nullptr);
   }
 
   last_active_index = stats.active_index;

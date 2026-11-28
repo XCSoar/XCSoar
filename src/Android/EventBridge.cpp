@@ -26,6 +26,8 @@ enum {
 
 static constexpr unsigned KEYCODE_DPAD_UP = 0x13;
 static constexpr unsigned KEYCODE_DPAD_DOWN = 0x14;
+static constexpr unsigned KEYCODE_DPAD_LEFT = 0x15;
+static constexpr unsigned KEYCODE_DPAD_RIGHT = 0x16;
 
 static unsigned
 TranslateKeyCode(unsigned key_code)
@@ -49,9 +51,14 @@ TranslateKeyCode(unsigned key_code)
 
 constexpr
 static bool
-IsCursorKey(unsigned key_code)
+IndicatesCursorKeys(unsigned key_code)
 {
-  return key_code == KEYCODE_DPAD_UP || key_code == KEYCODE_DPAD_DOWN;
+  /* a real Escape key also means a keyboard or remote stick: it is
+     the first key to select an overlay such as the airspace warning
+     banner; the "back" button (KEYCODE_BACK) does not count */
+  return key_code == KEYCODE_DPAD_UP || key_code == KEYCODE_DPAD_DOWN ||
+    key_code == KEYCODE_DPAD_LEFT || key_code == KEYCODE_DPAD_RIGHT ||
+    key_code == KEYCODE_ESCAPE;
 }
 
 gcc_visibility_default
@@ -62,7 +69,7 @@ Java_org_xcsoar_EventBridge_onKeyDown([[maybe_unused]] JNIEnv *env, [[maybe_unus
     /* XCSoar not yet initialised */
     return;
 
-  if (IsCursorKey(key_code)) {
+  if (IndicatesCursorKeys(key_code)) {
     bool expected = false;
     /* enable this flag as soon as we see the first cursor event; used
        by HasCursorKeys() */

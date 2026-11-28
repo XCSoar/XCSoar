@@ -95,6 +95,13 @@ class MainWindow : public UI::SingleWindow {
   unsigned banner_layout_height = 0;
 
   /**
+   * A transient question (task advance, MAT turn point) directly
+   * above the configured bottom widget.  Unlike the banner, a dialog
+   * simply covers it.
+   */
+  WindowWidget *bottom_question_widget = nullptr;
+
+  /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
    * is hidden and the DrawThread is suspended while this attribute is
    * non-nullptr.
@@ -291,7 +298,17 @@ protected:
    */
   void KillBottomBannerWidget() noexcept;
 
-  /** Keep the banner above page content, below menu buttons and dialogs. */
+  bool HaveBottomQuestionWidget() const noexcept {
+    return bottom_question_widget != nullptr;
+  }
+
+  /** Like KillBottomBannerWidget(), for the bottom question. */
+  void KillBottomQuestionWidget() noexcept;
+
+  /**
+   * Keep the banner and the bottom question above page content,
+   * below menu buttons and dialogs.
+   */
   void RaiseBottomBannerWidget() noexcept;
 
 public:
@@ -406,6 +423,20 @@ private:
    */
   [[gnu::pure]]
   unsigned GetVisibleBannerHeight() const noexcept;
+
+  /**
+   * The area above the configured bottom widget, below the top
+   * widget, for the bottom question.
+   */
+  [[gnu::pure]]
+  PixelRect GetAboveBottomRect() const noexcept;
+
+  /**
+   * Return the bottom question rectangle, directly above the
+   * configured bottom widget.
+   */
+  [[gnu::pure]]
+  PixelRect GetBottomQuestionRect() const noexcept;
 
   /**
    * Lay out the top/bottom widgets, banner and active main content inside
@@ -655,6 +686,39 @@ public:
    * space for the banner at the bottom of the screen.
    */
   void SetBottomBannerWidget(WindowWidget *widget) noexcept;
+
+  /**
+   * Show a transient question (e.g. task advance) directly above the
+   * configured bottom widget.  It stays when the page
+   * changes.  This replaces (deletes) the previous question, if any;
+   * call with widget==nullptr to remove it.
+   */
+  void SetBottomQuestionWidget(WindowWidget *widget) noexcept;
+
+  /**
+   * Offer a key to the visible bottom banner, then to the bottom
+   * question.  The map keeps the keyboard focus while they are shown
+   * (e.g. an airspace warning or a task advance question), so it
+   * calls this before running its own key bindings.  ESC on the
+   * banner moves on to the question (see FocusBottomQuestion()).
+   *
+   * @return true if one of them has handled the key
+   */
+  bool OverlayKeyPress(unsigned key_code) noexcept;
+
+  /**
+   * Let the visible bottom banner take the keys from the map.
+   *
+   * @return false if there is no banner or it does not want them
+   */
+  bool FocusBottomBanner() noexcept;
+
+  /**
+   * Let the visible bottom question take the keys from the map.
+   *
+   * @return false if there is none or it does not want them
+   */
+  bool FocusBottomQuestion() noexcept;
 
   /**
    * Replace the map with a #Widget.  The Widget instance gets deleted
