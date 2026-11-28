@@ -225,3 +225,14 @@ MD5::GetDigest(char *buffer) const noexcept
   *p = '\0';
   return p;
 }
+
+std::array<std::byte, 16>
+MD5::GetRawDigest() const noexcept
+{
+  std::array<std::byte, 16> digest;
+  const uint32_t words[] = {state.a, state.b, state.c, state.d};
+  for (unsigned i = 0; i < 4; ++i)
+    for (unsigned j = 0; j < 4; ++j)
+      digest[i * 4 + j] = std::byte(words[i] >> (8 * j));
+  return digest;
+}

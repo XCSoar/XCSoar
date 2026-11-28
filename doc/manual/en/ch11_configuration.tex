@@ -984,22 +984,30 @@ cue.
 %%%%%%%%%%%%%%%%%%
 \section{Services / LiveTrack24}
 
-The `{\em LiveTrack24}' protocol is used e.g.\ by the tracking portal on
-\url{http://www.livetrack24.com}.
-Please consult the web pages of the service provider listed under `Server'
-for details on this setup.
+XCSoar sends your position to the tracking portal
+\url{https://www.livetrack24.com}.  You need a LiveTrack24 account;
+without one, no position is sent.  Positions are only sent while
+XCSoar detects a flight and has a fix from a real GPS, not in the
+simulator or during a replay.  If the server reports that too many
+positions were sent, XCSoar pauses for 20 minutes.  XCSoar
+identifies this profile to LiveTrack24 with a random number that is
+generated once; it is not derived from any hardware number.
 
 \begin{description}
 \item[Enable]  Switch this {\bf On} to enable the live stream of 
   your position to `{\em LiveTrack24}'.
 \item[Tracking Interval]  The time interval for which one position is sent to
-  the tracking service.
+  the tracking service.  LiveTrack24 takes at most one position every
+  5 seconds; a shorter interval sends every 5 seconds.
 \item[Vehicle Type]  Type of vehicle used.
-\item[Server]  The service's web address to stream your position to. There is currently 
-  a choice of some predefined.
-\item[Username]  If you created an account you can enter those credentials here. 
-  Otherwise the track will be logged as `{\it guest}' and thus be anonymous.  
-\item[Password]  The password to your tracking account.
+\item[Vehicle Name]  Name of the vehicle, shown with your track.  If it
+  is empty, XCSoar sends the registration from the plane setup, or
+  the glider type if there is no registration.
+\item[Username]  The username of your LiveTrack24 account.
+\item[Password]  The password of your LiveTrack24 account.
+\item[Privacy]  Who can see your track: everybody (`{\em Public}'), only
+  your LiveTrack24 friends (`{\em Friends only}'), or only you
+  (`{\em Private}').
 \end{description}
 
 

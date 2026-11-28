@@ -2,17 +2,40 @@
 // Copyright The XCSoar Project
 
 #include "Glue.hpp"
+#include "AppKey.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/System.hpp"
 #include "Operation/Operation.hpp"
 #include "LogFile.hpp"
+#include "Version.hpp"
 #include "co/Task.hxx"
 #include "lib/curl/Global.hxx"
 #include "net/State.hpp"
+#include "util/Exception.hxx"
 #include "util/Macros.hpp"
 
+#include <algorithm>
+#include <cmath>
+
 namespace LiveTrack24 {
+
+/**
+ * Sent until the profile has a device id of its own (see
+ * Profile::InitLiveTrack24DeviceID()); the protocol only needs a
+ * string that is not "0".
+ */
+static constexpr const char *FALLBACK_DEVICE_ID = "xcsoar";
+
+/**
+ * LiveTrack24 asks for at least this much time between two requests
+ * that carry one fix each; it blocks a pilot who sends more than 60
+ * requests per minute.
+ */
+static constexpr std::chrono::seconds MIN_INTERVAL{5};
+
+/** How long the server blocks a pilot who sent too many requests. */
+static constexpr std::chrono::minutes RATE_LIMIT_PAUSE{20};
 
 static VehicleType
 MapVehicleTypeToLivetrack24(Settings::VehicleType vt)
@@ -34,11 +57,10 @@ MapVehicleTypeToLivetrack24(Settings::VehicleType vt)
 }
 
 Glue::Glue(CurlGlobal &curl) noexcept
-  :client(curl),
+  :client(curl, AppInfo{GetAppKey(), XCSoar_Version, FALLBACK_DEVICE_ID}),
    task(curl.GetEventLoop())
 {
   settings.SetDefaults();
-  client.SetServer(settings.server);
 }
 
 void
@@ -50,16 +72,22 @@ Glue::BeginShutdown() noexcept
 void
 Glue::SetSettings(const Settings &_settings)
 {
-  if (_settings.server != settings.server ||
-      _settings.username != settings.username ||
-      _settings.password != settings.password) {
+  if (_settings.username != settings.username ||
+      _settings.password != settings.password ||
+      _settings.device_id != settings.device_id) {
     /* wait for the current job to finish */
     task.Cancel();
 
+    /* a cancelled request may have reached the server already */
+    PostponeNextRequest(std::chrono::steady_clock::now() + MIN_INTERVAL);
+
     /* now it's safe to access these variables */
     settings = _settings;
-    state.ResetSession();
-    client.SetServer(_settings.server);
+    session = {};
+    device_id = settings.device_id;
+    client.SetDeviceID(device_id.empty()
+                       ? std::string_view{FALLBACK_DEVICE_ID}
+                       : std::string_view{device_id.c_str()});
   } else {
     /* no fundamental setting changes */
     settings = _settings;
@@ -79,6 +107,20 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
        attribute */
     return;
 
+  if (settings.username.empty() || settings.password.empty())
+    /* the server only takes tracks of a logged-in pilot */
+    return;
+
+  if (!calculated.flight.flying)
+    /* remember a landing even while requests are paused */
+    landed.store(true);
+
+  if (std::chrono::steady_clock::now() < next_request.load())
+    /* the server measures the time between two requests as they
+       arrive, so a slow request must not shorten the gap; after the
+       rate limit, a request would only extend the server's block */
+    return;
+
   if (GetNetState() == NetState::DISCONNECTED)
     /* no link; do not start HTTP to LiveTrack24 (see SkyLines Glue) */
     return;
@@ -87,7 +129,8 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* can't track without a valid GPS fix */
     return;
 
-  if (!clock.CheckUpdate(std::chrono::seconds(settings.interval)))
+  if (!clock.CheckUpdate(std::max(std::chrono::seconds(settings.interval),
+                                  MIN_INTERVAL)))
     /* later */
     return;
 
@@ -100,20 +143,24 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* use "today" if the GPS didn't provide a date */
     (BrokenDate &)date_time = BrokenDate::TodayUTC();
 
-  location = basic.location;
-  /* XXX use nav_altitude? */
-  altitude = basic.NavAltitudeAvailable() && basic.nav_altitude > 0
-    ? (unsigned)basic.nav_altitude
-    : 0u;
-  ground_speed = basic.ground_speed_available
-    ? (unsigned)Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR)
-    : 0u;
-  track = basic.track_available
-    ? basic.track
-    : Angle::Zero();
+  if (session.IsDefined() && date_time.ToTimePoint() == last_timestamp)
+    /* the GPS has not delivered a new fix since the last packet */
+    return;
 
-  last_flying = flying;
-  flying = calculated.flight.flying;
+  location = basic.location;
+  altitude = basic.NavAltitudeAvailable()
+    ? (int)std::lround(basic.nav_altitude)
+    : 0;
+  ground_speed = basic.ground_speed_available
+    ? (unsigned)std::lround(Units::ToUserUnit(basic.ground_speed,
+                                              Unit::KILOMETER_PER_HOUR))
+    : 0u;
+  course = basic.track_available
+    ? (unsigned)std::lround(basic.track.AsBearing().Degrees()) % 360
+    : 0u;
+
+  /* a landing that has not been handled yet ends the session first */
+  flying = calculated.flight.flying && !landed.load();
 
   task.Start(Tick(settings), BIND_THIS_METHOD(OnCompletion));
 }
@@ -123,12 +170,21 @@ Glue::Tick(Settings settings)
 {
   assert(settings.enabled);
 
+  if (std::chrono::steady_clock::now() < next_request.load())
+    /* OnTimer() may have seen the previous task finish before
+       OnCompletion() stored the new time */
+    co_return;
+
   if (!flying) {
-    if (last_flying && state.HasSession()) {
-      /* landing: end tracking session */
-      co_await client.EndTracking(state.session_id, state.packet_id);
-      state.ResetSession();
+    landed.store(false);
+
+    if (session.IsDefined()) {
+      /* landing: end tracking session; this does not depend on the
+         previous fix, so a Tick() that ended early cannot lose it */
+      Session old_session = std::exchange(session, Session{});
+      old_session.privacy = unsigned(settings.privacy);
       last_timestamp = {};
+      co_await client.EndTracking(old_session, packet_id);
     }
 
     /* don't track if not flying */
@@ -137,52 +193,89 @@ Glue::Tick(Settings settings)
 
   const auto current_timestamp = date_time.ToTimePoint();
 
-  if (state.HasSession() &&
+  if (session.IsDefined() &&
       current_timestamp + std::chrono::minutes(1) < last_timestamp) {
     /* time warp: create a new session */
-    const auto old_state = state;
-    state.ResetSession();
-    co_await client.EndTracking(old_state.session_id, old_state.packet_id);
+    Session old_session = std::exchange(session, Session{});
+    old_session.privacy = unsigned(settings.privacy);
+    co_await client.EndTracking(old_session, packet_id);
+
+    /* that was this interval's request; log in with the next one */
+    co_return;
   }
 
   last_timestamp = current_timestamp;
 
-  if (!state.HasSession()) {
-    UserID user_id = 0;
-    if (!settings.username.empty() && !settings.password.empty())
-      user_id = co_await client.GetUserID(settings.username, settings.password);
+  if (!session.IsDefined()) {
+    Session new_session;
+    new_session.user = co_await client.GetUserID(settings.username,
+                                                 settings.password,
+                                                 GetAppSecret());
+    new_session.id = GenerateSessionID();
+    new_session.token = MakeToken(settings.password.c_str(),
+                                  new_session.id, GetAppSecret());
+    session = std::move(new_session);
+    packet_id = 1;
 
-    if (user_id == 0) {
-      settings.username.clear();
-      settings.password.clear();
-      state.session_id = GenerateSessionID();
-    } else {
-      state.session_id = GenerateSessionID(user_id);
-    }
-
-    try {
-      co_await client.StartTracking(state.session_id, settings.username,
-                                    settings.password, settings.interval,
-                                    MapVehicleTypeToLivetrack24(settings.vehicleType),
-                                    settings.vehicle_name);
-    } catch (...) {
-      state.ResetSession();
-      throw;
-    }
-
-    state.packet_id = 2;
+    /* the login was this interval's request; the first fix follows
+       with the next one */
+    co_return;
   }
 
-  co_await client.SendPosition(state.session_id, state.packet_id++,
-                               location, altitude, ground_speed, track,
-                               current_timestamp);
+  /* every request carries the privacy, so a change made during the
+     flight goes out with the next fix */
+  session.privacy = unsigned(settings.privacy);
+
+  const Fix fix{current_timestamp, location, altitude, ground_speed, course};
+
+  /* advance before the request: a request that fails may still have
+     reached the server, and a packet number must not repeat */
+  const unsigned id = packet_id++;
+
+  if (id == 1) {
+    /* only the first packet describes the track */
+    const TrackInfo info{
+      MapVehicleTypeToLivetrack24(settings.vehicleType),
+      settings.vehicle_name.c_str(),
+      "XCSoar",
+    };
+
+    try {
+      co_await client.SendPosition(session, id, fix, &info);
+    } catch (...) {
+      /* start over, so the next attempt sends the track info again */
+      session = {};
+      throw;
+    }
+  } else
+    co_await client.SendPosition(session, id, fix, nullptr);
 }
 
 void
 Glue::OnCompletion(std::exception_ptr error) noexcept
 {
-  if (error)
+  auto next = std::chrono::steady_clock::now() + MIN_INTERVAL;
+
+  if (error) {
     LogError(error, "LiveTrack24 error");
+
+    if (FindNested<RateLimitError>(error) != nullptr)
+      next = std::chrono::steady_clock::now() + RATE_LIMIT_PAUSE;
+  }
+
+  PostponeNextRequest(next);
+}
+
+void
+Glue::PostponeNextRequest(std::chrono::steady_clock::time_point t) noexcept
+{
+  /* only postpone, so a task that Tick() ended early cannot shorten
+     a pause; OnCompletion() and SetSettings() may run at the same
+     time, because Cancel() does not wait for a completion callback
+     that is already running, so keep the later time in either order */
+  auto current = next_request.load();
+  while (t > current && !next_request.compare_exchange_weak(current, t)) {
+  }
 }
 
 } // namespace LiveTrack24

@@ -10,6 +10,9 @@
 #include "net/AsyncTask.hpp"
 #include "time/BrokenDateTime.hpp"
 
+#include <atomic>
+#include <chrono>
+
 struct MoreData;
 struct DerivedInfo;
 class CurlGlobal;
@@ -17,25 +20,19 @@ class CurlGlobal;
 namespace LiveTrack24 {
 
 class Glue final {
-  struct State
-  {
-    LiveTrack24::SessionID session_id;
-    unsigned packet_id;
-
-    void ResetSession() {
-      session_id = 0;
-    }
-
-    bool HasSession() {
-      return session_id != 0;
-    }
-  };
-
   PeriodClock clock;
 
   Settings settings;
 
-  State state;
+  /**
+   * The device id the #Client points to.  Unlike #settings, it is
+   * only written after the task has been cancelled.
+   */
+  decltype(Settings::device_id) device_id;
+
+  /** The current session; undefined while not flying. */
+  Session session;
+  unsigned packet_id;
 
   Client client;
 
@@ -47,10 +44,27 @@ class Glue final {
 
   BrokenDateTime date_time;
   GeoPoint location;
-  unsigned altitude;
+  int altitude;
   unsigned ground_speed;
-  Angle track;
-  bool flying = false, last_flying;
+  unsigned course;
+  bool flying = false;
+
+  /**
+   * Was the aircraft on the ground since Tick() last handled a
+   * landing?  OnTimer() sets it also while requests are paused, so a
+   * landing during a pause still ends the session before the next
+   * flight is sent.  Cleared by Tick() in the I/O thread.
+   */
+  std::atomic<bool> landed{false};
+
+  /**
+   * No request before this time: #MIN_INTERVAL after the previous
+   * request ended, or longer after the server's rate limit.  Written
+   * by OnCompletion() in the I/O thread and by SetSettings() after
+   * cancelling the task, possibly at the same time (see
+   * PostponeNextRequest()); read by OnTimer().
+   */
+  std::atomic<std::chrono::steady_clock::time_point> next_request{};
 
   Net::AsyncTask task;
 
@@ -65,6 +79,12 @@ public:
 protected:
   Co::InvokeTask Tick(Settings settings);
   void OnCompletion(std::exception_ptr error) noexcept;
+
+private:
+  /**
+   * Move #next_request to @p t, unless it is already later.
+   */
+  void PostponeNextRequest(std::chrono::steady_clock::time_point t) noexcept;
 };
 
 } // namespace Livetrack24

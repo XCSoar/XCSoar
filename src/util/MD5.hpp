@@ -49,4 +49,9 @@ public:
    * @return a pointer to the null terminator
    */
   char *GetDigest(char *buffer) const noexcept;
+
+  /**
+   * The digest as 16 raw bytes, the same value as GetDigest().
+   */
+  std::array<std::byte, 16> GetRawDigest() const noexcept;
 };

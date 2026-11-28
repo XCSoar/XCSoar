@@ -13,6 +13,7 @@
 #include "Profile/Profile.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Settings.hpp"
+#include "Profile/TrackingProfile.hpp"
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
 #include "Simulator.hpp"
@@ -189,6 +190,9 @@ LoadProfile()
   }
 
   Profile::Load();
+#ifdef HAVE_TRACKING
+  Profile::InitLiveTrack24DeviceID(Profile::map);
+#endif
   Profile::Use(Profile::map);
 
   Units::SetConfig(CommonInterface::GetUISettings().format.units);

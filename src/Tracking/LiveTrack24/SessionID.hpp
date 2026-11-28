@@ -10,12 +10,12 @@ namespace LiveTrack24 {
 typedef uint32_t UserID;
 typedef uint32_t SessionID;
 
-/** Generates a random session id */
+/**
+ * Generates a random, non-zero session id.
+ *
+ * Throws if the system has no source of randomness.
+ */
 SessionID
-GenerateSessionID() noexcept;
-
-/** Generates a random session id containing the given user id */
-SessionID
-GenerateSessionID(UserID user_id) noexcept;
+GenerateSessionID();
 
 } // namespace Livetrack24
